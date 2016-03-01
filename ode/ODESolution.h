@@ -53,9 +53,11 @@ class ODESolution
       }
       
       bool write( const char* fileName,
-                  const double& initialTime,
-                  const double& timeStep = 0.0 )
+                  const double& initialTime = 0.0,
+                  const double& timeStep = 0.0,
+                  const int dofToWrite = -1 )
       {
+         assert( dofToWrite == -1 || ( dofToWrite >= 0 && dofToWrite < degreesOfFreedom ) );
          std::fstream file;
          file.open( fileName, std::ios::out );
          if( !file )
@@ -69,8 +71,11 @@ class ODESolution
             if( timeStep != 0.0 )
                file << time << " ";
             time += timeStep;
-            for( int dof = 0; dof < degreesOfFreedom; dof++ )
-               file << this->getElement( k, dof );
+            if( dofToWrite == -1 )
+               for( int dof = 0; dof < degreesOfFreedom; dof++ )
+                  file << this->getElement( k, dof ) << " ";
+            else
+               file << this->getElement( k, dofToWrite );
             file << std::endl;
          }
          return true;

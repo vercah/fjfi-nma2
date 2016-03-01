@@ -32,8 +32,8 @@ class HyperbolicProblem
          const double& u1 = _u[ 0 ];
          const double& u2 = _u[ 1 ];
          fu[ 0 ] = u2;
-         fu[ 1 ] = -u1 - this->epsilon * u_1 * u_1 * u_2;
-         //std::cout << " t = " << t << " " << fu[ 0 ] << " ";
+         fu[ 1 ] = -u1 - this->epsilon * u1 * u1 * u2;
+         //std::cout << " t = " << t << " " << fu[ 0 ] << " " << fu[ 1 ] << std::endl;
       }
          
    protected:
