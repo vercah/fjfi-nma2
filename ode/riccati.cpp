@@ -8,7 +8,6 @@
 #include <cstdlib>
 #include "RiccatiProblem.h"
 #include "Euler.h"
-#include "Merson.h"
 #include "ODESolver.h"
 #include "ODESolution.h"
 
@@ -16,12 +15,11 @@ using namespace std;
 
 typedef RiccatiProblem Problem;
 typedef Euler< Problem > Integrator;
-//typedef Merson< Problem > Integrator;
-const double initialTime( 0.065 );
-const double finalTime( 0.1125 );
+const double initialTime( 0.1 );
+const double finalTime( 0.2 );
 const double timeStep( 1.0e-4 );
 
-const double integrationTimeStep( 1.0e-10 );
+const double integrationTimeStep( 1.0e-5 );
 
 int main( int argc, char** argv )
 {

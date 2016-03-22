@@ -8,7 +8,6 @@
 #include <cstdlib>
 #include "HyperbolicProblem.h"
 #include "Euler.h"
-#include "Merson.h"
 #include "ODESolver.h"
 #include "ODESolution.h"
 
@@ -16,7 +15,6 @@ using namespace std;
 
 typedef HyperbolicProblem Problem;
 typedef Euler< Problem > Integrator;
-//typedef Merson< Problem > Integrator;
 const double initialTime( 0.0 );
 const double finalTime( 1000.0 );
 const double timeStep( 1.0e-1 );
