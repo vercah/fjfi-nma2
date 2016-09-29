@@ -12,7 +12,9 @@
  */
 
 #include <string>
+#include <sstream>
 #include "DenseMatrix.h"
+#include "../string-split.h"
 
 DenseMatrix::DenseMatrix()
 : rows( 0 ), columns( 0 )
@@ -49,39 +51,35 @@ bool DenseMatrix::readMtxFile( std::istream& str )
    
    if( std::getline( str,line ) )
    {
-      std::string header1, header2, format, numberType;
-      if( std::getline( iss, header1, ' ' ) && 
-          std::getline( iss, header2, ' ' ) &&
-          std::getline( iss, format, ' ')   &&
-          std::getline( iss, numberType, ' ' ) &&
-          std::getline( iss, matrixType, '' ) )
-      {
-         if( header1 != "%%MatrixMarket" ||
-             header2 != "matrix" )
-         {
-            std::cerr << "Wrong MTX file header." << std::endl;
-            return false;
-         }
-         if( format != "coordinate" )
-         {
-            std::cerr << "Only coordinate MTX file format is allowed." << std::endl;
-            return false;
-         }
-         if( numberType != "real" )
-         {
-            std::cerr << "Only real numbers are allowed." << std::endl;
-            return false;
-         }
-         if( matrixType != "general" && matrixType != "symmetric" )
-         {
-            std::cerr << "Only general and symmetric matrices are supported." << std::endl;
-            return false;
-         }
-      }
-      else
+      std::vector< std::string > parsedLine;
+      string_split( line, ' ', parsedLine );
+      if( parsedLine.size() != 5 )
       {
          std::cerr << "Cannot read the MTX file header." << std::endl;
          return false;                
+      }
+      
+      if( parsedLine[ 0 ] != "%%MatrixMarket" ||
+          parsedLine[ 1 ] != "matrix" )
+      {
+         std::cerr << "Wrong MTX file header." << std::endl;
+         return false;
+      }
+      if( parsedLine[ 2 ] != "coordinate" )
+      {
+         std::cerr << "Only coordinate MTX file format is allowed." << std::endl;
+         return false;
+      }
+      if( parsedLine[ 3 ] != "real" )
+      {
+         std::cerr << "Only real numbers are allowed." << std::endl;
+         return false;
+      }
+      matrixType = parsedLine[ 4 ];
+      if( matrixType != "general" && matrixType != "symmetric" )
+      {
+         std::cerr << "Only general and symmetric matrices are supported." << std::endl;
+         return false;
       }
    }
    bool dimensionsFlag( false );
@@ -113,10 +111,10 @@ bool DenseMatrix::readMtxFile( std::istream& str )
       {
          int row = std::stoi( str_row ) - 1;
          int column = std::stoi( str_column ) - 1;
-         Real value = std::stof( str_value );
-         ( *this )( row, column, value );
+         Real value = std::stod( str_value );
+         ( *this )( row, column ) =  value;
          if( matrixType == "symmetric" && row != column )
-            ( *this )( column, row, value );
+            ( *this )( column, row ) = value;
       }      
    }      
 }
