@@ -13,6 +13,8 @@
 
 #include <string>
 #include <sstream>
+#include <iomanip>
+#include <assert.h>
 #include "DenseMatrix.h"
 #include "../string-split.h"
 
@@ -31,6 +33,17 @@ bool DenseMatrix::setDimensions( const int rows, const int columns )
    this->rows = rows;
    this->columns = columns;
    this->elements.resize( rows * columns );
+   return true;
+}
+
+int DenseMatrix::getRows() const
+{
+   return this->rows;
+}
+      
+int DenseMatrix::getColumns() const
+{
+   return this->columns;
 }
    
 Real& DenseMatrix::operator()( const int row, const int column )
@@ -43,15 +56,29 @@ const Real& DenseMatrix::operator()( const int row, const int column ) const
    return this->elements[ row * this->columns + column ];
 }
 
+void DenseMatrix::vectorMultiplication( const std::vector< Real >& in_vector,
+                                        std::vector< Real >& out_vector ) const
+{
+   assert( in_vector.size() == this->columns );
+   assert( out_vector.size() == this->rows );
+   
+   for( int row = 0; row < this->rows; row++ )
+   {
+      Real result( 0.0 );
+      for( int column = 0; column < this->columns; column++ )
+         result += ( *this )( row, column ) * in_vector[ column ];
+      out_vector[ row ]= result;
+   }
+}
+
 bool DenseMatrix::readMtxFile( std::istream& str )
 {
    std::string line;
-   std::stringstream iss( line );
    std::string matrixType;
+   std::vector< std::string > parsedLine;
    
    if( std::getline( str,line ) )
    {
-      std::vector< std::string > parsedLine;
       string_split( line, ' ', parsedLine );
       if( parsedLine.size() != 5 )
       {
@@ -83,48 +110,67 @@ bool DenseMatrix::readMtxFile( std::istream& str )
       }
    }
    bool dimensionsFlag( false );
+   long int lineNumber( 1 );   
    while( std::getline( str, line ) )
    {
+      lineNumber++;
       if( line[ 0 ] == '%' )
          continue;
+      
+      string_split( line, ' ', parsedLine );         
       if( ! dimensionsFlag )
       {
-         std::string rows, columns;
-         if( std::getline( iss, rows, ' ' ) &&
-             std::getline( iss, columns, ' ' ) )
-         {
-            if( ! this->setDimensions( std::stoi( rows ), std::stoi( columns ) ) )
-               return false;
-            dimensionsFlag = true;
-            continue;
-         }
-         else
+         if( parsedLine.size() < 3 )
          {
             std::cerr << "Cannot read matrix dimensions." << std::endl;
             return false;
+         }            
+         const std::string& str_rows = parsedLine[ 0 ];
+         const std::string& str_columns = parsedLine[ 1 ];
+         const int rows = std::stoi( str_rows );
+         const int columns = std::stoi( str_columns );
+         if( ! this->setDimensions( rows, columns ) )
+         {
+            std::cerr << "Unable to set dimensions " << rows << " x " << columns << "." << std::endl;
+            return false;
          }
+         dimensionsFlag = true;
       }
-      std::string str_row, str_column, str_value;
-      if( std::getline( iss, str_row, ' ' ) &&
-          std::getline( iss, str_column, ' ' ) &&
-          std::getline( iss, str_value ) )
+      else
       {
+         if( parsedLine.size() < 3 )
+         {
+            std::cerr << "Error at line " << lineNumber << "." << std::endl;
+            return false;
+         }
+         const std::string& str_row = parsedLine[ 0 ];
+         const std::string& str_column = parsedLine[ 1 ];
+         const std::string& str_value = parsedLine[ 2 ];
+
          int row = std::stoi( str_row ) - 1;
          int column = std::stoi( str_column ) - 1;
          Real value = std::stod( str_value );
          ( *this )( row, column ) =  value;
          if( matrixType == "symmetric" && row != column )
             ( *this )( column, row ) = value;
-      }      
-   }      
+      }
+   }
+   return true;
 }
       
-void DenseMatrix::print( std::ostream& str )
+void DenseMatrix::print( std::ostream& str,
+                         const int precision,
+                         const std::string zero )
 {
    for( int column = 0; column < this->columns; column++ )
    {
       for( int row = 0; row < this->rows; row++ )
-         str << ( *this )( row, column ) << " ";
+      {
+         const double& value = ( *this )( row, column );
+         if( value == 0.0 )
+            str << std::setw( precision + 6 ) << zero;
+         else str<< std::setprecision( precision ) << std::setw( precision + 6 )  << value;
+      }
       str << std::endl;
    }
 }

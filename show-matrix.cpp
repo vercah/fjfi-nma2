@@ -29,6 +29,7 @@ int main( int argc, char* argv[] )
    }
    if( ! matrix.readMtxFile( file ) )
       return EXIT_FAILURE;
-   matrix.print( std::cout );
+   std::cout << "Matrix = " << std::endl;
+   matrix.print( std::cout, 6 );
    return EXIT_SUCCESS;
 }
