@@ -8,21 +8,27 @@
 #pragma once
 
 #include "matrices/DenseMatrix.h"
+#include "Vector.h"
 #include "real.h"
+#include <ostream>
 
 class GEM
 {
    public:
       
       GEM( DenseMatrix& A,
-           std::vector< Real >& b );
+           Vector& b );
       
-      bool solve( std::vector< Real >& x );
+      bool solve( Vector& x, int verbose = 0 );
+      
+      bool solveWithPivoting( Vector& x, int verbose = 0 );
       
    protected:
       
+      void print( std::ostream& str = std::cout ) const;
+      
       DenseMatrix& A;
       
-      std::vector< Real >& b;
+      Vector& b;
 };
 

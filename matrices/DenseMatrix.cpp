@@ -56,11 +56,11 @@ const Real& DenseMatrix::operator()( const int row, const int column ) const
    return this->elements[ row * this->columns + column ];
 }
 
-void DenseMatrix::vectorMultiplication( const std::vector< Real >& in_vector,
-                                        std::vector< Real >& out_vector ) const
+void DenseMatrix::vectorMultiplication( const Vector& in_vector,
+                                        Vector& out_vector ) const
 {
-   assert( in_vector.size() == this->columns );
-   assert( out_vector.size() == this->rows );
+   assert( in_vector.getSize() == this->columns );
+   assert( out_vector.getSize() == this->rows );
    
    for( int row = 0; row < this->rows; row++ )
    {
@@ -69,6 +69,12 @@ void DenseMatrix::vectorMultiplication( const std::vector< Real >& in_vector,
          result += ( *this )( row, column ) * in_vector[ column ];
       out_vector[ row ]= result;
    }
+}
+
+DenseMatrix& DenseMatrix::operator=( const DenseMatrix& m )
+{
+   this->setDimensions( m.getRows(), m.getColumns() );
+   this->elements = m.elements;
 }
 
 bool DenseMatrix::readMtxFile( std::istream& str )

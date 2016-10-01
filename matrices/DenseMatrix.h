@@ -11,6 +11,7 @@
 #include <iostream>
 #include "../real.h"
 #include "Matrix.h"
+#include "../Vector.h"
 
 class DenseMatrix : public Matrix
 {
@@ -30,8 +31,10 @@ class DenseMatrix : public Matrix
       
       const Real& operator()( const int row, const int column ) const;
       
-      void vectorMultiplication( const std::vector< Real >& in_vector,
-                                 std::vector< Real >& out_vector ) const;
+      void vectorMultiplication( const Vector& in_vector,
+                                 Vector& out_vector ) const;
+      
+      DenseMatrix& operator=( const DenseMatrix& m );
       
       bool readMtxFile( std::istream& file );
       

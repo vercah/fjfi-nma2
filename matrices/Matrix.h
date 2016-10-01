@@ -7,14 +7,15 @@
 
 #pragma once
 
+#include "../Vector.h"
 #include "../real.h"
 
 class Matrix
 {
    public:
       
-      virtual void vectorMultiplication( const std::vector< Real >& in_vector,
-                                         std::vector< Real >& out_vector ) const = 0;
+      virtual void vectorMultiplication( const Vector& in_vector,
+                                         Vector& out_vector ) const = 0;
    
 };
 
