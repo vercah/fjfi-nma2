@@ -1,8 +1,8 @@
 /* 
- * File:   denseMatrix.h
+ * File:   TridiagonalMatrix.h
  * Author: oberhuber
  *
- * Created on September 28, 2016, 5:31 PM
+ * Created on October 3, 2016, 8:28 AM
  */
 
 #pragma once
@@ -13,17 +13,16 @@
 #include "Matrix.h"
 #include "../Vector.h"
 
-class DenseMatrix : public Matrix
+class TridiagonalMatrix : public Matrix
 {
    public:
    
-      DenseMatrix();
+      TridiagonalMatrix();
             
-      DenseMatrix( const int rows, const int columns );
+      TridiagonalMatrix( const int rows, const int columns );
       
       bool setDimensions( const int rows, const int columns );
       
-   
       Real& operator()( const int row, const int column );
       
       const Real& operator()( const int row, const int column ) const;
@@ -31,15 +30,20 @@ class DenseMatrix : public Matrix
       void vectorMultiplication( const Vector& in_vector,
                                  Vector& out_vector ) const;
       
-      DenseMatrix& operator=( const DenseMatrix& m );
+      TridiagonalMatrix& operator=( const TridiagonalMatrix& m );
       
       bool readMtxFile( std::istream& file );
-            
-   private:
       
+      void print( std::ostream& str,
+                  const int precision = 8,
+                  const std::string zero = "0" );         
       
+   private:      
       
       std::vector< Real > elements;
 
 };
+
+
+
 

@@ -6,9 +6,15 @@ CXX_FLAGS = -O0 -g -std=c++11
 #CXX_FLAGS = -O3 -std=c++11
 LDFLAGS = -lm
 
-COMMON_SOURCES = CommandLineParser.cpp string-split.cpp Vector.cpp
+COMMON_SOURCES = CommandLineParser.cpp \
+                 string-split.cpp \
+                 Vector.cpp \
+                 matrices/Matrix.cpp
 
-COMMON_OBJECTS = CommandLineParser.o string-split.o Vector.o
+COMMON_OBJECTS = CommandLineParser.o \
+                 string-split.o \
+                 Vector.o \
+                 matrices/Matrix.o
 
 SHOW_MATRIX_SOURCES = show-matrix.cpp
 
