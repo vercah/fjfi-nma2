@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* 
  * File:   denseMatrix.cpp
  * Author: oberhuber
@@ -36,15 +30,6 @@ bool DenseMatrix::setDimensions( const int rows, const int columns )
    return true;
 }
 
-int DenseMatrix::getRows() const
-{
-   return this->rows;
-}
-      
-int DenseMatrix::getColumns() const
-{
-   return this->columns;
-}
    
 Real& DenseMatrix::operator()( const int row, const int column )
 {
@@ -164,20 +149,4 @@ bool DenseMatrix::readMtxFile( std::istream& str )
    return true;
 }
       
-void DenseMatrix::print( std::ostream& str,
-                         const int precision,
-                         const std::string zero )
-{
-   for( int column = 0; column < this->columns; column++ )
-   {
-      for( int row = 0; row < this->rows; row++ )
-      {
-         const double& value = ( *this )( row, column );
-         if( value == 0.0 )
-            str << std::setw( precision + 6 ) << zero;
-         else str<< std::setprecision( precision ) << std::setw( precision + 6 )  << value;
-      }
-      str << std::endl;
-   }
-}
 
