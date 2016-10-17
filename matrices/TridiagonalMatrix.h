@@ -32,12 +32,6 @@ class TridiagonalMatrix : public Matrix
       
       TridiagonalMatrix& operator=( const TridiagonalMatrix& m );
       
-      bool readMtxFile( std::istream& file );
-      
-      void print( std::ostream& str,
-                  const int precision = 8,
-                  const std::string zero = "0" );         
-      
    private:      
       
       std::vector< Real > elements;

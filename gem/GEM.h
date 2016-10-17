@@ -7,9 +7,9 @@
 
 #pragma once
 
-#include "matrices/DenseMatrix.h"
-#include "Vector.h"
-#include "real.h"
+#include "../matrices/DenseMatrix.h"
+#include "../Vector.h"
+#include "../real.h"
 #include <ostream>
 
 class GEM
@@ -22,6 +22,8 @@ class GEM
       bool solve( Vector& x, int verbose = 0 );
       
       bool solveWithPivoting( Vector& x, int verbose = 0 );
+      
+      bool computeLUDecomposition( int verbose = 0 );
       
    protected:
       

@@ -1,7 +1,8 @@
 #include <fstream>
 #include "GEM.h"
-#include "CommandLineParser.h"
-#include "matrices/DenseMatrix.h"
+#include "../CommandLineParser.h"
+#include "../matrices/DenseMatrix.h"
+#include "../Timer.h"
 
 
 int main( int argc, char* argv[] )
@@ -18,6 +19,17 @@ int main( int argc, char* argv[] )
       {
          std::cerr << "No input file was given, use -i or --input-file." << std::endl;
       }
+   
+   bool pivoting( false );
+   if( parser.cmdOptionExists( "--pivoting" ) )
+   {
+      std::string pivoting_str = parser.getCmdOption( "--pivoting" );  
+      if( pivoting_str == "yes" )
+         pivoting = true;
+   }
+   int verbose( 0 );
+   if( parser.cmdOptionExists( "--verbose" ) )
+      verbose = std::stoi( parser.getCmdOption( "--verbose" ) );
    
    DenseMatrix matrix;
    std::fstream file;
@@ -36,6 +48,7 @@ int main( int argc, char* argv[] )
       return EXIT_FAILURE;
    }
    const int n = matrix.getRows();
+   std::cout << "Matrix dimensions are " << n << "x" << n << "." << std::endl;
    
    DenseMatrix A;
    A = matrix;
@@ -44,15 +57,24 @@ int main( int argc, char* argv[] )
    b.setSize( n );
    for( int i = 0; i < n; i++ )
       x[ i ] = 1.0;
+   std::cout << "Multiplying matrix-vector..." << std::endl;
    matrix.vectorMultiplication( x, b );
    for( int i = 0; i < n; i++ )
       x[ i ] = 0.0;
    
-   GEM gem( A, b );
-   gem.solve( x, 2 );   
+   GEM gem( A, b );   
+   Timer timer;
+   timer.reset();
+   timer.start();
+   if( pivoting )
+      gem.solveWithPivoting( x, verbose );
+   else
+      gem.solve( x, verbose );
+   timer.stop();
    std::cout << "The result is [ " << x << " ]." << std::endl;
+   std::cout << "Computation took " << timer.getRealTime() << " seconds." << std::endl;
    
-   A = matrix;
+   /*A = matrix;
    for( int i = 0; i < n; i++ )
       x[ i ] = 1.0;
    matrix.vectorMultiplication( x, b );
@@ -60,7 +82,7 @@ int main( int argc, char* argv[] )
       x[ i ] = 0.0;   
    std::cout << "Solving with pivoting ..." << std::endl;
    gem.solveWithPivoting( x, 2 );
-   std::cout << "The result is [ " << x << " ]." << std::endl;
+   std::cout << "The result is [ " << x << " ]." << std::endl;*/
    
    return EXIT_SUCCESS;
 }
