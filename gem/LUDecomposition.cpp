@@ -74,6 +74,34 @@ bool LUDecomposition::computeByGEM( int verbose )
    }   
 }
 
+bool LUDecomposition::computeByCrout( int verbose )
+{
+   const int n = A.getRows();
+   
+   for( int k = 0; k < n; k++ )
+   {
+      for( int i = k; i < n; i++ )
+      {
+         Real aux( 0.0 );
+         for( int l = 0; l < k - 1; l++ )
+            aux += A( i, l ) * A( l, k );      
+         A( i, k ) -=  aux;
+      }
+      if( verbose > 1 )
+         std::cout << "Computing the " << k << "-th column of L:" << std::endl << A << std::endl;
+      for( int j = k + 1; j < n; j++ )
+      {
+         Real aux( 0.0 );
+         for( int l = 0; l < k - 1; l++ )
+            aux += A( k, l ) * A( l, j );      
+         A( k, j ) -=  aux;
+         A( k, j ) /= A( k, k );
+      }
+      if( verbose > 1 )
+         std::cout << "Computing the " << k << "-th row of U:" << std::endl << A << std::endl;
+   }
+}
+
 void LUDecomposition::restoreMatrix( DenseMatrix& B )
 {
    assert( B.getColumns() == A.getColumns() );

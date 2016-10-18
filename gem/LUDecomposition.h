@@ -19,6 +19,8 @@ class LUDecomposition
             
       bool computeByGEM( int verbose = 0 );
       
+      bool computeByCrout( int verbose = 0 );
+      
       void restoreMatrix( DenseMatrix& B );
       
    protected:

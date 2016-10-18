@@ -35,7 +35,7 @@ class Matrix
       
       void print( std::ostream& str,
                   const int precision = 8,
-                  const std::string zero = "0" );
+                  const std::string zero = "0" ) const;
       
       bool readMtxFile( std::istream& file );      
 
@@ -44,3 +44,4 @@ class Matrix
       int rows, columns;   
 };
 
+std::ostream& operator << ( std::ostream& str, const Matrix& m );

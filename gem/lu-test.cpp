@@ -42,41 +42,27 @@ int main( int argc, char* argv[] )
    }
    const int n = matrix.getRows();
    std::cout << "Matrix dimensions are " << n << "x" << n << "." << std::endl;
-   
+   if( verbose >= 1 )
+      std::cout << "Matrix is:" << std::endl << matrix << std::endl;
    DenseMatrix A, B;
    A = matrix;
-   /*Vector x, b;   
-   x.setSize( n );
-   b.setSize( n );
-   for( int i = 0; i < n; i++ )
-      x[ i ] = 1.0;
-   std::cout << "Multiplying matrix-vector..." << std::endl;
-   matrix.vectorMultiplication( x, b );
-   for( int i = 0; i < n; i++ )
-      x[ i ] = 0.0;*/
-   
    LUDecomposition lu( A );   
    Timer timer;
    timer.reset();
    timer.start();
-   lu.computeByGEM( verbose );
+   //lu.computeByGEM( verbose );
+   lu.computeByCrout( verbose );
    timer.stop();
-   //std::cout << "The result is [ " << x << " ]." << std::endl;
+
    std::cout << "Computation took " << timer.getRealTime() << " seconds." << std::endl;
-   
+   if( verbose >= 1 )
+      std::cout << "Result is: " << std::endl << A << std::endl;
    B.setDimensions( A.getRows(), A.getColumns() );
    lu.restoreMatrix( B );
-   B -= A;
-   
-   /*A = matrix;
-   for( int i = 0; i < n; i++ )
-      x[ i ] = 1.0;
-   matrix.vectorMultiplication( x, b );
-   for( int i = 0; i < n; i++ )
-      x[ i ] = 0.0;   
-   std::cout << "Solving with pivoting ..." << std::endl;
-   gem.solveWithPivoting( x, 2 );
-   std::cout << "The result is [ " << x << " ]." << std::endl;*/
+   if( verbose >= 1 )
+      std::cout << "Restored matrix is: " << std::endl << B << std::endl;
+   B -= matrix;
+   std::cout << "Max. norm of the difference is " << B.maxNorm() << "." << std::endl;
    
    return EXIT_SUCCESS;
 }

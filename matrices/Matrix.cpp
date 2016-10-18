@@ -40,11 +40,11 @@ Real Matrix::maxNorm() const
 
 void Matrix::print( std::ostream& str,
                     const int precision,
-                    const std::string zero )
+                    const std::string zero ) const
 {
-   for( int column = 0; column < this->columns; column++ )
+   for( int row = 0; row < this->rows; row++ )
    {
-      for( int row = 0; row < this->rows; row++ )
+      for( int column = 0; column < this->columns; column++ )
       {
          const double& value = ( *this )( row, column );
          if( value == 0.0 )
@@ -141,6 +141,11 @@ bool Matrix::readMtxFile( std::istream& str )
    }
    return true;
 }
-      
+
+std::ostream& operator << ( std::ostream& str, const Matrix& m )
+{
+   m.print( str );
+   return str;
+}
 
 
