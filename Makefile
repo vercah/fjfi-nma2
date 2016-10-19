@@ -8,11 +8,15 @@ LDFLAGS = -lm
 
 COMMON_SOURCES = CommandLineParser.cpp \
                  string-split.cpp \
+                 matrices/Matrix.cpp \
+                 Timer.cpp \
                  Vector.cpp \
                  matrices/Matrix.cpp
 
 COMMON_OBJECTS = CommandLineParser.o \
                  string-split.o \
+                 matrices/Matrix.o \
+                 Timer.o \
                  Vector.o \
                  matrices/Matrix.o
 

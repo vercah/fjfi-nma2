@@ -21,6 +21,11 @@ class Matrix
       virtual void vectorMultiplication( const Vector& in_vector,
                                          Vector& out_vector ) const = 0;
       
+      virtual Real& operator()( const int row, const int column ) = 0;
+      
+      virtual const Real& operator()( const int row, const int column ) const = 0;
+
+      
       int getRows() const;
       
       int getColumns() const;

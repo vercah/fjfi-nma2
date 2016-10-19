@@ -7,17 +7,16 @@
 
 #include <string>
 #include <sstream>
-#include <iomanip>
 #include <assert.h>
 #include "DenseMatrix.h"
 #include "../string-split.h"
 
 DenseMatrix::DenseMatrix()
-: rows( 0 ), columns( 0 )
+: Matrix( 0, 0 )
 {
 }
 DenseMatrix::DenseMatrix( const int rows, const int columns )
-: rows( rows ), columns( columns )
+: Matrix( rows, columns )
 {
    this->elements.resize( rows * columns );
 }
