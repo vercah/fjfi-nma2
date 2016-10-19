@@ -31,12 +31,22 @@ bool TridiagonalMatrix::setDimensions( const int rows, const int columns )
    
 Real& TridiagonalMatrix::operator()( const int row, const int column )
 {
-   return this->elements[ 3 * row + column ];
+   if( abs( column - row ) > 1 )
+   {
+      std::cerr << "Accesing wrong element ( " << row << " column " << column << " ) in tridiagonal matrix. " << std::endl;
+      throw 0;
+   }
+   return this->elements[ 2 * row + column ];
 }
       
 const Real& TridiagonalMatrix::operator()( const int row, const int column ) const
 {
-   return this->elements[ 3 * row + column ];
+   if( abs( column - row ) > 1 )
+   {
+      std::cerr << "Accesing wrong element ( " << row << " column " << column << " ) in tridiagonal matrix. " << std::endl;
+      throw 0;
+   }   
+   return this->elements[ 2 * row + column ];
 }
 
 void TridiagonalMatrix::vectorMultiplication( const Vector& in_vector,
@@ -45,23 +55,13 @@ void TridiagonalMatrix::vectorMultiplication( const Vector& in_vector,
    assert( in_vector.getSize() == this->columns );
    assert( out_vector.getSize() == this->rows );
    
-   out_vector[ 0 ] = ( *this )( 0, 0 ) * in_vector[ 0 ] + ( *this )( 0, 1 ) * in_vector[ 1 ];      
-   for( int row = 1; row < std::min( this->rows, this->columns ) - 1; row++ )
-   {
-      Real result( 0.0 );
-      for( int column = row - 1; column < row + 1; column++ )
-         result += ( *this )( row, column ) * in_vector[ column ];
-      out_vector[ row ]= result;
-   }
-   const int n = this->getRows();
-   out_vector[ n - 1 ] = ( *this )( n - 1, n - 2 ) * in_vector[ n - 2 ] +
-                         ( *this )( n - 1, n - 1 ) * in_vector[ n - 1 ];
-   if( this->getColumns() >  n )
-      out_vector[ n - 1 ] += ( *this )( n - 1, n ) * in_vector[ n ];
- }
+   assert( false );
+}
 
 TridiagonalMatrix& TridiagonalMatrix::operator=( const TridiagonalMatrix& m )
 {
    this->setDimensions( m.getRows(), m.getColumns() );
    this->elements = m.elements;
 }
+
+

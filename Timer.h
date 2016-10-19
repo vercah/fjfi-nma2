@@ -11,23 +11,22 @@
 
 class Timer
 {
-   
-   Timer();
-   
-   void reset();
-   
-   void start();
-   
-   void stop();
-   
-   double getTime();
-   
+
+   public:
+      Timer();
+
+      void reset();
+
+      void start();
+
+      void stop();
+
+      double getTime();   
    
    protected:
     
       std::chrono::high_resolution_clock::time_point start_;
       
       std::chrono::duration< double > total_time;
-   
 };
 

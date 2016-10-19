@@ -31,7 +31,7 @@ class TridiagonalMatrix : public Matrix
                                  Vector& out_vector ) const;
       
       TridiagonalMatrix& operator=( const TridiagonalMatrix& m );
-            
+      
    private:      
       
       std::vector< Real > elements;

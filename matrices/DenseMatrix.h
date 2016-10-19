@@ -23,7 +23,6 @@ class DenseMatrix : public Matrix
       
       bool setDimensions( const int rows, const int columns );
       
-   
       Real& operator()( const int row, const int column );
       
       const Real& operator()( const int row, const int column ) const;
@@ -33,13 +32,11 @@ class DenseMatrix : public Matrix
       
       DenseMatrix& operator=( const DenseMatrix& m );
       
-      bool readMtxFile( std::istream& file );
+      DenseMatrix& operator-=( const DenseMatrix& m );
+      
             
-   private:
-      
-      
+   private:            
       
       std::vector< Real > elements;
-
 };
 

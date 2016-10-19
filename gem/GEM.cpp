@@ -35,6 +35,11 @@ bool GEM::solve( Vector& x, int verbose )
        * Divide the k-th row by pivot
        */
       const Real& pivot = A( k, k );
+      if( pivot == 0.0 )
+      {
+         std::cerr << "Zero pivot has appeared in " << k << "-th step. GEM has failed." << std::endl;
+         return false;
+      }
       b[ k ] /= pivot;
       for( int j = k+1; j < n; j++ )
          A( k, j ) /= pivot;
@@ -86,6 +91,7 @@ bool GEM::solveWithPivoting( Vector& x, int verbose )
 
    for( int k = 0; k < n; k++ )
    {
+      std::cout << "Step " << k << "/" << n << ".... \r";
       /****
        * Find the pivot - the largest in k-th row
        */
@@ -106,6 +112,7 @@ bool GEM::solveWithPivoting( Vector& x, int verbose )
       
       if( verbose > 1 )
       {
+         std::cout << std::endl;
          std::cout << "Choosing element at " << pivotPosition << "-th row as pivot..." << std::endl;
          std::cout << "Swaping " << k << "-th and " << pivotPosition <<  "-th rows ... " << std::endl;
       }
@@ -114,6 +121,11 @@ bool GEM::solveWithPivoting( Vector& x, int verbose )
        * Divide the k-th row by pivot
        */
       const Real& pivot = A( k, k );
+      if( pivot == 0.0 )
+      {
+         std::cerr << "Zero pivot has appeared in " << k << "-th step. GEM has failed." << std::endl;
+         return false;
+      }      
       b[ k ] /= pivot;
       for( int j = k+1; j < n; j++ )
          A( k, j ) /= pivot;
@@ -154,6 +166,48 @@ bool GEM::solveWithPivoting( Vector& x, int verbose )
    }   
 }
 
+bool GEM::computeLUDecomposition( int verbose )
+{  
+   const int n = A.getRows();
+
+   if( verbose )
+      this->print();
+
+   for( int k = 0; k < n; k++ )
+   {
+      /****
+       * Divide the k-th row by pivot
+       */
+      const Real& pivot = A( k, k );
+      b[ k ] /= pivot;
+      for( int j = k+1; j < n; j++ )
+         A( k, j ) /= pivot;
+      //A( k, k ) = 1.0;
+      
+      if( verbose > 1 )
+      {
+         std::cout << "Dividing by the pivot ... " << std::endl;
+         this->print();
+      }
+      
+      /****
+       * Subtract the k-th row from the rows bellow
+       */
+      for( int i = k+1; i < n; i++ )
+      {
+         for( int j = k+1; j < n; j++ )
+            A( i, j ) -= A( i, k ) * A( k, j );
+         b[ i ] -= A( i, k ) * b[ k ];
+         //A( i, k ) = 0.0;
+      }
+
+      if( verbose > 1 )
+      {
+         std::cout << "Subtracting the " << k << "-th row from the rows bellow ... " << std::endl;
+         this->print();
+      }
+   }   
+}
 
 void GEM::print( std::ostream& str ) const
 {
