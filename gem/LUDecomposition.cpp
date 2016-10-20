@@ -23,7 +23,12 @@ bool LUDecomposition::solve( Vector& b, int verbose )
    /****
     * Forward substitution
     */
-
+   for( int k = 0; k < n; k++ )
+   {      
+      for( int j = 0; j < k; j++ )
+         b[ k ] -= b[ j ] * A( k, j );
+      b[ k ] /= A( k, k );
+   }
    
    /****
     * Backward substitution

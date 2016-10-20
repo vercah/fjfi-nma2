@@ -34,7 +34,8 @@ DIST = $(SOURCES) $(HEADERS) Makefile
      
 all: show-matrix \
 	gem-test \
-	lu-test
+	lu-test \
+	lu-solver
 
 show-matrix: $(COMMON_OBJECTS) show-matrix.o matrices/DenseMatrix.o bin
 	$(CXX) -o bin/$@ show-matrix.o matrices/DenseMatrix.o $(COMMON_OBJECTS) $(LDFLAGS)
