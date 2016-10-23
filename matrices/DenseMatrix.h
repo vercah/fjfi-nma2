@@ -29,6 +29,10 @@ class DenseMatrix : public Matrix
       
       void vectorMultiplication( const Vector& in_vector,
                                  Vector& out_vector ) const;
+
+      void performJacobiIteration( const Vector& b,
+                                   const Vector& x,
+                                   Vector& aux ) const;
       
       DenseMatrix& operator=( const DenseMatrix& m );
       

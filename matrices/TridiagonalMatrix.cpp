@@ -50,12 +50,22 @@ const Real& TridiagonalMatrix::operator()( const int row, const int column ) con
 }
 
 void TridiagonalMatrix::vectorMultiplication( const Vector& in_vector,
-                                        Vector& out_vector ) const
+                                              Vector& out_vector ) const
 {
    assert( in_vector.getSize() == this->columns );
    assert( out_vector.getSize() == this->rows );
    
-   assert( false );
+   for( int i = 0; i < this->rows; i++ )
+   {
+      Real sum( 0.0 );
+      if( i > 0 )
+         sum += in_vector[ i - 1 ] * ( *this )( i, i - 1 );
+      sum += in_vector[ i ] * ( *this )( i, i );
+      if( i < this->columns - 1 )
+         sum += in_vector[ i + 1 ] * ( *this )( i, i + 1 );      
+      out_vector[ i ] = sum;
+   }
+      
 }
 
 TridiagonalMatrix& TridiagonalMatrix::operator=( const TridiagonalMatrix& m )
@@ -63,5 +73,3 @@ TridiagonalMatrix& TridiagonalMatrix::operator=( const TridiagonalMatrix& m )
    this->setDimensions( m.getRows(), m.getColumns() );
    this->elements = m.elements;
 }
-
-

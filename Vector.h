@@ -24,6 +24,14 @@ class Vector
       
       const Real& operator[]( const int index ) const;
       
+      void swap( Vector& v );
+      
+      const Real maxNorm() const;
+      
+      const Real l1Norm() const;
+      
+      const Real l2Norm() const;
+      
    protected:
       
       std::vector< Real > data;

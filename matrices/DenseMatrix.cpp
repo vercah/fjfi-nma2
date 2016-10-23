@@ -56,6 +56,29 @@ void DenseMatrix::vectorMultiplication( const Vector& in_vector,
    }
 }
 
+void DenseMatrix::performJacobiIteration( const Vector& b,
+                                          const Vector& x,
+                                          Vector& aux ) const
+{
+   assert( x.getSize() == this->columns );
+   assert( b.getSize() == this->columns );
+   assert( this->columns == this->rows );
+   
+   int idx( 0 );
+   
+   for( int row = 0; row < this->rows; row++ )
+   {
+      Real sum( 0.0 ), a_ii( 0.0 );
+      for( int column = 0; column < this->columns; column++ )
+         if( column != row )
+            sum += this->elements[ idx++ ] * x[ column ];
+         else
+            a_ii = this->elements[ idx++ ];
+      aux[ row ]= 1.0 / a_ii * ( b[ row ] - sum );
+   }
+   
+}
+
 DenseMatrix& DenseMatrix::operator=( const DenseMatrix& m )
 {
    this->setDimensions( m.getRows(), m.getColumns() );

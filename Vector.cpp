@@ -5,6 +5,7 @@
  */
 
 #include "Vector.h"
+#include <cmath>
 
 void Vector::setSize( const int size )
 {
@@ -27,6 +28,39 @@ const Real& Vector::operator[]( const int index ) const
    return this->data[ index ];
 }
 
+void Vector::swap( Vector& v )
+{
+   this->data.swap( v.data );
+}
+
+const Real Vector::maxNorm() const
+{
+   Real result( 0.0 );
+   for( int i = 0; i < this->size; i++ )
+      if( result < fabs( this->data[ i ] ) )
+         result = fabs( this->data[ i ] );
+   return result;
+}
+
+const Real Vector::l1Norm() const
+{
+   Real result( 0.0 );
+   for( int i = 0; i < this->size; i++ )
+      result += fabs( this->data[ i ] );
+   return result;
+}
+
+const Real Vector::l2Norm() const
+{
+   Real result( 0.0 );
+   for( int i = 0; i < this->size; i++ )
+   {
+      const Real aux = fabs( this->data[ i ] );
+      result += aux * aux;
+   }
+   return sqrt( result );
+}
+
 std::ostream& operator << ( std::ostream& str, const Vector& v )
 {
    for( int i = 0; i < v.getSize() - 1; i++ )
@@ -34,3 +68,4 @@ std::ostream& operator << ( std::ostream& str, const Vector& v )
    str << v[ v.getSize() - 1 ];
    return str;
 }
+

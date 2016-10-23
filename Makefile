@@ -35,7 +35,8 @@ DIST = $(SOURCES) $(HEADERS) Makefile
 all: show-matrix \
 	gem-test \
 	lu-test \
-	lu-solver
+	lu-solver \
+	thomas-solver
 
 show-matrix: $(COMMON_OBJECTS) show-matrix.o matrices/DenseMatrix.o bin
 	$(CXX) -o bin/$@ show-matrix.o matrices/DenseMatrix.o $(COMMON_OBJECTS) $(LDFLAGS)
@@ -49,6 +50,10 @@ lu-test: $(COMMON_OBJECTS) matrices/DenseMatrix.o gem/LUDecomposition.o gem/lu-t
 lu-solver: $(COMMON_OBJECTS) matrices/DenseMatrix.o gem/LUDecomposition.o gem/lu-solver.o bin
 	$(CXX) -o bin/$@ gem/lu-solver.o gem/LUDecomposition.o matrices/DenseMatrix.o $(COMMON_OBJECTS) $(LDFLAGS)
 
+thomas-solver: matrices/DenseMatrix.o matrices/TridiagonalMatrix.o gem/ThomasAlgorithm.o gem/GEM.o gem/thomas-solver.o $(COMMON_OBJECTS) bin
+	$(CXX) -o bin/$@ matrices/DenseMatrix.o matrices/TridiagonalMatrix.o gem/ThomasAlgorithm.o gem/GEM.o gem/thomas-solver.o $(COMMON_OBJECTS) $(LDFLAGS)
+
+
 bin:
 	mkdir bin
 
@@ -57,7 +62,7 @@ install: all
 	cp bin/* $(INSTALL_DIR)/bin
 
 clean:
-	rm -f *.o
+	rm -f *.o matrices/*.o gem/*.o
 
 dist: $(DIST)
 	tar zcvf fjfi-01num1-src.tgz $(DIST)

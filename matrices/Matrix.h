@@ -26,6 +26,10 @@ class Matrix
       
       virtual void vectorMultiplication( const Vector& in_vector,
                                          Vector& out_vector ) const = 0;
+      
+      virtual void performJacobiIteration( const Vector& b,
+                                           const Vector& x,
+                                           Vector& aux ) const = 0;
 
       int getRows() const;
       

@@ -30,6 +30,10 @@ class TridiagonalMatrix : public Matrix
       void vectorMultiplication( const Vector& in_vector,
                                  Vector& out_vector ) const;
       
+      void performJacobiIteration( const Vector& b,
+                                   const Vector& x,
+                                   Vector& aux ) const{};
+      
       TridiagonalMatrix& operator=( const TridiagonalMatrix& m );
       
    private:      
