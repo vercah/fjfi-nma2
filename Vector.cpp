@@ -28,6 +28,12 @@ const Real& Vector::operator[]( const int index ) const
    return this->data[ index ];
 }
 
+Vector& Vector::operator -= ( const Vector& b )
+{
+   for( int i = 0; i < this->size; i++ )
+      this->data[ i ] -= b[ i ];
+}
+
 void Vector::swap( Vector& v )
 {
    this->data.swap( v.data );

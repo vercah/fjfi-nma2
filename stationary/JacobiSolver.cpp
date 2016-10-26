@@ -1,5 +1,6 @@
 #include "JacobiSolver.h"
-
+#include <assert.h>
+#include <iostream>
 
 JacobiSolver::JacobiSolver( Matrix& A,
                             Vector& b )
@@ -28,7 +29,8 @@ bool JacobiSolver::solve( Vector& x,
       {
          A.vectorMultiplication( x, aux );
          aux -= b;
-         residue = aux.l2Norm();
+         const Real residue = aux.l2Norm();
+         std::cout << "ITER. " << iteration << " RES. " << residue << std::endl;
          if( residue < convergence_residue )
             return true;
       }      

@@ -74,9 +74,13 @@ void DenseMatrix::performJacobiIteration( const Vector& b,
             sum += this->elements[ idx++ ] * x[ column ];
          else
             a_ii = this->elements[ idx++ ];
+      if( a_ii == 0.0 )
+      {
+         std::cerr << "a_ii = 0 for i = " << row << ", unable to continue." << std::endl;
+         abort();
+      }
       aux[ row ]= 1.0 / a_ii * ( b[ row ] - sum );
    }
-   
 }
 
 DenseMatrix& DenseMatrix::operator=( const DenseMatrix& m )

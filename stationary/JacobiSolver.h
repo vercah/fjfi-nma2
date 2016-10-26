@@ -21,7 +21,7 @@ class JacobiSolver
       
       bool solve( Vector& x, 
                   const int max_iterations = 100000,
-                  cost Real& convergence_residue = 1.0e-6,
+                  const Real& convergence_residue = 1.0e-6,
                   int verbose = 0 );            
       
    protected:

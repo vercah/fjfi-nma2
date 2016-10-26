@@ -24,6 +24,8 @@ class Vector
       
       const Real& operator[]( const int index ) const;
       
+      Vector& operator -= ( const Vector& b );
+      
       void swap( Vector& v );
       
       const Real maxNorm() const;
@@ -31,6 +33,8 @@ class Vector
       const Real l1Norm() const;
       
       const Real l2Norm() const;
+      
+      
       
    protected:
       

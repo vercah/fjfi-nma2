@@ -2,8 +2,8 @@ INSTALL_DIR = ${HOME}/.local
 
 
 CXX = g++
-#CXX_FLAGS = -O0 -g -std=c++11
-CXX_FLAGS = -O3 -std=c++11
+CXX_FLAGS = -O0 -g -std=c++11
+#CXX_FLAGS = -O3 -std=c++11
 LDFLAGS = -lm
 
 COMMON_SOURCES = CommandLineParser.cpp \
@@ -33,16 +33,17 @@ DIST = $(SOURCES) $(HEADERS) Makefile
 
      
 all: show-matrix \
-	gem-test \
+	gem-solver \
 	lu-test \
 	lu-solver \
-	thomas-solver
+	thomas-solver \
+	jacobi-solver
 
 show-matrix: $(COMMON_OBJECTS) show-matrix.o matrices/DenseMatrix.o bin
 	$(CXX) -o bin/$@ show-matrix.o matrices/DenseMatrix.o $(COMMON_OBJECTS) $(LDFLAGS)
 
-gem-test: $(COMMON_OBJECTS) matrices/DenseMatrix.o gem/GEM.o gem/gem-test.o bin
-	$(CXX) -o bin/$@ gem/gem-test.o gem/GEM.o matrices/DenseMatrix.o $(COMMON_OBJECTS) $(LDFLAGS)
+gem-solver: $(COMMON_OBJECTS) matrices/DenseMatrix.o gem/GEM.o gem/gem-solver.o bin
+	$(CXX) -o bin/$@ gem/gem-solver.o gem/GEM.o matrices/DenseMatrix.o $(COMMON_OBJECTS) $(LDFLAGS)
 
 lu-test: $(COMMON_OBJECTS) matrices/DenseMatrix.o gem/LUDecomposition.o gem/lu-test.o bin
 	$(CXX) -o bin/$@ gem/lu-test.o gem/LUDecomposition.o matrices/DenseMatrix.o $(COMMON_OBJECTS) $(LDFLAGS)
@@ -53,6 +54,8 @@ lu-solver: $(COMMON_OBJECTS) matrices/DenseMatrix.o gem/LUDecomposition.o gem/lu
 thomas-solver: matrices/DenseMatrix.o matrices/TridiagonalMatrix.o gem/ThomasAlgorithm.o gem/GEM.o gem/thomas-solver.o $(COMMON_OBJECTS) bin
 	$(CXX) -o bin/$@ matrices/DenseMatrix.o matrices/TridiagonalMatrix.o gem/ThomasAlgorithm.o gem/GEM.o gem/thomas-solver.o $(COMMON_OBJECTS) $(LDFLAGS)
 
+jacobi-solver: matrices/DenseMatrix.o stationary/JacobiSolver.o stationary/jacobi-solver.o $(COMMON_OBJECTS) bin
+	$(CXX) -o bin/$@ matrices/DenseMatrix.o stationary/JacobiSolver.o stationary/jacobi-solver.o $(COMMON_OBJECTS) $(LDFLAGS)
 
 bin:
 	mkdir bin
@@ -62,7 +65,7 @@ install: all
 	cp bin/* $(INSTALL_DIR)/bin
 
 clean:
-	rm -f *.o matrices/*.o gem/*.o
+	rm -f *.o matrices/*.o gem/*.o stationary/*.o
 
 dist: $(DIST)
 	tar zcvf fjfi-01num1-src.tgz $(DIST)

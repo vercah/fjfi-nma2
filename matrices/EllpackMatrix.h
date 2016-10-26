@@ -1,8 +1,8 @@
 /* 
- * File:   denseMatrix.h
+ * File:   EllpackMatrix.h
  * Author: oberhuber
  *
- * Created on September 28, 2016, 5:31 PM
+ * Created on October 26, 2016, 3:32 PM
  */
 
 #pragma once
@@ -13,7 +13,7 @@
 #include "Matrix.h"
 #include "../Vector.h"
 
-class DenseMatrix : public Matrix
+class EllpackMatrix : public Matrix
 {
    public:
    
@@ -22,6 +22,8 @@ class DenseMatrix : public Matrix
       EllpackMatrix( const int rows, const int columns );
       
       bool setDimensions( const int rows, const int columns );
+      
+      bool setRowWidth( const int row_width );
       
       Real& operator()( const int row, const int column );
       
@@ -34,13 +36,18 @@ class DenseMatrix : public Matrix
                                    const Vector& x,
                                    Vector& aux ) const;
       
-      DenseMatrix& operator=( const DenseMatrix& m );
+      EllpackMatrix& operator=( const EllpackMatrix& m );
       
-      DenseMatrix& operator-=( const DenseMatrix& m );
+      EllpackMatrix& operator-=( const EllpackMatrix& m );
       
             
-   private:            
+   private:
+      
+      bool allocate();      
+      
+      int row_width;
+      
+      std::vector< int > columns;
       
       std::vector< Real > elements;
 };
-
