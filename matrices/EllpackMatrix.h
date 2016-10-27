@@ -25,6 +25,8 @@ class EllpackMatrix : public Matrix
       
       bool setRowWidth( const int row_width );
       
+      bool setElement( const int row, const int column, const Real& value );
+      
       Real& operator()( const int row, const int column );
       
       const Real& operator()( const int row, const int column ) const;
