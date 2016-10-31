@@ -37,7 +37,8 @@ all: show-matrix \
 	lu-test \
 	lu-solver \
 	thomas-solver \
-	jacobi-solver
+	stationary-solver \
+	ellpack-test
 
 show-matrix: $(COMMON_OBJECTS) show-matrix.o matrices/DenseMatrix.o bin
 	$(CXX) -o bin/$@ show-matrix.o matrices/DenseMatrix.o $(COMMON_OBJECTS) $(LDFLAGS)
@@ -54,8 +55,11 @@ lu-solver: $(COMMON_OBJECTS) matrices/DenseMatrix.o gem/LUDecomposition.o gem/lu
 thomas-solver: matrices/DenseMatrix.o matrices/TridiagonalMatrix.o gem/ThomasAlgorithm.o gem/GEM.o gem/thomas-solver.o $(COMMON_OBJECTS) bin
 	$(CXX) -o bin/$@ matrices/DenseMatrix.o matrices/TridiagonalMatrix.o gem/ThomasAlgorithm.o gem/GEM.o gem/thomas-solver.o $(COMMON_OBJECTS) $(LDFLAGS)
 
-jacobi-solver: matrices/DenseMatrix.o stationary/JacobiSolver.o stationary/jacobi-solver.o $(COMMON_OBJECTS) bin
-	$(CXX) -o bin/$@ matrices/DenseMatrix.o stationary/JacobiSolver.o stationary/jacobi-solver.o $(COMMON_OBJECTS) $(LDFLAGS)
+stationary-solver: matrices/DenseMatrix.o stationary/StationarySolver.o stationary/stationary-solver.o $(COMMON_OBJECTS) bin
+	$(CXX) -o bin/$@ matrices/DenseMatrix.o stationary/StationarySolver.o stationary/stationary-solver.o $(COMMON_OBJECTS) $(LDFLAGS)
+
+ellpack-test: matrices/DenseMatrix.o matrices/EllpackMatrix.o matrices/ellpack-test.o $(COMMON_OBJECTS) bin
+	$(CXX) -o bin/$@ matrices/DenseMatrix.o matrices/EllpackMatrix.o matrices/ellpack-test.o $(COMMON_OBJECTS) $(LDFLAGS)
 
 bin:
 	mkdir bin

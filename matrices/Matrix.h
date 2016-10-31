@@ -20,16 +20,29 @@ class Matrix
       
       virtual bool setDimensions( const int rows, const int columns ) = 0;
       
-      virtual Real& operator()( const int row, const int column ) = 0;
+      virtual bool setElement( const int row, const int column, const Real& value ) = 0;
       
-      virtual const Real& operator()( const int row, const int column ) const = 0;
+      virtual Real getElement( const int row, const int column ) const = 0;
       
       virtual void vectorMultiplication( const Vector& in_vector,
                                          Vector& out_vector ) const = 0;
       
+      virtual void performRichardsonIteration( const Vector& b,
+                                               const Vector& x,
+                                               Vector& aux,
+                                               const Real& relaxation = 1.0 ) const = 0;
+      
       virtual void performJacobiIteration( const Vector& b,
                                            const Vector& x,
-                                           Vector& aux ) const = 0;
+                                           Vector& aux,
+                                           const Real& relaxation = 1.0 ) const = 0;
+      
+      virtual void performSORIteration( const Vector& b,
+                                        Vector& x,
+                                        const Real& relaxation = 1.0 ) const = 0;
+      
+      
+      virtual void getResidue( const Vector& x, const Vector& b, Vector& r ) const = 0;
 
       int getRows() const;
       
@@ -41,7 +54,7 @@ class Matrix
                   const int precision = 8,
                   const std::string zero = "0" ) const;
       
-      bool readMtxFile( std::istream& file );      
+      virtual bool readMtxFile( std::istream& file );
 
    protected:
       

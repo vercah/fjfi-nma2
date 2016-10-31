@@ -12,7 +12,7 @@
  */
 
 #include <fstream>
-#include "JacobiSolver.h"
+#include "StationarySolver.h"
 #include "../CommandLineParser.h"
 #include "../matrices/DenseMatrix.h"
 #include "../Timer.h"
@@ -31,14 +31,32 @@ int main( int argc, char* argv[] )
       {
          std::cerr << "No input file was given, use -i or --input-file." << std::endl;
       }
+ 
+   std::string method;
+   if( parser.cmdOptionExists( "--method" ) )
+      method = parser.getCmdOption( "--method" );
+
+   Real relaxation( 1.0 );
+   if( parser.cmdOptionExists( "--relaxation" ) )
+      relaxation = std::stof( parser.getCmdOption( "--relaxation" ) );
+   
+   std::string matrix_format( "dense" );
+   if( parser.cmdOptionExists( "--matrix-format" ) )
+      matrix_format = parser.getCmdOption( "--matrix-format" );
+   
+   int max_iterations( 1000 );
+   if( parser.cmdOptionExists( "--max-iterations" ) )
+      max_iterations = std::stoi( parser.getCmdOption( "--max-iterations" ) );
+   
+   Real convergence_residue( 1.0-6 );
+   if( parser.cmdOptionExists( "--convergence-residue" ) )
+      convergence_residue = std::stof( parser.getCmdOption( "--convergence-residue" ) );
+
    
    int verbose( 0 );
    if( parser.cmdOptionExists( "--verbose" ) )
       verbose = std::stoi( parser.getCmdOption( "--verbose" ) );
-   
-   std::string matrix_format( "ellpack" );
-   if( parser.cmdOptionExists( "--matrix-format" ) )
-      matrix_format = parser.getCmdOption( "--matrix-format" );
+
    
    Matrix* matrix( 0 );
    if( matrix_format == "dense" ) 
@@ -82,15 +100,16 @@ int main( int argc, char* argv[] )
    std::cout << "Multiplication took " << timer.getTime() << " seconds." << std::endl;
    for( int i = 0; i < n; i++ )
       x[ i ] = 0.0;
-   
 
-   std::cout << "Solving linear system by the Jacobi method..." << std::endl;
-   JacobiSolver jacobi( *matrix, b );
+   std::cout << "Solving linear system by the " << method << " method..." << std::endl;
+   StationarySolver solver( *matrix, b );
    timer.reset();
    timer.start();
-   jacobi.solve( x, 100, 1.0e-6, 1 );
+   solver.solve( x, max_iterations, convergence_residue, method, relaxation, verbose );
    timer.stop();
-   std::cerr << "Result is " << x << std::endl;
+
+   if( verbose == 1 )
+      std::cerr << "Result is " << x << std::endl;
    std::cout << "Computation took " << timer.getTime() << " seconds." << std::endl;   
    return EXIT_SUCCESS;
 }

@@ -72,7 +72,11 @@ int main( int argc, char* argv[] )
    else
       gem.solve( x, verbose );
    timer.stop();
-   std::cout << "The result is [ " << x << " ]." << std::endl;
+   if( verbose )
+      std::cout << "The result is [ " << x << " ]." << std::endl;
+   Vector r;
+   A.getResidue( x, b, r );
+   std::cout << "Max. norm of the residue is " << r.maxNorm() << "." << std::endl;
    std::cout << "Computation took " << timer.getTime() << " seconds." << std::endl;
    
    /*A = matrix;

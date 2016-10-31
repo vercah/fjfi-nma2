@@ -32,7 +32,7 @@ Real Matrix::maxNorm() const
    for( int k = 0; k < this->getRows(); k++ )
    {
       for( int j = 0; j < this->getColumns(); j++ )
-         currentRow += std::fabs( ( *this )( k, j ) );
+         currentRow += std::fabs( this->getElement( k, j ) );
       if( currentRow > maxRow )
          maxRow = currentRow;
    }
@@ -47,7 +47,7 @@ void Matrix::print( std::ostream& str,
    {
       for( int column = 0; column < this->columns; column++ )
       {
-         const double& value = ( *this )( row, column );
+         const double& value = this->getElement( row, column );
          if( value == 0.0 )
             str << std::setw( precision + 6 ) << zero;
          else str<< std::setprecision( precision ) << std::setw( precision + 6 )  << value;
@@ -135,9 +135,9 @@ bool Matrix::readMtxFile( std::istream& str )
          int row = std::stoi( str_row ) - 1;
          int column = std::stoi( str_column ) - 1;
          Real value = std::stod( str_value );
-         ( *this )( row, column ) =  value;
+         this->setElement( row, column,  value );
          if( matrixType == "symmetric" && row != column )
-            ( *this )( column, row ) = value;
+            this->setElement( column, row, value );
       }
    }
    return true;

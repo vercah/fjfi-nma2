@@ -37,17 +37,24 @@ int main( int argc, char* argv[] )
    DenseMatrix dense_matrix( n, n );
       for( int i = 0; i < n; i++ )
          for( int j = 0; j < n; j++ )
-            dense_matrix( i, j ) = 0.0;
+            dense_matrix.setElement( i, j, 0.0 );
       
    TridiagonalMatrix tridiagonal_matrix( n, n );
    for( int k = 0; k < n; k++ )
    {
-      dense_matrix( k, k ) = tridiagonal_matrix( k, k ) = 2.5;
+      dense_matrix.setElement( k, k, 2.5 );
+      tridiagonal_matrix.setElement( k, k, 2.5 );
       if( k > 1 )
-         dense_matrix( k, k - 1 ) = tridiagonal_matrix( k, k - 1 ) = -1;
+      {
+         
+         dense_matrix.setElement( k, k - 1, -1 );
+         tridiagonal_matrix.setElement( k, k - 1, -1 );
+      }
       if( k < n - 1 )
-         dense_matrix( k, k + 1 ) = tridiagonal_matrix( k, k + 1 ) = -1;
-
+      {
+         dense_matrix.setElement( k, k + 1, -1 );
+         tridiagonal_matrix.setElement( k, k + 1, -1 );
+      }
    }
    
    Vector x, b;   

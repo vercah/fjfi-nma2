@@ -12,16 +12,18 @@
 #include "../real.h"
 #include <ostream>
 
-class JacobiSolver
+class StationarySolver
 {
    public:
       
-      JacobiSolver( Matrix& A,
+      StationarySolver( Matrix& A,
                     Vector& b );
       
       bool solve( Vector& x, 
                   const int max_iterations = 100000,
                   const Real& convergence_residue = 1.0e-6,
+                  const std::string& method = "sor",
+                  const Real& relaxation = 1.0,
                   int verbose = 0 );            
       
    protected:

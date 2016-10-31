@@ -29,14 +29,32 @@ bool TridiagonalMatrix::setDimensions( const int rows, const int columns )
    return true;
 }
    
+bool TridiagonalMatrix::setElement( const int row, const int column, const Real& value )
+{
+   if( abs( column - row ) > 1 )
+   {
+      std::cerr << "Accesing wrong element ( " << row << " column " << column << " ) in tridiagonal matrix. " << std::endl;
+      return false;
+   }
+   this->elements[ 2 * row + column ] = value;
+   return true;
+}
+      
+Real TridiagonalMatrix::getElement( const int row, const int column ) const
+{
+   if( abs( column - row ) > 1 )
+      return 0.0;
+   return this->elements[ 2 * row + column ];   
+}
+
 Real& TridiagonalMatrix::operator()( const int row, const int column )
 {
    if( abs( column - row ) > 1 )
    {
       std::cerr << "Accesing wrong element ( " << row << " column " << column << " ) in tridiagonal matrix. " << std::endl;
-      throw 0;
+      throw( 0 );
    }
-   return this->elements[ 2 * row + column ];
+   return this->elements[ 2 * row + column ];   
 }
       
 const Real& TridiagonalMatrix::operator()( const int row, const int column ) const
@@ -44,9 +62,9 @@ const Real& TridiagonalMatrix::operator()( const int row, const int column ) con
    if( abs( column - row ) > 1 )
    {
       std::cerr << "Accesing wrong element ( " << row << " column " << column << " ) in tridiagonal matrix. " << std::endl;
-      throw 0;
+      throw( 0 );
    }   
-   return this->elements[ 2 * row + column ];
+   return this->elements[ 2 * row + column ];   
 }
 
 void TridiagonalMatrix::vectorMultiplication( const Vector& in_vector,
@@ -59,10 +77,10 @@ void TridiagonalMatrix::vectorMultiplication( const Vector& in_vector,
    {
       Real sum( 0.0 );
       if( i > 0 )
-         sum += in_vector[ i - 1 ] * ( *this )( i, i - 1 );
-      sum += in_vector[ i ] * ( *this )( i, i );
+         sum += in_vector[ i - 1 ] * this->getElement( i, i - 1 );
+      sum += in_vector[ i ] * this->getElement( i, i );
       if( i < this->columns - 1 )
-         sum += in_vector[ i + 1 ] * ( *this )( i, i + 1 );      
+         sum += in_vector[ i + 1 ] * this->getElement( i, i + 1 );      
       out_vector[ i ] = sum;
    }
       
