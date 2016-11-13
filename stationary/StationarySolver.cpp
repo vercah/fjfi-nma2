@@ -4,15 +4,23 @@
 
 StationarySolver::StationarySolver( Matrix& A,
                                     Vector& b )
-: A( A ), b( b )
+: A( A ), b( b ), max_iterations( 1000 ), conevergence_residue( 1.0e-8 )
 {  
    assert( A.getRows() == b.getSize() &&
            A.getColumns() == b.getSize() );
 }
 
+void setMaxIterations( const int max_iterations )
+{
+   this->max_iterations = max_iterations;
+}
+     
+void setConvergenceResidue( const Real& convergence_residue )
+{
+   this->convergence_residue = convergence_residue;
+}
+
 bool StationarySolver::solve( Vector& x, 
-                              const int max_iterations,
-                              const Real& convergence_residue,
                               const std::string& method,
                               const Real& relaxation,
                               int verbose )
@@ -20,7 +28,7 @@ bool StationarySolver::solve( Vector& x,
    int iteration( 0 );
    Vector aux;
    aux.setSize( x.getSize() );
-   while( iteration < max_iterations )
+   while( iteration < this->max_iterations )
    {
       if( method == "richardson" )
          A.performRichardsonIteration( b, x, aux, relaxation );
@@ -41,7 +49,7 @@ bool StationarySolver::solve( Vector& x,
          aux -= b;
          const Real residue = aux.l2Norm();
          std::cout << "ITER. " << iteration << " RES. " << residue << std::endl;
-         if( residue < convergence_residue )
+         if( residue < this->convergence_residue )
             return true;
       }      
    }

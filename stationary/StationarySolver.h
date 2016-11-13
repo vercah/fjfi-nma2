@@ -17,7 +17,11 @@ class StationarySolver
    public:
       
       StationarySolver( Matrix& A,
-                    Vector& b );
+                        Vector& b );
+      
+      void setMaxIterations( const int max_iterations );
+      
+      void setConvergenceResidue( const Real& convergence_residue );
       
       bool solve( Vector& x, 
                   const int max_iterations = 100000,
@@ -31,5 +35,9 @@ class StationarySolver
       Matrix& A;
       
       Vector& b;
+      
+      int max_iterations;
+      
+      Real convergence_residue;
 };
 

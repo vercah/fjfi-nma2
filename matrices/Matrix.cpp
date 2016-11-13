@@ -39,6 +39,17 @@ Real Matrix::maxNorm() const
    return maxRow;
 }
 
+void Matrix::getEigenvalueResidue( const Vector& eigenvector,
+                                   const Real& eigenvalue,
+                                   Vector& residue )
+{
+   residue.setSize( eigenvector.getSize() );
+   A.vectorMultiplication( eigenvector, residue );
+   for( int i = 0; i < eignevectore.getSize(); i++ )
+      residue[ i ] -= eigenvalue * eigenvector[ i ];
+}
+
+
 void Matrix::print( std::ostream& str,
                     const int precision,
                     const std::string zero ) const

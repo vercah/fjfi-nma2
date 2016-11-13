@@ -52,12 +52,10 @@ int main( int argc, char* argv[] )
    if( parser.cmdOptionExists( "--convergence-residue" ) )
       convergence_residue = std::stof( parser.getCmdOption( "--convergence-residue" ) );
 
-   
    int verbose( 0 );
    if( parser.cmdOptionExists( "--verbose" ) )
       verbose = std::stoi( parser.getCmdOption( "--verbose" ) );
 
-   
    Matrix* matrix( 0 );
    if( matrix_format == "dense" ) 
       matrix = new DenseMatrix;
@@ -103,9 +101,11 @@ int main( int argc, char* argv[] )
 
    std::cout << "Solving linear system by the " << method << " method..." << std::endl;
    StationarySolver solver( *matrix, b );
+   solver.setMaxIterations( max_iterations );
+   solver.setConvergenceResidue( convergence_residue );
    timer.reset();
    timer.start();
-   solver.solve( x, max_iterations, convergence_residue, method, relaxation, verbose );
+   solver.solve( x, method, relaxation, verbose );
    timer.stop();
 
    if( verbose == 1 )
