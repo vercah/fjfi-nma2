@@ -40,8 +40,8 @@ bool StationarySolver::solve( Vector& x,
          A.vectorMultiplication( x, aux );
          aux -= b;
          const Real residue = aux.l2Norm();
-         std::cout << "ITER. " << iteration << " RES. " << residue << std::endl;
-         if( residue < convergence_residue )
+         std::cout << "ITER. " << iteration << " L2-RES. " << residue << std::endl;
+         if( residue <= convergence_residue )
             return true;
       }      
    }

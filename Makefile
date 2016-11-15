@@ -55,8 +55,8 @@ lu-solver: $(COMMON_OBJECTS) matrices/DenseMatrix.o gem/LUDecomposition.o gem/lu
 thomas-solver: matrices/DenseMatrix.o matrices/TridiagonalMatrix.o gem/ThomasAlgorithm.o gem/GEM.o gem/thomas-solver.o $(COMMON_OBJECTS) bin
 	$(CXX) -o bin/$@ matrices/DenseMatrix.o matrices/TridiagonalMatrix.o gem/ThomasAlgorithm.o gem/GEM.o gem/thomas-solver.o $(COMMON_OBJECTS) $(LDFLAGS)
 
-stationary-solver: matrices/DenseMatrix.o stationary/StationarySolver.o stationary/stationary-solver.o $(COMMON_OBJECTS) bin
-	$(CXX) -o bin/$@ matrices/DenseMatrix.o stationary/StationarySolver.o stationary/stationary-solver.o $(COMMON_OBJECTS) $(LDFLAGS)
+stationary-solver: matrices/DenseMatrix.o matrices/EllpackMatrix.o stationary/StationarySolver.o stationary/stationary-solver.o $(COMMON_OBJECTS) bin
+	$(CXX) -o bin/$@ matrices/DenseMatrix.o matrices/EllpackMatrix.o stationary/StationarySolver.o stationary/stationary-solver.o $(COMMON_OBJECTS) $(LDFLAGS)
 
 ellpack-test: matrices/DenseMatrix.o matrices/EllpackMatrix.o matrices/ellpack-test.o $(COMMON_OBJECTS) bin
 	$(CXX) -o bin/$@ matrices/DenseMatrix.o matrices/EllpackMatrix.o matrices/ellpack-test.o $(COMMON_OBJECTS) $(LDFLAGS)

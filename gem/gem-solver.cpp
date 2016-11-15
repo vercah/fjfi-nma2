@@ -76,7 +76,9 @@ int main( int argc, char* argv[] )
       std::cout << "The result is [ " << x << " ]." << std::endl;
    Vector r;
    A.getResidue( x, b, r );
-   std::cout << "Max. norm of the residue is " << r.maxNorm() << "." << std::endl;
+   std::cout << "L1. norm of the residue is " << r.l1Norm() << "." << std::endl;
+   std::cout << "L2. norm of the residue is " << r.l2Norm() << "." << std::endl;   
+   std::cout << "Max. norm of the residue is " << r.maxNorm() << "." << std::endl;   
    std::cout << "Computation took " << timer.getTime() << " seconds." << std::endl;
    
    /*A = matrix;

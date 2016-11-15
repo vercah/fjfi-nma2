@@ -15,6 +15,7 @@
 #include "StationarySolver.h"
 #include "../CommandLineParser.h"
 #include "../matrices/DenseMatrix.h"
+#include "../matrices/EllpackMatrix.h"
 #include "../Timer.h"
 
 int main( int argc, char* argv[] )
@@ -43,15 +44,18 @@ int main( int argc, char* argv[] )
    std::string matrix_format( "dense" );
    if( parser.cmdOptionExists( "--matrix-format" ) )
       matrix_format = parser.getCmdOption( "--matrix-format" );
+
+   Real initial_value( 0.0 );
+   if( parser.cmdOptionExists( "--initial-value" ) )
+      initial_value = std::stof( parser.getCmdOption( "--initial-value" ) );
    
    int max_iterations( 1000 );
    if( parser.cmdOptionExists( "--max-iterations" ) )
       max_iterations = std::stoi( parser.getCmdOption( "--max-iterations" ) );
    
-   Real convergence_residue( 1.0-6 );
+   Real convergence_residue( 1.0e-6 );
    if( parser.cmdOptionExists( "--convergence-residue" ) )
       convergence_residue = std::stof( parser.getCmdOption( "--convergence-residue" ) );
-
    
    int verbose( 0 );
    if( parser.cmdOptionExists( "--verbose" ) )
@@ -61,6 +65,9 @@ int main( int argc, char* argv[] )
    Matrix* matrix( 0 );
    if( matrix_format == "dense" ) 
       matrix = new DenseMatrix;
+   if( matrix_format == "ellpack" ) 
+      matrix = new EllpackMatrix;
+   
    if( ! matrix )
    {
       std::cerr << "Unknown matrix format " << matrix_format << "." << std::endl;
@@ -99,7 +106,7 @@ int main( int argc, char* argv[] )
    timer.stop();
    std::cout << "Multiplication took " << timer.getTime() << " seconds." << std::endl;
    for( int i = 0; i < n; i++ )
-      x[ i ] = 0.0;
+      x[ i ] = initial_value;
 
    std::cout << "Solving linear system by the " << method << " method..." << std::endl;
    StationarySolver solver( *matrix, b );

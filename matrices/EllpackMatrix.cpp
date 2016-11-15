@@ -101,7 +101,20 @@ void EllpackMatrix::performRichardsonIteration( const Vector& b,
                                                 Vector& aux,
                                                 const Real& relaxation ) const
 {
+   assert( x.getSize() == this->columns );
+   assert( b.getSize() == this->columns );
+   assert( this->columns == this->rows );
    
+   for( int row = 0; row < this->rows; row++ )
+   {
+      Real sum( 0.0 ), a_ii( 0.0 );
+      int ptr = row * row_width;
+      int column;
+      const int row_end = ptr + row_width;
+      while( ptr < row_end && ( column = this->column_indexes[ ptr ] ) != -1 )
+            sum += this->elements[ ptr++ ] * x[ column ];
+      aux[ row ]= x[ row ] + relaxation * ( b[ row ] - sum );
+   }   
 }
 
 void EllpackMatrix::performJacobiIteration( const Vector& b,
@@ -122,25 +135,45 @@ void EllpackMatrix::performJacobiIteration( const Vector& b,
       while( ptr < row_end && ( column = this->column_indexes[ ptr ] ) != -1 )
       {
          if( column == row )
-            a_ii = this->elements[ ptr++ ];
-         else 
-            sum += this->elements[ ptr++ ] * x[ column ];
+            a_ii = this->elements[ ptr ];
+         sum += this->elements[ ptr++ ] * x[ column ];
       }
       if( a_ii == 0.0 )
       {
          std::cerr << "a_ii = 0 for i = " << row << ", unable to continue." << std::endl;
          abort();
       }      
-      aux[ row ]= ( b[ row ] - sum ) / a_ii;
+      aux[ row ]= x[ row ] + relaxation * ( b[ row ] - sum ) / a_ii;
    }
-   
 }
 
 void EllpackMatrix::performSORIteration( const Vector& b,
                                          Vector& x,
                                          const Real& relaxation ) const
 {
+   assert( x.getSize() == this->columns );
+   assert( b.getSize() == this->columns );
+   assert( this->columns == this->rows );
    
+   for( int row = 0; row < this->rows; row++ )
+   {
+      Real sum( 0.0 ), a_ii( 0.0 );
+      int ptr = row * row_width;
+      int column;
+      const int row_end = ptr + row_width;
+      while( ptr < row_end && ( column = this->column_indexes[ ptr ] ) != -1 )
+      {
+         if( column == row )
+            a_ii = this->elements[ ptr ];
+         sum += this->elements[ ptr++ ] * x[ column ];
+      }
+      if( a_ii == 0.0 )
+      {
+         std::cerr << "a_ii = 0 for i = " << row << ", unable to continue." << std::endl;
+         abort();
+      }
+      x[ row ] += relaxation * ( b[ row ] - sum ) / a_ii;
+   }   
 }
 
 void EllpackMatrix::getResidue( const Vector& x, const Vector& b, Vector& r ) const

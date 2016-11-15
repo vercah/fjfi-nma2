@@ -34,6 +34,8 @@ bool GEM::solve( Vector& x, int verbose )
       /****
        * Divide the k-th row by pivot
        */
+      if( k % 10 == 0 )
+         std::cout << "Elimination: " << k << "/" << n << std::endl;
       const Real& pivot = A( k, k );
       if( pivot == 0.0 )
       {
@@ -74,6 +76,8 @@ bool GEM::solve( Vector& x, int verbose )
     */
    for( int k = n - 1; k >= 0; k-- )
    {
+      //if( k % 10 == 0 )
+      //   std::cout << "Substitution: " << k << "/" << n << std::endl;
       x[ k ] = b[ k ];
       for( int j = k + 1; j < n; j++ )
          x[ k ] -= x[ j ] * A( k, j );         

@@ -101,16 +101,19 @@ void DenseMatrix::performJacobiIteration( const Vector& b,
    {
       Real sum( 0.0 ), a_ii( 0.0 );
       for( int column = 0; column < this->columns; column++ )
-         if( column != row )
-            sum += this->elements[ idx++ ] * x[ column ];
-         else
-            a_ii = this->elements[ idx++ ];
+      {
+         if( column == row )
+            a_ii = this->elements[ idx ];
+         sum += this->elements[ idx++ ] * x[ column ];
+      }
+
+            
       if( a_ii == 0.0 )
       {
          std::cerr << "a_ii = 0 for i = " << row << ", unable to continue." << std::endl;
          abort();
       }
-      aux[ row ] = ( b[ row ] - sum ) / a_ii;
+      aux[ row ] = x[ row ] + relaxation * ( b[ row ] - sum ) / a_ii;
    }
 }
 
