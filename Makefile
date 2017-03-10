@@ -1,10 +1,6 @@
-INSTALL_DIR = ${HOME}/.local
+include Makefile.inc
 
-
-CXX = g++
-CXX_FLAGS = -O0 -g -std=c++11
-#CXX_FLAGS = -O3 -std=c++11
-LDFLAGS = -lm
+include ode/Makefile
 
 COMMON_SOURCES = CommandLineParser.cpp \
                  string-split.cpp \
@@ -29,8 +25,12 @@ HEADERS = matrices/DenseMatrix.h \
 
 SOURCES = $(SHOW_MATRIX_SOURCES)
 
-DIST = $(SOURCES) $(HEADERS) Makefile
+MAKEFILES = \
+            Makefile \
+            Makefile.inc
 
+
+DIST = $(SOURCES) $(HEADERS) $(MAKEFILES)
      
 all: show-matrix \
 	gem-solver \
@@ -39,7 +39,8 @@ all: show-matrix \
 	thomas-solver \
 	stationary-solver \
 	ellpack-test \
-	power-method
+	power-method \
+	$(TARGETS)
 
 show-matrix: $(COMMON_OBJECTS) show-matrix.o matrices/DenseMatrix.o bin
 	$(CXX) -o bin/$@ show-matrix.o matrices/DenseMatrix.o $(COMMON_OBJECTS) $(LDFLAGS)
