@@ -29,6 +29,17 @@ SOURCES += $(RICCATI_SOURCES) \
            $(SPECIES_SOURCES) \
            $(LORENTZ_SOURCES)
 
+HEADERS += ode/Euler.h \
+           ode/HyperbolicProblem.h  \
+           ode/IntegratorBase.h \
+           ode/LorentzProblem.h \
+           ode/Merson.h \
+           ode/ODESolution.h \
+           ode/ODESolver.h \
+           ode/RiccatiProblem.h \
+           ode/SpeciesProblem.h
+
+     
 MAKEFILES += ode/Makefile
 
 riccati: $(RICCATI_OBJECTS)

@@ -23,7 +23,7 @@ install: all
 	cp $(TARGETS) $(INSTALL_DIR)/bin
 	
 dist: $(DIST)
-	tar zcvf para-src.tgz $(DIST) 
+	tar zcf num2-src.tgz $(DIST) 
 
 clean: 
 	rm -f $(OBJECTS)
