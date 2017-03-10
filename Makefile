@@ -38,7 +38,8 @@ all: show-matrix \
 	lu-solver \
 	thomas-solver \
 	stationary-solver \
-	ellpack-test
+	ellpack-test \
+	power-method
 
 show-matrix: $(COMMON_OBJECTS) show-matrix.o matrices/DenseMatrix.o bin
 	$(CXX) -o bin/$@ show-matrix.o matrices/DenseMatrix.o $(COMMON_OBJECTS) $(LDFLAGS)
@@ -61,6 +62,9 @@ stationary-solver: matrices/DenseMatrix.o matrices/EllpackMatrix.o stationary/St
 ellpack-test: matrices/DenseMatrix.o matrices/EllpackMatrix.o matrices/ellpack-test.o $(COMMON_OBJECTS) bin
 	$(CXX) -o bin/$@ matrices/DenseMatrix.o matrices/EllpackMatrix.o matrices/ellpack-test.o $(COMMON_OBJECTS) $(LDFLAGS)
 
+power-method: matrices/DenseMatrix.o matrices/EllpackMatrix.o eigenvalues/PowerMethod.o stationary/StationarySolver.o eigenvalues/power-method.o $(COMMON_OBJECTS) bin
+	$(CXX) -o bin/$@ matrices/DenseMatrix.o matrices/EllpackMatrix.o eigenvalues/PowerMethod.o stationary/StationarySolver.o eigenvalues/power-method.o $(COMMON_OBJECTS) $(LDFLAGS)
+
 bin:
 	mkdir bin
 
@@ -69,7 +73,7 @@ install: all
 	cp bin/* $(INSTALL_DIR)/bin
 
 clean:
-	rm -f *.o matrices/*.o gem/*.o stationary/*.o
+	rm -f *.o matrices/*.o gem/*.o stationary/*.o eigenvalues/*.o
 
 dist: $(DIST)
 	tar zcvf fjfi-01num1-src.tgz $(DIST)

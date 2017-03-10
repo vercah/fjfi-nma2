@@ -43,12 +43,16 @@ class Matrix
       
       
       virtual void getResidue( const Vector& x, const Vector& b, Vector& r ) const = 0;
+      
+      void getEigenvalueResidue( const Vector& eigenvector,
+                                 const Real& eigenvalue,
+                                 Vector& residue ) const;      
 
       int getRows() const;
       
       int getColumns() const;
       
-      Real maxNorm() const;
+      Real maxNorm() const;      
       
       void print( std::ostream& str,
                   const int precision = 8,

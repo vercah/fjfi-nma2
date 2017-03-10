@@ -21,7 +21,9 @@ class LUDecomposition
       
       bool computeByCrout( int verbose = 0 );
       
-      void restoreMatrix( DenseMatrix& B );
+      bool computeByDoolitle( int verbose = 0 );
+      
+      void restoreMatrix( DenseMatrix& B, bool ones_on_L = false );
       
    protected:
       

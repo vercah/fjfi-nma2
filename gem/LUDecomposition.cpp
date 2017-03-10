@@ -120,23 +120,77 @@ bool LUDecomposition::computeByCrout( int verbose )
    }
 }
 
-void LUDecomposition::restoreMatrix( DenseMatrix& B )
+bool LUDecomposition::computeByDoolitle( int verbose )
+{
+   const int n = A.getRows();
+   
+   for( int step = 0; step < n; step++ )
+   {
+      const int j = step;
+      
+      /****
+       * Compute i-th row of matrix U (except diagonal part)
+       */
+      for( int j = step; j < n; j++ )
+      {
+         const int i = step;
+         Real aux( 0.0 );
+         for( int k = 0; k < i; k++ )
+            aux += A( i, k ) * A( k, j );      
+         A( i, j ) -=  aux;
+      }
+      if( verbose > 1 )
+         std::cout << "Computing the " << step << "-th row of U:" << std::endl << A << std::endl;
+      
+      /****
+       * Compute j-th column of matrix L
+       */
+      for( int i = step + 1; i < n; i++ )
+      {
+         Real aux( 0.0 );
+         for( int k = 0; k < j; k++ )
+            aux += A( i, k ) * A( k, j );      
+         A( i, j ) -=  aux;
+         A( i, j ) /= A( i, i );
+      }
+      if( verbose > 1 )
+         std::cout << "Computing the " << step << "-th column of L:" << std::endl << A << std::endl;
+
+   }
+}
+
+
+void LUDecomposition::restoreMatrix( DenseMatrix& B, bool ones_on_U )
 {
    assert( B.getColumns() == A.getColumns() );
    assert( B.getRows() ==  A.getRows() );
    const int n = A.getColumns();
    
-   for( int i = 0; i < n; i++ )
-      for( int j = 0; j < n; j++ )
-      {
-         Real aux( 0.0 );
-         for( int k = 0; k <= std::min( i, j ); k++ )            
-            if( k == j )  // There are ones on the diagonal of U 
-               aux += A( i, k );
-            else
-               aux += A( i, k ) * A( k, j );
-         B( i, j ) = aux;
-      }  
+   if( ones_on_U )
+      for( int i = 0; i < n; i++ )
+         for( int j = 0; j < n; j++ )
+         {
+            Real aux( 0.0 );
+            for( int k = 0; k <= std::min( i, j ); k++ )            
+               if( k == j )  // There are ones on the diagonal of U 
+                  aux += A( i, k );
+               else
+                  aux += A( i, k ) * A( k, j );
+            B( i, j ) = aux;
+         }  
+   else
+      for( int i = 0; i < n; i++ )
+         for( int j = 0; j < n; j++ )
+         {
+            Real aux( 0.0 );
+            for( int k = 0; k <= std::min( i, j ); k++ )            
+               if( k == i )  // There are ones on the diagonal of L 
+                  aux += A( k, j );
+               else
+                  aux += A( i, k ) * A( k, j );
+            B( i, j ) = aux;
+         }  
+
 }
 
 void LUDecomposition::print( std::ostream& str ) const

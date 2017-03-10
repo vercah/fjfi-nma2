@@ -1,22 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* 
- * File:   jacobi-test.cpp
+ * File:   power-method.cpp
  * Author: oberhuber
  *
- * Created on October 24, 2016, 4:15 PM
+ * Created on November 15, 2016, 2:00 PM
  */
 
 #include <fstream>
-#include "StationarySolver.h"
+#include "../stationary/StationarySolver.h"
 #include "../CommandLineParser.h"
 #include "../matrices/DenseMatrix.h"
 #include "../matrices/EllpackMatrix.h"
 #include "../Timer.h"
+#include "PowerMethod.h"
 
 int main( int argc, char* argv[] )
 {
@@ -33,22 +28,19 @@ int main( int argc, char* argv[] )
          std::cerr << "No input file was given, use -i or --input-file." << std::endl;
       }
  
-   std::string method;
-   if( parser.cmdOptionExists( "--method" ) )
-      method = parser.getCmdOption( "--method" );
-
-   Real relaxation( 1.0 );
-   if( parser.cmdOptionExists( "--relaxation" ) )
-      relaxation = std::stof( parser.getCmdOption( "--relaxation" ) );
+   bool smallest( false );
+   if( parser.cmdOptionExists( "--eigenvalue" ) )
+      if( parser.getCmdOption( "--eigenvalue" ) == "smallest" )
+         smallest = true;
    
-   std::string matrix_format( "dense" );
-   if( parser.cmdOptionExists( "--matrix-format" ) )
-      matrix_format = parser.getCmdOption( "--matrix-format" );
-
-   Real initial_value( 0.0 );
+   Real initial_value( 1.0 );
    if( parser.cmdOptionExists( "--initial-value" ) )
-      initial_value = std::stof( parser.getCmdOption( "--initial-value" ) );
+      initial_value = std::stof( parser.getCmdOption( "--initial-value" ) );   
    
+   std::string linear_solver( "sor");
+   if( parser.cmdOptionExists( "--linear-solver" ) )
+      linear_solver = parser.getCmdOption( "--linear-solver" );
+
    int max_iterations( 1000 );
    if( parser.cmdOptionExists( "--max-iterations" ) )
       max_iterations = std::stoi( parser.getCmdOption( "--max-iterations" ) );
@@ -62,14 +54,11 @@ int main( int argc, char* argv[] )
       verbose = std::stoi( parser.getCmdOption( "--verbose" ) );
 
    Matrix* matrix( 0 );
-   if( matrix_format == "dense" ) 
-      matrix = new DenseMatrix;
-   if( matrix_format == "ellpack" ) 
-      matrix = new EllpackMatrix;
+   matrix = new EllpackMatrix;
    
    if( ! matrix )
    {
-      std::cerr << "Unknown matrix format " << matrix_format << "." << std::endl;
+      std::cerr << "Unable to allocate the matrix." << std::endl;
       return EXIT_FAILURE;
    }
    std::fstream file;
@@ -91,31 +80,25 @@ int main( int argc, char* argv[] )
    std::cout << "Matrix dimensions are " << n << "x" << n << "." << std::endl;
    if( verbose >= 1 )
       std::cout << "Matrix is:" << std::endl << matrix << std::endl;
-   Vector x, b;   
-   x.setSize( n );
-   b.setSize( n );
-   for( int i = 0; i < n; i++ )
-      x[ i ] = 1.0;
-
-   Timer timer;
-   timer.reset();
-   timer.start();   
-   std::cout << "Multiplying matrix-vector..." << std::endl;
-   matrix->vectorMultiplication( x, b );
-   timer.stop();
-   std::cout << "Multiplication took " << timer.getTime() << " seconds." << std::endl;
-   for( int i = 0; i < n; i++ )
+   Vector x;   
+   Real lambda;
+   x.setSize( matrix->getColumns() );
+   for( int i = 0; i < x.getSize(); i++ )
       x[ i ] = initial_value;
 
-   std::cout << "Solving linear system by the " << method << " method..." << std::endl;
-   StationarySolver solver( *matrix, b );
-   solver.setMaxIterations( max_iterations );
-   solver.setConvergenceResidue( convergence_residue );
+
+   std::cout << "Finding the eigenvalue by the power method..." << std::endl;
+   PowerMethod power_method( *matrix );
+   power_method.setMaxIterations( max_iterations );
+   power_method.setConvergenceResidue( convergence_residue );
+   Timer timer;
    timer.reset();
    timer.start();
-   solver.solve( x, method, relaxation, verbose );
+   power_method.getEigenvalue( x, lambda, smallest, verbose );
    timer.stop();
+   std::cout << "lambda = " << lambda << std::endl;
 
+   
    if( verbose == 1 )
       std::cerr << "Result is " << x << std::endl;
    std::cout << "Computation took " << timer.getTime() << " seconds." << std::endl;   
