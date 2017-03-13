@@ -15,8 +15,8 @@ using namespace std;
 
 typedef RiccatiProblem Problem;
 typedef Euler< Problem > Integrator;
-const double initialTime( 0.12 );
-const double finalTime( 0.15 );
+const double initialTime( 0.1 );
+const double finalTime( 0.2 );
 const double timeStep( 1.0e-3 );
 const double integrationTimeStep( 1.0e-3 );
 

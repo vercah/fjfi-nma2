@@ -26,12 +26,12 @@ const double integrationTimeStep( 1.0e-4 );
 int main( int argc, char** argv )
 {
     Problem problem;
-    problem.setParameters( 1.1, 0.9, 0.8, 1.2 );
+    problem.setParameters( 1.5, 1.0, 3.0, 1.0 );
     Integrator integrator( problem );
     ODESolution solution;
     integrator.setIntegrationTimeStep( integrationTimeStep );
     ODESolver< Problem, Integrator > solver( problem, integrator );
-    double initialCondition[ 2 ] = { 0.75, 0.25 };
+    double initialCondition[ 2 ] = { 7.5, 0.25 };
     solver.setInitialCondition( initialCondition );
     solver.solve( solution, initialTime, finalTime, timeStep );
     solution.write( "species-1.txt", initialTime, timeStep, 0 );
