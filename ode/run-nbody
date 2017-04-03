@@ -1,0 +1,31 @@
+#!/bin/bash
+
+nbody
+
+seznam=`ls nbody-*.txt`
+step=0
+for fname in $seznam ; do
+time=$(expr $step*$snapshotPeriod | bc | sed 's/^\./0./')
+echo "Drawing map $fname"
+gnuplot << EOF
+set output '${fname}.png'
+set xrange [${1}:${domainEnd}]
+set yrange [${1}:${domainEnd}]
+#set zrange [${minZ}:${maxZ}]    
+#set pm3d
+#unset surface
+set terminal png size 1200,600
+set cbrange [-1:1]
+set view map
+set title 'Numerical solution - map - T: ${time}'
+set style data points
+set size square
+set contour base
+set cntrparam levels ${numberOfContours}
+plot '$fname' with dots notitle
+EOF
+step=$((${step}+1))
+done
+
+mencoder "mf://u-*.png" -mf fps=4 -o mean_curvature_map_$size.avi -ovc lavc -lavcopts vcodec=mpeg4
+rm *.png
