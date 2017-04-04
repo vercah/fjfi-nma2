@@ -15,17 +15,16 @@
 using namespace std;
 
 typedef HyperbolicProblem Problem;
-typedef Euler< Problem > Integrator;
+typedef Merson< Problem > Integrator;
 const double initialTime( 0.0 );
 const double finalTime( 100.0 );
 const double timeStep( 1.0e-1 );
-
 const double integrationTimeStep( 1.0 );
 
 int main( int argc, char** argv )
 {
     Problem problem;
-    problem.setEpsilon( 0.0 );
+    problem.setEpsilon( 0.5 );
     Integrator integrator( problem );
     ODESolution solution;
     integrator.setIntegrationTimeStep( integrationTimeStep );

@@ -48,17 +48,20 @@ HEADERS += ode/Euler.h \
      
 MAKEFILES += ode/Makefile
 
-riccati: $(RICCATI_OBJECTS)
+riccati: $(RICCATI_OBJECTS) $(RICCATI_SOURCES) $(HEADERS)
 	$(CXX) $(RICCATI_OBJECTS) $(LD_FLAGS) -o bin/riccati
 
-hyperbolic: $(HYPERBOLIC_OBJECTS)
+hyperbolic: $(HYPERBOLIC_OBJECTS) $(HYPERBOLIC_SOURCES) $(HEADERS)
 	$(CXX) $(HYPERBOLIC_OBJECTS) $(LD_FLAGS) -o bin/hyperbolic
 	
-species: $(SPECIES_OBJECTS)
+species: $(SPECIES_OBJECTS) $(SPECIES_SOURCES) $(HEADERS)
 	$(CXX) $(SPECIES_OBJECTS) $(LD_FLAGS) -o bin/species
 	
-lorentz: $(LORENTZ_OBJECTS)
+lorentz: $(LORENTZ_OBJECTS) $(LORENTZ_SOURCES) $(HEADERS)
 	$(CXX) $(LORENTZ_OBJECTS) $(LD_FLAGS) -o bin/lorentz
 	
-nbody: $(NBODY_OBJECTS)
+nbody: $(NBODY_OBJECTS) $(NBODY_SOURCES) $(HEADERS)
 	$(CXX) $(NBODY_OBJECTS) $(LD_FLAGS) -o bin/nbody
+	
+%.o: %.cpp
+	$(CXX) $(CPPFLAGS) $(CXX_FLAGS) -c -o $@ $<	

@@ -15,10 +15,10 @@ using namespace std;
 
 typedef RiccatiProblem Problem;
 typedef Euler< Problem > Integrator;
-const double initialTime( 0.1 );
-const double finalTime( 0.2 );
+const double initialTime( 0.12 );
+const double finalTime( 0.15 );
 const double timeStep( 1.0e-3 );
-const double integrationTimeStep( 1.0e-3 );
+const double integrationTimeStep( 1.0e-4 );
 
 int main( int argc, char** argv )
 {
@@ -33,7 +33,6 @@ int main( int argc, char** argv )
     solver.solve( solution, initialTime, finalTime, timeStep );
     solution.write( "riccati.txt", initialTime, timeStep );
     problem.writeExactSolution( "exact-riccati.txt", initialTime, finalTime, timeStep, 1.0 );
-    
     
     
     return EXIT_SUCCESS;

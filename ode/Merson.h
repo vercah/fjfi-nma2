@@ -47,28 +47,28 @@ class Merson : public IntegratorBase
              */
             for( int i = 0; i < dofs; i++ )
                aux[ i ] = u[ i ] + tau * ( 1.0 / 3.0 * k1[ i ] );
-            problem.getRightHandSide( this->time, aux, k2 );
+            problem.getRightHandSide( this->time + 1.0 / 3.0 * tau, aux, k2 );
             
             /****
              * Compute k3
              */
             for( int i = 0; i < dofs; i++ )
                aux[ i ] = u[ i ] + tau * 1.0 / 6.0 * ( k1[ i ] + k2[ i ] );
-            problem.getRightHandSide( this->time, aux, k3 );
+            problem.getRightHandSide( this->time + 1.0 / 3.0 * tau, aux, k3 );
             
             /****
              * Compute k4
              */
             for( int i = 0; i < dofs; i++ )
                aux[ i ] = u[ i ] + tau * ( 0.125 * k1[ i ] + 0.375 * k3[ i ] );
-            problem.getRightHandSide( this->time, aux, k4 );
+            problem.getRightHandSide( this->time + 1.0 / 2.0 * tau, aux, k4 );
             
             /****
              * Compute k5
              */
             for( int i = 0; i < dofs; i++ )
                aux[ i ] = u[ i ] + tau * ( 0.5 * k1[ i ] - 1.5 * k3[ i ] + 2.0 * k4[ i ] );
-            problem.getRightHandSide( this->time, aux, k5 );
+            problem.getRightHandSide( this->time + tau, aux, k5 );
             
             /****
              * Compute error
