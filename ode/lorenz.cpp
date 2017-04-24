@@ -6,7 +6,7 @@
  */
 
 #include <cstdlib>
-#include "LorentzProblem.h"
+#include "LorenzProblem.h"
 #include "Euler.h"
 #include "Merson.h"
 #include "ODESolver.h"
@@ -14,11 +14,11 @@
 
 using namespace std;
 
-typedef LorentzProblem Problem;
+typedef LorenzProblem Problem;
 //typedef Euler< Problem > Integrator;
 typedef Merson< Problem > Integrator;
 const double initialTime( 0.0 );
-const double finalTime( 50.0 );
+const double finalTime( 100.0 );
 const double timeStep( 1.0e-2 );
 
 const double integrationTimeStep( 1.0e-4 );
@@ -34,7 +34,7 @@ int main( int argc, char** argv )
     double initialCondition[ 3 ] = { 1.0, 1.0, 1.0 };
     solver.setInitialCondition( initialCondition );
     solver.solve( solution, initialTime, finalTime, timeStep );
-    solution.write( "lorentz.txt" );
+    solution.write( "lorenz.txt" );
     return EXIT_SUCCESS;
 }
 

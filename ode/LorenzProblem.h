@@ -1,22 +1,22 @@
 /* 
- * File:   LorentzProblem.h
+ * File:   LorenzProblem.h
  * Author: oberhuber
  *
  * Created on February 25, 2016, 10:41 AM
  */
 
-#ifndef LORENTZPROBLEM_H
-#define LORENTZPROBLEM_H
+#ifndef LORENZPROBLEM_H
+#define LORENZPROBLEM_H
 
 #include<cmath>
 #include<iostream>
 #include<fstream>
 
-class LorentzProblem
+class LorenzProblem
 {
    public:
       
-      LorentzProblem()
+      LorenzProblem()
       : sigma( 1.0 ), rho( 1.0 ), beta( 1.0 )
       {}
       
@@ -48,5 +48,5 @@ class LorentzProblem
 };
 
 
-#endif /* LORENTZPROBLEM_H */
+#endif /* LORENZPROBLEM_H */
 

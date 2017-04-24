@@ -1,4 +1,4 @@
-TARGETS += riccati hyperbolic species lorentz nbody
+TARGETS += riccati hyperbolic species lorenz nbody
 
 CXX_FLAGS += -Iode
  
@@ -14,9 +14,9 @@ SPECIES_OBJECTS = ode/species.o
 
 SPECIES_SOURCES = ode/species.cpp
 
-LORENTZ_OBJECTS = ode/lorentz.o
+LORENZ_OBJECTS = ode/lorenz.o
 
-LORENTZ_SOURCES = ode/lorentz.cpp
+LORENZ_SOURCES = ode/lorenz.cpp
 
 NBODY_OBJECTS = ode/nbody.o
 
@@ -26,19 +26,19 @@ NBODY_SOURCES = ode/nbody.cpp
 OBJECTS += $(RICCATI_OBJECTS) \
            $(HYPERBOLIC_OBJECTS) \
            $(SPECIES_OBJECTS) \
-           $(LORENTZ_OBJECTS) \
+           $(LORENZ_OBJECTS) \
 	   $(NBODY_OBJECTS)
 
 SOURCES += $(RICCATI_SOURCES) \
            $(HYPERBOLIC_SOURCES) \
            $(SPECIES_SOURCES) \
-           $(LORENTZ_SOURCES) \
+           $(LORENZ_SOURCES) \
 	   $(NBODY_SOURCES)
 
 HEADERS += ode/Euler.h \
            ode/HyperbolicProblem.h  \
            ode/IntegratorBase.h \
-           ode/LorentzProblem.h \
+           ode/LorenzProblem.h \
            ode/Merson.h \
            ode/ODESolution.h \
            ode/ODESolver.h \
@@ -57,8 +57,8 @@ hyperbolic: $(HYPERBOLIC_OBJECTS) $(HYPERBOLIC_SOURCES) $(HEADERS)
 species: $(SPECIES_OBJECTS) $(SPECIES_SOURCES) $(HEADERS)
 	$(CXX) $(SPECIES_OBJECTS) $(LD_FLAGS) -o bin/species
 	
-lorentz: $(LORENTZ_OBJECTS) $(LORENTZ_SOURCES) $(HEADERS)
-	$(CXX) $(LORENTZ_OBJECTS) $(LD_FLAGS) -o bin/lorentz
+lorenz: $(LORENZ_OBJECTS) $(LORENZ_SOURCES) $(HEADERS)
+	$(CXX) $(LORENZ_OBJECTS) $(LD_FLAGS) -o bin/lorenz
 	
 nbody: $(NBODY_OBJECTS) $(NBODY_SOURCES) $(HEADERS)
 	$(CXX) $(NBODY_OBJECTS) $(LD_FLAGS) -o bin/nbody
