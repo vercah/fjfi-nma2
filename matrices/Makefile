@@ -3,6 +3,18 @@ include ../Makefile.inc
 TARGETS = show-matrix \
           ellpack-test
 
+COMMON_SOURCES = ../CommandLineParser.cpp \
+                 ../string-split.cpp \
+                 ../Timer.cpp \
+                 ../Vector.cpp \
+                 ../matrices/Matrix.cpp
+
+SOURCES = $(COMMON_SOURCES) \
+         DenseMatrix.cpp \
+         EllpackMatrix.cpp \
+         show-matrix.cpp \
+         ellpack-test.cpp
+
 COMMON_OBJECTS = ../CommandLineParser.o \
                  ../string-split.o \
                  ../Timer.o \
@@ -10,13 +22,11 @@ COMMON_OBJECTS = ../CommandLineParser.o \
                  ../matrices/Matrix.o
 
 SHOW_MATRIX_OBJECTS = show-matrix.o \
-                       ../matrices/DenseMatrix.o
+                       DenseMatrix.o
 
-ELLPACK_TEST_OBJECTS = ../matrices/DenseMatrix.o \
-                       ../matrices/EllpackMatrix.o \
+ELLPACK_TEST_OBJECTS = DenseMatrix.o \
+                       EllpackMatrix.o \
                        ellpack-test.o
-
-$(shell mkdir -p $(DEPDIR) >/dev/null)
 
 all: $(TARGETS)
 
@@ -30,15 +40,12 @@ ellpack-test: $(ELLPACK_TEST_OBJECTS) $(COMMON_OBJECTS)
 	
 .PHONY: clean
 clean:
-	rm -f *.o $(TARGETS)
+	rm -f *.o *.d $(TARGETS)
 
 %.o: %.cpp
-%.o: %.cpp $(DEPDIR)/%.d
-	$(COMPILE.cxx) $(OUTPUT_OPTION) $<
-	$(POSTCOMPILE)
-	$(CXX) $(CPPFLAGS) $(CXX_FLAGS) -c -o $@ $<	
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<	
 
-$(DEPDIR)/%.d: ;
-.PRECIOUS: $(DEPDIR)/%.d
+$(SOURCES:%.cpp=%.o): %.o: %.cpp
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
 	
-include $(wildcard $(patsubst %,$(DEPDIR)/%.d,$(basename $(SRCS))))	
+-include $(SOURCES:%.cpp=%.d)	

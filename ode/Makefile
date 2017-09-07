@@ -2,6 +2,19 @@ include ../Makefile.inc
 
 TARGETS = riccati hyperbolic species lorenz nbody
 
+COMMON_SOURCES = ../CommandLineParser.cpp \
+                 ../string-split.cpp \
+                 ../Timer.cpp \
+                 ../Vector.cpp \
+                 ../matrices/Matrix.cpp
+
+SOURCES = $(COMMON_SOURCES) \
+          ricatti.cpp \
+          hyperbolic.cpp \
+          species.cpp \
+          lorenz.cpp \
+          nbody.cpp
+
 COMMON_OBJECTS = ../CommandLineParser.o \
                  ../string-split.o \
                  ../Timer.o \
@@ -17,8 +30,6 @@ SPECIES_OBJECTS = species.o
 LORENZ_OBJECTS = lorenz.o
 
 NBODY_OBJECTS = nbody.o
-
-$(shell mkdir -p $(DEPDIR) >/dev/null)
 
 all: $(TARGETS)
 
@@ -44,15 +55,12 @@ nbody: $(NBODY_OBJECTS)
 	
 .PHONY: clean
 clean:
-	rm -f *.o $(TARGETS)
+	rm -f *.o *.d $(TARGETS)
 
 %.o: %.cpp
-%.o: %.cpp $(DEPDIR)/%.d
-	$(COMPILE.cxx) $(OUTPUT_OPTION) $<
-	$(POSTCOMPILE)
-	$(CXX) $(CPPFLAGS) $(CXX_FLAGS) -c -o $@ $<	
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<	
 
-$(DEPDIR)/%.d: ;
-.PRECIOUS: $(DEPDIR)/%.d
+$(SOURCES:%.cpp=%.o): %.o: %.cpp
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
 	
-include $(wildcard $(patsubst %,$(DEPDIR)/%.d,$(basename $(SRCS))))
+-include $(SOURCES:%.cpp=%.d)	

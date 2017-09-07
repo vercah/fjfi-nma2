@@ -12,7 +12,8 @@ FILES = Makefile \
         string-split.cpp \
         string-split.h
 
-SUBDIRS = eigenvalues \
+SUBDIRS = data \
+          eigenvalues \
           gem \
           matrices \
           ode \
