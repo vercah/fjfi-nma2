@@ -24,7 +24,7 @@ const double integrationTimeStep( 1.0 );
 int main( int argc, char** argv )
 {
     Problem problem;
-    problem.setEpsilon( 0.5 );
+    problem.setEpsilon( 0.0 );
     Integrator integrator( problem );
     ODESolution solution;
     integrator.setIntegrationTimeStep( integrationTimeStep );

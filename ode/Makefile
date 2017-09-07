@@ -1,67 +1,58 @@
-TARGETS += riccati hyperbolic species lorenz nbody
+include ../Makefile.inc
 
-CXX_FLAGS += -Iode
+TARGETS = riccati hyperbolic species lorenz nbody
+
+COMMON_OBJECTS = ../CommandLineParser.o \
+                 ../string-split.o \
+                 ../Timer.o \
+                 ../Vector.o \
+                 ../matrices/Matrix.o
  
-RICCATI_OBJECTS = ode/riccati.o
+RICCATI_OBJECTS = riccati.o
 
-RICCATI_SOURCES = ode/riccati.cpp
+HYPERBOLIC_OBJECTS = hyperbolic.o
 
-HYPERBOLIC_OBJECTS = ode/hyperbolic.o
+SPECIES_OBJECTS = species.o
 
-HYPERBOLIC_SOURCES = ode/hyperbolic.cpp
+LORENZ_OBJECTS = lorenz.o
 
-SPECIES_OBJECTS = ode/species.o
+NBODY_OBJECTS = nbody.o
 
-SPECIES_SOURCES = ode/species.cpp
+$(shell mkdir -p $(DEPDIR) >/dev/null)
 
-LORENZ_OBJECTS = ode/lorenz.o
+all: $(TARGETS)
 
-LORENZ_SOURCES = ode/lorenz.cpp
+riccati: $(RICCATI_OBJECTS)
+	$(CXX) -o $@ $(RICCATI_OBJECTS) $(LD_FLAGS)
+	cp riccati ../bin
 
-NBODY_OBJECTS = ode/nbody.o
-
-NBODY_SOURCES = ode/nbody.cpp
-
-
-OBJECTS += $(RICCATI_OBJECTS) \
-           $(HYPERBOLIC_OBJECTS) \
-           $(SPECIES_OBJECTS) \
-           $(LORENZ_OBJECTS) \
-	   $(NBODY_OBJECTS)
-
-SOURCES += $(RICCATI_SOURCES) \
-           $(HYPERBOLIC_SOURCES) \
-           $(SPECIES_SOURCES) \
-           $(LORENZ_SOURCES) \
-	   $(NBODY_SOURCES)
-
-HEADERS += ode/Euler.h \
-           ode/HyperbolicProblem.h  \
-           ode/IntegratorBase.h \
-           ode/LorenzProblem.h \
-           ode/Merson.h \
-           ode/ODESolution.h \
-           ode/ODESolver.h \
-           ode/RiccatiProblem.h \
-           ode/SpeciesProblem.h
-
-     
-MAKEFILES += ode/Makefile
-
-riccati: $(RICCATI_OBJECTS) $(RICCATI_SOURCES) $(HEADERS)
-	$(CXX) $(RICCATI_OBJECTS) $(LD_FLAGS) -o bin/riccati
-
-hyperbolic: $(HYPERBOLIC_OBJECTS) $(HYPERBOLIC_SOURCES) $(HEADERS)
-	$(CXX) $(HYPERBOLIC_OBJECTS) $(LD_FLAGS) -o bin/hyperbolic
+hyperbolic: $(HYPERBOLIC_OBJECTS)
+	$(CXX) -o $@ $(HYPERBOLIC_OBJECTS) $(LD_FLAGS)
+	cp hyperbolic ../bin
 	
-species: $(SPECIES_OBJECTS) $(SPECIES_SOURCES) $(HEADERS)
-	$(CXX) $(SPECIES_OBJECTS) $(LD_FLAGS) -o bin/species
+species: $(SPECIES_OBJECTS)
+	$(CXX) -o $@ $(SPECIES_OBJECTS) $(LD_FLAGS)
+	cp species ../bin
 	
-lorenz: $(LORENZ_OBJECTS) $(LORENZ_SOURCES) $(HEADERS)
-	$(CXX) $(LORENZ_OBJECTS) $(LD_FLAGS) -o bin/lorenz
+lorenz: $(LORENZ_OBJECTS)
+	$(CXX) -o $@ $(LORENZ_OBJECTS) $(LD_FLAGS)
+	cp lorenz ../bin
 	
-nbody: $(NBODY_OBJECTS) $(NBODY_SOURCES) $(HEADERS)
-	$(CXX) $(NBODY_OBJECTS) $(LD_FLAGS) -o bin/nbody
+nbody: $(NBODY_OBJECTS)
+	$(CXX) -o $@ $(NBODY_OBJECTS) $(LD_FLAGS)
+	cp nbody ../bin
 	
+.PHONY: clean
+clean:
+	rm -f *.o $(TARGETS)
+
 %.o: %.cpp
+%.o: %.cpp $(DEPDIR)/%.d
+	$(COMPILE.cxx) $(OUTPUT_OPTION) $<
+	$(POSTCOMPILE)
 	$(CXX) $(CPPFLAGS) $(CXX_FLAGS) -c -o $@ $<	
+
+$(DEPDIR)/%.d: ;
+.PRECIOUS: $(DEPDIR)/%.d
+	
+include $(wildcard $(patsubst %,$(DEPDIR)/%.d,$(basename $(SRCS))))

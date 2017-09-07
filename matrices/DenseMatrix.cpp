@@ -9,6 +9,7 @@
 #include <sstream>
 #include <iomanip>
 #include <assert.h>
+#include <stdlib.h>
 #include "DenseMatrix.h"
 
 DenseMatrix::DenseMatrix()

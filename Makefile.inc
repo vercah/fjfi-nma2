@@ -1,7 +1,8 @@
 INSTALL_DIR = ${HOME}/.local
 
 CXX = g++
-#CXX_FLAGS = -DNDEBUG -O3 -funroll-loops -g -std=c++11 -Dlinux
-CXX_FLAGS = -DNDEBUG -O3 -g -Dlinux -std=c++11
+#CXXFLAGS = -DNDEBUG -O3 -funroll-loops -g -std=c++11 -Dlinux
+CXXFLAGS = -DNDEBUG -O3 -g -Dlinux -std=c++11
+CPPFLAGS = -MD -MP
 
-LD_FLAGS += -lm #-lgomp
+LDFLAGS += -lm #-lgomp

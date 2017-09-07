@@ -1,5 +1,5 @@
-#include "matrices/DenseMatrix.h"
-#include "CommandLineParser.h"
+#include "DenseMatrix.h"
+#include "../CommandLineParser.h"
 #include <algorithm>
 #include <fstream>
 #include <cstdlib>

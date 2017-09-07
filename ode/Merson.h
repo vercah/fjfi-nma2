@@ -14,7 +14,7 @@ class Merson : public IntegratorBase
    public:
       
       Merson( Problem& problem )
-      : adaptivity( 1.0e-12 )
+      : adaptivity( 0.0 )
       {
          this->k1 = new double[ problem.getDegreesOfFreedom() ];
          this->k2 = new double[ problem.getDegreesOfFreedom() ];

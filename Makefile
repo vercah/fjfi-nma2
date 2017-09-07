@@ -1,83 +1,47 @@
 include Makefile.inc
 
-include ode/Makefile
+FILES = Makefile \
+        Makefile.inc \
+        CommandLineParser.cpp \
+        CommandLineParser.h \
+        Timer.cpp \
+        Timer.h \
+        Vector.cpp \
+        Vector.h \
+        real.h \
+        string-split.cpp \
+        string-split.h
 
-COMMON_SOURCES = CommandLineParser.cpp \
-                 string-split.cpp \
-                 Timer.cpp \
-                 Vector.cpp \
-                 matrices/Matrix.cpp
+SUBDIRS = eigenvalues \
+          gem \
+          matrices \
+          ode \
+          stationary
 
-COMMON_OBJECTS = CommandLineParser.o \
-                 string-split.o \
-                 Timer.o \
-                 Vector.o \
-                 matrices/Matrix.o
+SUBDIRSCLEAN=$(addsuffix clean,$(SUBDIRS))
 
-SHOW_MATRIX_SOURCES = show-matrix.cpp
+all: subdirs
 
-HEADERS = matrices/DenseMatrix.h \
-          CommandLineParser.h \
-          Timer.h \
-          Vector.h \
-          real.h \
-          string-split.h
-
-SOURCES = $(SHOW_MATRIX_SOURCES)
-
-MAKEFILES = \
-            Makefile \
-            Makefile.inc
-
-
-DIST = $(SOURCES) $(HEADERS) $(MAKEFILES)
-     
-all: show-matrix \
-	gem-solver \
-	lu-test \
-	lu-solver \
-	thomas-solver \
-	stationary-solver \
-	ellpack-test \
-	power-method \
-	$(TARGETS)
-
-show-matrix: $(COMMON_OBJECTS) show-matrix.o matrices/DenseMatrix.o bin
-	$(CXX) -o bin/$@ show-matrix.o matrices/DenseMatrix.o $(COMMON_OBJECTS) $(LDFLAGS)
-
-gem-solver: $(COMMON_OBJECTS) matrices/DenseMatrix.o gem/GEM.o gem/gem-solver.o bin
-	$(CXX) -o bin/$@ gem/gem-solver.o gem/GEM.o matrices/DenseMatrix.o $(COMMON_OBJECTS) $(LDFLAGS)
-
-lu-test: $(COMMON_OBJECTS) matrices/DenseMatrix.o gem/LUDecomposition.o gem/lu-test.o bin
-	$(CXX) -o bin/$@ gem/lu-test.o gem/LUDecomposition.o matrices/DenseMatrix.o $(COMMON_OBJECTS) $(LDFLAGS)
-
-lu-solver: $(COMMON_OBJECTS) matrices/DenseMatrix.o gem/LUDecomposition.o gem/lu-solver.o bin
-	$(CXX) -o bin/$@ gem/lu-solver.o gem/LUDecomposition.o matrices/DenseMatrix.o $(COMMON_OBJECTS) $(LDFLAGS)
-
-thomas-solver: matrices/DenseMatrix.o matrices/TridiagonalMatrix.o gem/ThomasAlgorithm.o gem/GEM.o gem/thomas-solver.o $(COMMON_OBJECTS) bin
-	$(CXX) -o bin/$@ matrices/DenseMatrix.o matrices/TridiagonalMatrix.o gem/ThomasAlgorithm.o gem/GEM.o gem/thomas-solver.o $(COMMON_OBJECTS) $(LDFLAGS)
-
-stationary-solver: matrices/DenseMatrix.o matrices/EllpackMatrix.o stationary/StationarySolver.o stationary/stationary-solver.o $(COMMON_OBJECTS) bin
-	$(CXX) -o bin/$@ matrices/DenseMatrix.o matrices/EllpackMatrix.o stationary/StationarySolver.o stationary/stationary-solver.o $(COMMON_OBJECTS) $(LDFLAGS)
-
-ellpack-test: matrices/DenseMatrix.o matrices/EllpackMatrix.o matrices/ellpack-test.o $(COMMON_OBJECTS) bin
-	$(CXX) -o bin/$@ matrices/DenseMatrix.o matrices/EllpackMatrix.o matrices/ellpack-test.o $(COMMON_OBJECTS) $(LDFLAGS)
-
-power-method: matrices/DenseMatrix.o matrices/EllpackMatrix.o eigenvalues/PowerMethod.o stationary/StationarySolver.o eigenvalues/power-method.o $(COMMON_OBJECTS) bin
-	$(CXX) -o bin/$@ matrices/DenseMatrix.o matrices/EllpackMatrix.o eigenvalues/PowerMethod.o stationary/StationarySolver.o eigenvalues/power-method.o $(COMMON_OBJECTS) $(LDFLAGS)
+.PHONY:	subdirs $(SUBDIRS)
+subdirs:    $(SUBDIRS)
+$(SUBDIRS):
+	$(MAKE) -C $@	
 
 bin:
-	mkdir bin
+	mkdir -p bin
 
 install: all
 	mkdir -p $(INSTALL_DIR)/bin
 	cp bin/* $(INSTALL_DIR)/bin
 
-clean:
-	rm -f *.o matrices/*.o gem/*.o stationary/*.o eigenvalues/*.o
+.PHONY:	clean
+clean:	$(SUBDIRSCLEAN) clean_curdir
 
-dist: $(DIST)
-	tar zcvf fjfi-01num1-src.tgz $(DIST)
+clean_curdir:
+	rm -f *.o
+	
+%clean:	%
+	$(MAKE) -C $< clean
 
-%.o: %.cpp
-	$(CXX) $(CPPFLAGS) $(CXX_FLAGS) -c -o $@ $<
+dist: clean
+	tar zcvf fjfi-num1-src.tgz $(SUBDIRS) $(FILES)

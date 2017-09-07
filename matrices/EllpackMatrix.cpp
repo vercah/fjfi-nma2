@@ -10,6 +10,7 @@
 #include <iomanip>
 #include <assert.h>
 #include <set>
+#include <stdlib.h>
 #include "../string-split.h"
 #include "EllpackMatrix.h"
 
