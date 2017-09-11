@@ -1,0 +1,4 @@
+ODE
+    - presunout vypisovani snapshotu do tridy Problem - to umozni zrusit ODESolution
+    - zrusit ODESolver, vse bude jen v RK resicich, tj. vcetne volani metody pro snapshot
+    - sablony nahradit dedicnosti => zavest zakladni tridu pro Problem a RKSolver
