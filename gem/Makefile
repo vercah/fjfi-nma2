@@ -2,6 +2,23 @@ include ../Makefile.inc
 
 TARGETS = gem-solver lu-test lu-solver thomas-solver
 
+COMMON_SOURCES = ../CommandLineParser.cpp \
+                 ../string-split.cpp \
+                 ../Timer.cpp \
+                 ../Vector.cpp \
+                 ../matrices/Matrix.cpp
+
+SOURCES = $(COMMON_SOURCES) \
+         ../matrices/DenseMatrix.cpp \
+         ../matrices/TridiagonalMatrix.cpp \
+	GEM.cpp \
+	gem-solver.cpp \
+	LUDecomposition.cpp \
+	lu-test.cpp \
+        lu-solver.cpp \
+        ThomasAlgorithm.cpp \
+        thomas-solver.cpp
+
 COMMON_OBJECTS = ../CommandLineParser.o \
                  ../string-split.o \
                  ../Timer.o \
@@ -26,8 +43,6 @@ THOMAS_SOLVER_OBJECTS = ../matrices/DenseMatrix.o \
                         GEM.o \
                         thomas-solver.o
 
-$(shell mkdir -p $(DEPDIR) >/dev/null)
-
 all: $(TARGETS)
 
 gem-solver: $(GEM_SOLVER_OBJECTS) $(COMMON_OBJECTS)
@@ -48,15 +63,12 @@ thomas-solver:  $(THOMAS_SOLVER_OBJECTS) $(COMMON_OBJECTS)
 
 .PHONY: clean
 clean:
-	rm -f *.o $(TARGETS)
+	rm -f *.o *.d $(TARGETS)
 	
 %.o: %.cpp
-%.o: %.cpp $(DEPDIR)/%.d
-	$(COMPILE.cxx) $(OUTPUT_OPTION) $<
-	$(POSTCOMPILE)
-	$(CXX) $(CPPFLAGS) $(CXX_FLAGS) -c -o $@ $<	
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<	
 
-$(DEPDIR)/%.d: ;
-.PRECIOUS: $(DEPDIR)/%.d
+$(SOURCES:%.cpp=%.o): %.o: %.cpp
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
 	
-include $(wildcard $(patsubst %,$(DEPDIR)/%.d,$(basename $(SRCS))))
+-include $(SOURCES:%.cpp=%.d)
