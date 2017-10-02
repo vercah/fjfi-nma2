@@ -20,7 +20,7 @@ SUBDIRS = eigenvalues \
 
 SUBDIRSCLEAN=$(addsuffix clean,$(SUBDIRS))
 
-all: subdirs
+all: bin subdirs
 
 .PHONY:	subdirs $(SUBDIRS)
 subdirs:    $(SUBDIRS)
