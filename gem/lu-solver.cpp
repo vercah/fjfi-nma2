@@ -84,7 +84,7 @@ int main( int argc, char* argv[] )
    lu.solve( b, verbose );
    timer.stop();
    
-   //std::cout << "Result is: " << std::endl << b << std::endl;
+   std::cout << "Result is: " << std::endl << b << std::endl;
    std::cout << "Solution took " << timer.getTime() << " seconds." << std::endl;
    return EXIT_SUCCESS;
 }

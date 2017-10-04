@@ -90,7 +90,7 @@ int main( int argc, char* argv[] )
    const int n = matrix->getRows();
    std::cout << "Matrix dimensions are " << n << "x" << n << "." << std::endl;
    if( verbose >= 1 )
-      std::cout << "Matrix is:" << std::endl << matrix << std::endl;
+      std::cout << "Matrix is:" << std::endl << *matrix << std::endl;
    Vector x, b;   
    x.setSize( n );
    b.setSize( n );
