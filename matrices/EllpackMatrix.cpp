@@ -136,9 +136,8 @@ void EllpackMatrix::performJacobiIteration( const Vector& b,
       while( ptr < row_end && ( column = this->column_indexes[ ptr ] ) != -1 )
       {
          if( column == row )
-            a_ii = this->elements[ ptr++ ];
-         else
-            sum += this->elements[ ptr++ ] * x[ column ];
+            a_ii = this->elements[ ptr ];
+         sum += this->elements[ ptr++ ] * x[ column ];
       }
       if( a_ii == 0.0 )
       {
@@ -166,9 +165,8 @@ void EllpackMatrix::performSORIteration( const Vector& b,
       while( ptr < row_end && ( column = this->column_indexes[ ptr ] ) != -1 )
       {
          if( column == row )
-            a_ii = this->elements[ ptr++ ];
-         else
-            sum += this->elements[ ptr++ ] * x[ column ];
+            a_ii = this->elements[ ptr ];
+         sum += this->elements[ ptr++ ] * x[ column ];
       }
       if( a_ii == 0.0 )
       {

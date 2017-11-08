@@ -104,9 +104,8 @@ void DenseMatrix::performJacobiIteration( const Vector& b,
       for( int column = 0; column < this->columns; column++ )
       {
          if( column == row )
-            a_ii = this->elements[ idx++ ];
-         else
-            sum += this->elements[ idx++ ] * x[ column ];
+            a_ii = this->elements[ idx ];
+         sum += this->elements[ idx++ ] * x[ column ];
       }
 
             
@@ -135,9 +134,8 @@ void DenseMatrix::performSORIteration( const Vector& b,
       for( int column = 0; column < this->columns; column++ )
       {
          if( column == row )
-            a_ii = this->elements[ idx++ ];
-         else
-            sum += this->elements[ idx++ ] * x[ column ];
+            a_ii = this->elements[ idx ];
+         sum += this->elements[ idx++ ] * x[ column ];
       }
       if( a_ii == 0.0 )
       {
