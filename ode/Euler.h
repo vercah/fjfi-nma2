@@ -5,47 +5,55 @@
  * Created on February 25, 2016, 9:10 AM
  */
 
-#ifndef EULER_H
-#define	EULER_H
+#pragma once
 
 #include<algorithm>
-#include "IntegratorBase.h"
+#include "Integrator.h"
+#include "ODEProblem.h"
 
-template< typename Problem >
-class Euler : public IntegratorBase
+class Euler : public Integrator
 {
    public:
       
-      Euler( Problem& problem )
+      Euler()
       {
-         this->k = new double[ problem.getDegreesOfFreedom() ];
+         this-> k = 0;
       }
       
-      bool solve( Problem& problem,
+      bool setup( const int degreesOfFreedom )
+      {
+         this->k = new double[ degreesOfFreedom ];
+         if( ! this->k )
+            return false;
+         return true;
+      }
+      
+      bool solve( const double integrationTimeStep,
+                  const double stopTime,
+                  double* time,
+                  ODEProblem* problem,
                   double* u )
       {
-         const int dofs = problem.getDegreesOfFreedom();         
-         double tau = std::min( this->integrationTimeStep, this->stopTime - this->time );
-         while( this->time < this->stopTime )
+         const int dofs = problem->getDegreesOfFreedom();         
+         double tau = std::min( integrationTimeStep, stopTime - *time );
+         while( *time < stopTime )
          {
-           problem.getRightHandSide( this->time, u, this->k );
+           problem->getRightHandSide( *time, u, this->k );
            for( int i = 0; i < dofs; i++ )
               u[ i ] +=  tau * k[ i ];
-            this->time += tau;
-            tau = std::min( this->integrationTimeStep, this->stopTime - this->time );
+            *time += tau;
+            tau = std::min( integrationTimeStep, stopTime - *time );
          }
          return true;
       }
       
       ~Euler()
       {
-         delete[] k;
+         if( k ) delete[] k;
       }
       
    protected:
       
       double* k;   
 };
-
-#endif	/* EULER_H */
 

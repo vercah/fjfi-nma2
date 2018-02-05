@@ -5,22 +5,24 @@
  * Created on February 25, 2016, 10:41 AM
  */
 
-#ifndef HYPERBOLICPROBLEM_H
-#define HYPERBOLICPROBLEM_H
+#pragma once
 
 #include<cmath>
 #include<iostream>
 #include<fstream>
+#include "ODEProblem.h"
 
-class HyperbolicProblem
+
+class HyperbolicProblem : public ODEProblem
 {
    public:
       
       HyperbolicProblem()
-      : epsilon( 1.0 )
-      {}
+      { 
+         this->epsilon = 1.0;
+      }
       
-      const int getDegreesOfFreedom() { return 2; }
+      int getDegreesOfFreedom() { return 2; }
       
       void setEpsilon( const double& eps )
       {
@@ -35,12 +37,15 @@ class HyperbolicProblem
          fu[ 1 ] = -u1 - this->epsilon * u1 * u1 * u2;
          //std::cout << " t = " << t << " " << fu[ 0 ] << " " << fu[ 1 ] << std::endl;
       }
+      
+      bool writeSolution( const double& t, int step, const double* u )
+      {
+         
+      }
+      
          
    protected:
       
       double epsilon;
 };
-
-
-#endif /* HYPERBOLICPROBLEM_H */
 

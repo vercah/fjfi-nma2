@@ -5,18 +5,18 @@
  * Created on February 25, 2016, 10:41 AM
  */
 
-#ifndef RICCATIPROBLEM_H
-#define RICCATIPROBLEM_H
+#pragma once
 
 #include<cmath>
 #include<iostream>
 #include<fstream>
+#include "ODEProblem.h"
 
-class RiccatiProblem
+class RiccatiProblem : public ODEProblem
 {
    public:
       
-      const int getDegreesOfFreedom() { return 1; }
+      int getDegreesOfFreedom() { return 1; }
       
       void getRightHandSide( const double& t, const double* _u, double* fu )
       {
@@ -46,8 +46,10 @@ class RiccatiProblem
             t = std::min( t + timeStep, finalTime );
          }
       }
+      
+      bool writeSolution( const double& t, int step, const double* u )
+      {
+         
+      }      
 };
-
-
-#endif /* RICCATIPROBLEM_H */
 

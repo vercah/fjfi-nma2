@@ -5,23 +5,36 @@
  * Created on February 26, 2016, 4:46 PM
  */
 
-#ifndef MERSON_H
-#define	MERSON_H
+#pragma once
 
-template< typename Problem >
-class Merson : public IntegratorBase
+#include "Integrator.h"
+
+class Merson : public Integrator
 {
    public:
       
-      Merson( Problem& problem )
-      : adaptivity( 0.0 )
+      Merson()
       {
-         this->k1 = new double[ problem.getDegreesOfFreedom() ];
-         this->k2 = new double[ problem.getDegreesOfFreedom() ];
-         this->k3 = new double[ problem.getDegreesOfFreedom() ];
-         this->k4 = new double[ problem.getDegreesOfFreedom() ];
-         this->k5 = new double[ problem.getDegreesOfFreedom() ];
-         this->aux = new double[ problem.getDegreesOfFreedom() ];
+         adaptivity = 1.0e-6;
+         k1 = 0;
+         k2 = 0;
+         k3 = 0;
+         k4 = 0;
+         k5 = 0;
+         aux = 0;
+      }
+      
+      bool setup( int degreesOfFreedom )
+      {
+         k1 = new double[ degreesOfFreedom ];
+         k2 = new double[ degreesOfFreedom ];
+         k3 = new double[ degreesOfFreedom ];
+         k4 = new double[ degreesOfFreedom ];
+         k5 = new double[ degreesOfFreedom ];
+         aux = new double[ degreesOfFreedom ];
+         if( ! k1 || ! k2 || ! k3 || ! k4 || ! k5 || ! aux )
+            return false;
+         return true;
       }
 
       void setAdaptivity( const double& adaptivity )
@@ -29,46 +42,49 @@ class Merson : public IntegratorBase
          this->adaptivity = adaptivity;
       }
       
-      bool solve( Problem& problem,
-                  double* u )
+      bool solve( const double& integrationTimeStep,
+                  const double& stopTime,
+                  double* time,
+                  ODEProblem* problem,
+                  double* u )      
       {
-         const int dofs = problem.getDegreesOfFreedom();
-         double tau = std::min( this->integrationTimeStep, this->stopTime - this->time );
+         const int dofs = problem->getDegreesOfFreedom();
+         double tau = std::min( integrationTimeStep, stopTime - *time );
          long int iteration( 0 );
-         while( this->time < this->stopTime )
+         while( *time < stopTime )
          {
             /****
              * Compute k1
              */
-            problem.getRightHandSide( this->time, u, k1 );
+            problem->getRightHandSide( *time, u, k1 );
             
             /****
              * Compute k2
              */
             for( int i = 0; i < dofs; i++ )
                aux[ i ] = u[ i ] + tau * ( 1.0 / 3.0 * k1[ i ] );
-            problem.getRightHandSide( this->time + 1.0 / 3.0 * tau, aux, k2 );
+            problem->getRightHandSide( *time + 1.0 / 3.0 * tau, aux, k2 );
             
             /****
              * Compute k3
              */
             for( int i = 0; i < dofs; i++ )
                aux[ i ] = u[ i ] + tau * 1.0 / 6.0 * ( k1[ i ] + k2[ i ] );
-            problem.getRightHandSide( this->time + 1.0 / 3.0 * tau, aux, k3 );
+            problem->getRightHandSide( *time + 1.0 / 3.0 * tau, aux, k3 );
             
             /****
              * Compute k4
              */
             for( int i = 0; i < dofs; i++ )
                aux[ i ] = u[ i ] + tau * ( 0.125 * k1[ i ] + 0.375 * k3[ i ] );
-            problem.getRightHandSide( this->time + 1.0 / 2.0 * tau, aux, k4 );
+            problem->getRightHandSide( *time + 1.0 / 2.0 * tau, aux, k4 );
             
             /****
              * Compute k5
              */
             for( int i = 0; i < dofs; i++ )
                aux[ i ] = u[ i ] + tau * ( 0.5 * k1[ i ] - 1.5 * k3[ i ] + 2.0 * k4[ i ] );
-            problem.getRightHandSide( this->time + tau, aux, k5 );
+            problem->getRightHandSide( *time + tau, aux, k5 );
             
             /****
              * Compute error
@@ -87,7 +103,7 @@ class Merson : public IntegratorBase
             {
                for( int i = 0; i < dofs; i++ )
                   u[ i ] += tau / 6.0 * ( k1[ i ] + 4.0 * k4[ i ] + k5[ i ] );
-               this->time += tau;
+               *time += tau;
                iteration++;
                if( iteration > 100000 )
                {
@@ -97,7 +113,7 @@ class Merson : public IntegratorBase
             }
             if( this->adaptivity )
                tau *= 0.8 * pow( this->adaptivity / eps, 0.2 );
-            tau = std::min( tau, this->stopTime - this->time );
+            tau = std::min( tau, stopTime - *time );
             std::cout << "ITER: " << iteration << " \t tau = " << tau << " \t time= " << time << "         \r " << std::flush;
          }
          std::cout << std::endl;
@@ -106,12 +122,12 @@ class Merson : public IntegratorBase
       
       ~Merson()
       {
-         delete[] k1;
-         delete[] k2;
-         delete[] k3;
-         delete[] k4;
-         delete[] k5;
-         delete[] aux;
+         if( k1 ) delete[] k1;
+         if( k2 ) delete[] k2;
+         if( k3 ) delete[] k3;
+         if( k4 ) delete[] k4;
+         if( k5 ) delete[] k5;
+         if( aux ) delete[] aux;
       }
       
    protected:
@@ -121,6 +137,4 @@ class Merson : public IntegratorBase
       double adaptivity;
 
 };
-
-#endif	/* MERSON_H */
 

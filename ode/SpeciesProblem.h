@@ -5,22 +5,27 @@
  * Created on February 25, 2016, 10:41 AM
  */
 
-#ifndef SPECIESPROBLEM_H
-#define SPECIESPROBLEM_H
+#pragma once
 
 #include<cmath>
 #include<iostream>
 #include<fstream>
+#include "ODEProblem.h"
 
-class SpeciesProblem
+
+class SpeciesProblem : public ODEProblem
 {
    public:
       
       SpeciesProblem()
-      : a( 1.0 ), b( 1.0 ), c( 1.0 ), d( 1.0 )
-      {}
+      {
+         a = 1.0;
+         b = 1.0;
+         c = 1.0;
+         d = 1.0;
+      }
       
-      const int getDegreesOfFreedom() { return 2; }
+      int getDegreesOfFreedom() { return 2; }
       
       void setParameters( const double& a,
                           const double& b,
@@ -42,11 +47,12 @@ class SpeciesProblem
          //std::cout << " t = " << t << " " << fu[ 0 ] << " " << fu[ 1 ] << std::endl;
       }
          
+      bool writeSolution( const double& t, int step, const double* u )
+      {
+         
+      }      
+      
    protected:
       
       double a,b,c,d;
 };
-
-
-#endif /* SPECIESPROBLEM_H */
-

@@ -9,13 +9,12 @@
 #include "HyperbolicProblem.h"
 #include "Euler.h"
 #include "Merson.h"
-#include "ODESolver.h"
-#include "ODESolution.h"
+#include "ode-solve.h"
 
 using namespace std;
 
 typedef HyperbolicProblem Problem;
-typedef Merson< Problem > Integrator;
+
 const double initialTime( 0.0 );
 const double finalTime( 100.0 );
 const double timeStep( 1.0e-1 );
@@ -23,17 +22,22 @@ const double integrationTimeStep( 1.0 );
 
 int main( int argc, char** argv )
 {
-    Problem problem;
+    HyperbolicProblem problem;
     problem.setEpsilon( 0.0 );
-    Integrator integrator( problem );
-    ODESolution solution;
-    integrator.setIntegrationTimeStep( integrationTimeStep );
+    Euler integrator;
+
     //integrator.setAdaptivity( 1.0e-5 );
-    ODESolver< Problem, Integrator > solver( problem, integrator );
-    double initialCondition[ 2 ] = { 0.0, 1.0 };
-    solver.setInitialCondition( initialCondition );
-    solver.solve( solution, initialTime, finalTime, timeStep );
-    solution.write( "hyperbolic.txt", initialTime, timeStep, 0 );
+        
+    double u[ 2 ] = { 0.0, 1.0 };
+    
+    if( ! solve( initialTime,
+                 finalTime,
+                 timeStep,
+                 integrationTimeStep,
+                 &problem,
+                 &integrator,
+                 u ) )
+       return EXIT_FAILURE;
     return EXIT_SUCCESS;
 }
 
