@@ -12,6 +12,8 @@
 #include<fstream>
 #include "ODEProblem.h"
 
+using namespace std;
+
 class RiccatiProblem : public ODEProblem
 {
    public:
@@ -49,7 +51,24 @@ class RiccatiProblem : public ODEProblem
       
       bool writeSolution( const double& t, int step, const double* u )
       {
-         
-      }      
+         fstream file;
+         if( step == 0 )
+         {
+            /****
+             * In the first step, we want to rewrite the file
+             */
+            file.open( "riccati.txt", ios::out );
+            if( !file ) return false;
+         }
+         else
+         {
+            /****
+             * In later steps, we just append new time steps
+             */
+            file.open( "riccati.txt", ios::out | ios::app );
+            if( !file ) return false;            
+         }
+         file << t << " " << u[ 0 ] << endl;
+      }
 };
 

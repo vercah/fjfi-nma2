@@ -10,7 +10,6 @@
 #include "Euler.h"
 #include "Merson.h"
 #include "ode-solve.h"
-#include "ODESolution.h"
 
 using namespace std;
 
@@ -25,18 +24,17 @@ int main( int argc, char** argv )
     LorenzProblem problem;
     problem.setParameters( 10.0, 28.0, 8.0/3.0 );
     
-    Integrator integrator;
+    Euler integrator;
 
-    ODESolver solver;
     double u[ 3 ] = { 1.0, 1.0, 1.0 };
 
-    if( ! solver.solve( initialTime,
-                        finalTime,
-                        timeStep,
-                        integrationTimeStep,
-                        &problem,
-                        &integrator,
-                        u ) )
+    if( ! solve( initialTime,
+                 finalTime,
+                 timeStep,
+                 integrationTimeStep,
+                 &problem,
+                 &integrator,
+                 u ) )
        return EXIT_FAILURE;
     return EXIT_SUCCESS;    
 }

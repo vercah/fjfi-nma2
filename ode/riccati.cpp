@@ -9,7 +9,6 @@
 #include "RiccatiProblem.h"
 #include "Euler.h"
 #include "ode-solve.h"
-#include "ODESolution.h"
 
 using namespace std;
 

@@ -10,7 +10,6 @@
 #include "Euler.h"
 #include "Merson.h"
 #include "ode-solve.h"
-#include "ODESolution.h"
 
 using namespace std;
 
@@ -26,15 +25,14 @@ int main( int argc, char** argv )
     problem.setParameters( 0.5, 0.25, 0.5, 0.95 );
     Euler integrator;
 
-    ODESolver solver;
     double u[ 2 ] = { 7.5, 0.25 };
-    if( ! solver.solve( initialTime,
-                        finalTime,
-                        timeStep,
-                        integrationTimeStep,
-                        &problem,
-                        &integrator,
-                        u ) )
+    if( ! solve( initialTime,
+                 finalTime,
+                 timeStep,
+                 integrationTimeStep,
+                 &problem,
+                 &integrator,
+                 u ) )
        return EXIT_FAILURE;
     return EXIT_SUCCESS;
 }

@@ -10,12 +10,11 @@
 #include "Euler.h"
 #include "Merson.h"
 #include "NBodySolver.h"
+#include "ode-solve.h"
 
 using namespace std;
 
 typedef NBodyProblem Problem;
-//typedef Euler< Problem > Integrator;
-typedef Merson< Problem > Integrator;
 const double initialTime( 0.0 );
 const double finalTime( 1.0e3 );
 const double timeStep( 4.0e-2 );
@@ -24,13 +23,26 @@ const int particlesCount( 100 );
 
 int main( int argc, char** argv )
 {
-    Problem problem( particlesCount );
-    //problem.setParameters( 1.5, 1.0, 3.0, 1.0 );
-    Integrator integrator( problem );
-    integrator.setIntegrationTimeStep( integrationTimeStep );
-    //integrator.setAdaptivity( 1.0e-8 );
-    NBodySolver< Problem, Integrator > solver( problem, integrator );
-    solver.solve( finalTime, timeStep );
-    return EXIT_SUCCESS;
+   Problem problem( particlesCount );
+   
+   Euler integrator; 
+   //integrator.setAdaptivity( 1.0e-8 );
+    
+   double* u = new double[ problem.getDegreesOfFreedom() ];
+   problem.setInitialCondition( u );
+   
+   if( ! solve( initialTime,
+            finalTime,
+            timeStep,
+            integrationTimeStep,
+            &problem,
+            &integrator,
+            u ) )
+   {
+      delete[] u;
+      return EXIT_FAILURE;
+   }
+   delete[] u;
+   return EXIT_SUCCESS;
 }
 

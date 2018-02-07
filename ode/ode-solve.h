@@ -9,14 +9,14 @@
 #include <iostream>
 #include <cmath>
 #include "ODEProblem.h"
-#include "Integrator.h"
+#include "ODESolver.h"
 
 bool solve( const double initialTime,
             const double finalTime,
             const double timeStep,
             const double integrationTimeStep, 
             ODEProblem* problem,
-            Integrator* integrator,
+            ODESolver* integrator,
             double* u )
 {
    integrator->setup( problem->getDegreesOfFreedom() );

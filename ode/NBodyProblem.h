@@ -13,8 +13,9 @@
 #include<vector>
 #include<sstream>
 #include<iomanip>
+#include "ODEProblem.h"
 
-class NBodyProblem
+class NBodyProblem : public ODEProblem
 {
    public:
       
@@ -22,7 +23,7 @@ class NBodyProblem
       : dimensions( dimensions ), particlesCount( particlesCount ), masses( particlesCount ), g( 9.81 )
       {}
       
-      const int getDegreesOfFreedom() { return 2 * dimensions * particlesCount; }
+      int getDegreesOfFreedom() { return 2 * dimensions * particlesCount; }
       
       void setParameters()
       {
@@ -77,7 +78,7 @@ class NBodyProblem
          }
       }
       
-      bool writeSolution( const double* u, int step )
+      bool writeSolution( const double& t, int step, const double* u )      
       {
          std::stringstream str;
          str << "nbody-" << std::setw( 5 ) << std::setfill( '0' ) << step << ".txt";

@@ -8,10 +8,10 @@
 #pragma once
 
 #include<algorithm>
-#include "Integrator.h"
+#include "ODESolver.h"
 #include "ODEProblem.h"
 
-class Euler : public Integrator
+class Euler : public ODESolver
 {
    public:
       

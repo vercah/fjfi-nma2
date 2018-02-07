@@ -7,9 +7,9 @@
 
 #pragma once
 
-#include "Integrator.h"
+#include "ODESolver.h"
 
-class Merson : public Integrator
+class Merson : public ODESolver
 {
    public:
       
