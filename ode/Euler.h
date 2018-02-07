@@ -15,42 +15,17 @@ class Euler : public ODESolver
 {
    public:
       
-      Euler()
-      {
-         this-> k = 0;
-      }
+      Euler();
       
-      bool setup( const int degreesOfFreedom )
-      {
-         this->k = new double[ degreesOfFreedom ];
-         if( ! this->k )
-            return false;
-         return true;
-      }
+      bool setup( const int degreesOfFreedom );
       
       bool solve( const double integrationTimeStep,
                   const double stopTime,
                   double* time,
                   ODEProblem* problem,
-                  double* u )
-      {
-         const int dofs = problem->getDegreesOfFreedom();         
-         double tau = std::min( integrationTimeStep, stopTime - *time );
-         while( *time < stopTime )
-         {
-           problem->getRightHandSide( *time, u, this->k );
-           for( int i = 0; i < dofs; i++ )
-              u[ i ] +=  tau * k[ i ];
-            *time += tau;
-            tau = std::min( integrationTimeStep, stopTime - *time );
-         }
-         return true;
-      }
+                  double* u );
       
-      ~Euler()
-      {
-         if( k ) delete[] k;
-      }
+      ~Euler();
       
    protected:
       

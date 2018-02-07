@@ -18,49 +18,15 @@ class HyperbolicProblem : public ODEProblem
 {
    public:
       
-      HyperbolicProblem()
-      { 
-         this->epsilon = 1.0;
-      }
+      HyperbolicProblem();
       
-      int getDegreesOfFreedom() { return 2; }
+      void setEpsilon( const double& eps );
       
-      void setEpsilon( const double& eps )
-      {
-         this->epsilon = eps;
-      }
+      int getDegreesOfFreedom();
+     
+      void getRightHandSide( const double& t, const double* _u, double* fu );
       
-      void getRightHandSide( const double& t, const double* _u, double* fu )
-      {
-         const double& u1 = _u[ 0 ];
-         const double& u2 = _u[ 1 ];
-         fu[ 0 ] = u2;
-         fu[ 1 ] = -u1 - this->epsilon * u1 * u1 * u2;
-         //std::cout << " t = " << t << " " << fu[ 0 ] << " " << fu[ 1 ] << std::endl;
-      }
-      
-      bool writeSolution( const double& t, int step, const double* u )
-      {
-         fstream file;
-         if( step == 0 )
-         {
-            /****
-             * In the first step, we want to rewrite the file
-             */
-            file.open( "hyperbolic.txt", ios::out );
-            if( file ) return false;
-         }
-         else
-         {
-            /****
-             * In later steps, we just append new time steps
-             */
-            file.open( "hyperbolic.txt", ios::out | ios::app );
-            if( ! file ) return false;            
-         }
-         file << t << " " << u[ 0 ] << " " << u[ 1 ] << endl;
-      }
-      
+      bool writeSolution( const double& t, int step, const double* u );      
          
    protected:
       

@@ -9,12 +9,10 @@
 #include "NBodyProblem.h"
 #include "Euler.h"
 #include "Merson.h"
-#include "NBodySolver.h"
 #include "ode-solve.h"
 
 using namespace std;
 
-typedef NBodyProblem Problem;
 const double initialTime( 0.0 );
 const double finalTime( 1.0e3 );
 const double timeStep( 4.0e-2 );
@@ -23,7 +21,7 @@ const int particlesCount( 100 );
 
 int main( int argc, char** argv )
 {
-   Problem problem( particlesCount );
+   NBodyProblem problem( particlesCount );
    
    Euler integrator; 
    //integrator.setAdaptivity( 1.0e-8 );

@@ -19,17 +19,20 @@ COMMON_OBJECTS = ../CommandLineParser.o \
                  ../string-split.o \
                  ../Timer.o \
                  ../Vector.o \
-                 ../matrices/Matrix.o
+                 ../matrices/Matrix.o \
+                 Euler.o \
+                 Merson.o \
+                 RungeKutta.o
  
-RICCATI_OBJECTS = riccati.o
+RICCATI_OBJECTS = $(COMMON_OBJECTS) RiccatiProblem.o riccati.o
 
-HYPERBOLIC_OBJECTS = hyperbolic.o
+HYPERBOLIC_OBJECTS = $(COMMON_OBJECTS) HyperbolicProblem.o hyperbolic.o
 
-SPECIES_OBJECTS = species.o
+SPECIES_OBJECTS = $(COMMON_OBJECTS) SpeciesProblem.o species.o
 
-LORENZ_OBJECTS = lorenz.o
+LORENZ_OBJECTS = $(COMMON_OBJECTS) LorenzProblem.o lorenz.o
 
-NBODY_OBJECTS = nbody.o
+NBODY_OBJECTS = $(COMMON_OBJECTS) NBodyProblem.o nbody.o
 
 all: $(TARGETS)
 
