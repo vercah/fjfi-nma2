@@ -1,5 +1,12 @@
 #include "RiccatiProblem.h"
 
+RiccatiProblem::RiccatiProblem()
+{
+   l1Error = 0.0;
+   l2Error = 0.0;
+   maxError = 0.0;
+}
+
 int RiccatiProblem::getDegreesOfFreedom()
 { 
    return 1; 
@@ -53,5 +60,26 @@ bool RiccatiProblem::writeSolution( const double& t, int step, const double* u )
       if( !file ) return false;            
    }
    file << t << " " << u[ 0 ] << endl;
+   
+   const double diff = fabs( getExactSolution( t ) - u[ 0 ] );
+   l1Error += diff;
+   l2Error += diff * diff;
+   maxError = std::max( maxError, diff );
 }
+
+double RiccatiProblem::getL1Error( const double timeStep )
+{
+   return timeStep * l1Error;
+}
+
+double RiccatiProblem::getL2Error( const double timeStep )
+{
+   return sqrt( timeStep * l2Error );
+}
+
+double RiccatiProblem::getMaxError()
+{
+   return maxError;
+}
+
 
