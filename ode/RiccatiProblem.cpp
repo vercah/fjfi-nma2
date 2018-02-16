@@ -21,7 +21,9 @@ void RiccatiProblem::getRightHandSide( const double& t, const double* _u, double
 double RiccatiProblem::getExactSolution( const double& t ,
                                          const double& c = 1.0 )
 {
-   return exp( t ) * ( 1.0 / ( sqrt( 2.0 ) * t * t ) * tan( sqrt( 2.0 ) * ( c - 1.0 / t ) ) - 1.0 / ( 2.0 * t ) );
+   const double sqrt_2 = sqrt( 2.0 );
+   return exp( t ) * ( 1.0 / ( sqrt_2 * t * t ) * 
+                       tan( sqrt_2 * ( c - 1.0 / t ) ) - 1.0 / ( 2.0 * t ) );
 }
 
 bool RiccatiProblem::writeExactSolution( const char*  fileName, 
