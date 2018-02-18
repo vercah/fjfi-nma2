@@ -19,7 +19,7 @@ void RiccatiProblem::getRightHandSide( const double& t, const double* _u, double
 }
 
 double RiccatiProblem::getExactSolution( const double& t ,
-                                         const double& c = 1.0 )
+                                         const double& c )
 {
    const double sqrt_2 = sqrt( 2.0 );
    return exp( t ) * ( 1.0 / ( sqrt_2 * t * t ) * 
@@ -42,8 +42,9 @@ bool RiccatiProblem::writeExactSolution( const char*  fileName,
    }
 }
 
-bool RiccatiProblem::writeSolution( const double& t, int step, const double* u )
+bool RiccatiProblem::writeSolution( const double& t, int step, const double* _u )
 {
+   const double& u = _u[ 0 ];
    fstream file;
    if( step == 0 )
    {
@@ -61,9 +62,12 @@ bool RiccatiProblem::writeSolution( const double& t, int step, const double* u )
       file.open( "riccati.txt", ios::out | ios::app );
       if( !file ) return false;            
    }
-   file << t << " " << u[ 0 ] << endl;
+   file << t << " " << u << endl;
    
-   const double diff = fabs( getExactSolution( t ) - u[ 0 ] );
+   /****
+    * Evaluate errors of the approximation
+    */   	    
+   const double diff = fabs( getExactSolution( t ) - u );
    l1Error += diff;
    l2Error += diff * diff;
    maxError = std::max( maxError, diff );

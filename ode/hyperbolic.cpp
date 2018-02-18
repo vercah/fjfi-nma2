@@ -5,13 +5,11 @@
  * Created on February 25, 2016, 10:41 AM
  */
 
-#include <cstdlib>
+//#include <cstdlib>
 #include "HyperbolicProblem.h"
 #include "Euler.h"
 #include "Merson.h"
 #include "ode-solve.h"
-
-using namespace std;
 
 typedef HyperbolicProblem Problem;
 

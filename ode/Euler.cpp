@@ -20,14 +20,13 @@ bool Euler::solve( const double integrationTimeStep,
                    double* u )
 {
    const int dofs = problem->getDegreesOfFreedom();         
-   double tau = std::min( integrationTimeStep, stopTime - *time );
    while( *time < stopTime )
    {
+     const double tau = std::min( integrationTimeStep, stopTime - *time );
      problem->getRightHandSide( *time, u, this->k );
      for( int i = 0; i < dofs; i++ )
         u[ i ] +=  tau * k[ i ];
       *time += tau;
-      tau = std::min( integrationTimeStep, stopTime - *time );
    }
    return true;
 }
