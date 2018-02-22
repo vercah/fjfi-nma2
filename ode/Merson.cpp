@@ -31,8 +31,8 @@ void Merson::setAdaptivity( const double& adaptivity )
    this->adaptivity = adaptivity;
 }
 
-bool Merson::solve( const double& integrationTimeStep,
-                    const double& stopTime,
+bool Merson::solve( const double integrationTimeStep,
+                    const double stopTime,
                     double* time,
                     ODEProblem* problem,
                     double* u )      

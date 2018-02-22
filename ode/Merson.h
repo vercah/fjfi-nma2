@@ -19,9 +19,9 @@ class Merson : public ODESolver
       bool setup( int degreesOfFreedom );
 
       void setAdaptivity( const double& adaptivity );
-      
-      bool solve( const double& integrationTimeStep,
-                  const double& stopTime,
+
+      bool solve( const double integrationTimeStep,
+                  const double stopTime,
                   double* time,
                   ODEProblem* problem,
                   double* u );
