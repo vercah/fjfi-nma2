@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Euler.h"
 
 Euler::Euler()
@@ -19,7 +20,8 @@ bool Euler::solve( const double integrationTimeStep,
                    ODEProblem* problem,
                    double* u )
 {
-   const int dofs = problem->getDegreesOfFreedom();         
+   const int dofs = problem->getDegreesOfFreedom();
+   long int iteration( 0 );
    while( *time < stopTime )
    {
      const double tau = std::min( integrationTimeStep, stopTime - *time );
@@ -27,7 +29,10 @@ bool Euler::solve( const double integrationTimeStep,
      for( int i = 0; i < dofs; i++ )
         u[ i ] +=  tau * k[ i ];
       *time += tau;
+      iteration++;
+      std::cout << "ITER: " << iteration << " \t tau = " << tau << " \t time= " << *time << "         \r " << std::flush;
    }
+   std::cout << std::endl;
    return true;
 }
 
