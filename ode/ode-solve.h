@@ -32,7 +32,6 @@ bool solve( const double initialTime,
                             problem,
                             u ) )
          return false;
-      time += timeStep;
       problem->writeSolution( time, k, u );
    }
    std::cout << "Done." << std::endl;
