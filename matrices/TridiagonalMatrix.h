@@ -38,16 +38,16 @@ class TridiagonalMatrix : public Matrix
       void performRichardsonIteration( const Vector& b,
                                        const Vector& x,
                                        Vector& aux,
-                                       const Real& relaxation = 1.0 ) const{};
+                                       const Real& relaxation = 1.0 ) const;
       
       void performJacobiIteration( const Vector& b,
                                    const Vector& x,
                                    Vector& aux,
-                                   const Real& relaxation = 1.0 ) const{};
+                                   const Real& relaxation = 1.0 ) const;
       
       void performSORIteration( const Vector& b,
                                 Vector& x,
-                                const Real& relaxation = 1.0 ) const {};
+                                const Real& relaxation = 1.0 ) const;
       
       
       void getResidue( const Vector& x, const Vector& b, Vector& r ) const {};
@@ -57,7 +57,6 @@ class TridiagonalMatrix : public Matrix
    private:      
       
       std::vector< Real > elements;
-
 };
 
 

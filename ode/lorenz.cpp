@@ -24,7 +24,7 @@ int main( int argc, char** argv )
     LorenzProblem problem;
     problem.setParameters( 10.0, 28.0, 8.0/3.0 );
     
-    Euler integrator;
+    Merson integrator;
 
     double u[ 3 ] = { 1.0, 1.0, 1.0 };
 

@@ -23,7 +23,7 @@ int main( int argc, char** argv )
 {
     SpeciesProblem problem;
     problem.setParameters( 0.5, 0.25, 0.5, 0.95 );
-    Euler integrator;
+    Merson integrator;
 
     double u[ 2 ] = { 7.5, 0.25 };
     if( ! solve( initialTime,

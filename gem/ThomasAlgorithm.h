@@ -24,6 +24,8 @@ class ThomasAlgorithm
       TridiagonalMatrix& A;
       
       Vector& b;
+      
+      Vector rho, mu;
    
 };
 

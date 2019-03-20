@@ -86,6 +86,53 @@ void TridiagonalMatrix::vectorMultiplication( const Vector& in_vector,
       
 }
 
+void TridiagonalMatrix::performRichardsonIteration( const Vector& b,
+                                                    const Vector& x,
+                                                    Vector& aux,
+                                                    const Real& relaxation ) const
+{
+   for( int row = 0; row < this->getRows(); row++ )
+   {
+      Real sum = this->getElement( row, row ) * x[ row ];
+      if( row > 0 )
+         sum += this->getElement( row, row - 1 ) * x[ row - 1 ]; 
+      if( row < this->getRows() - 1 )
+         sum += this->getElement( row, row + 1 ) * x[ row + 1 ]; 
+      aux[ row ] = x[ row ] + relaxation * ( b[ row ] - sum );
+   }
+}
+
+void TridiagonalMatrix::performJacobiIteration( const Vector& b,
+                                                const Vector& x,
+                                                Vector& aux,
+                                                const Real& relaxation ) const
+{
+   for( int row = 0; row < this->getRows(); row++ )
+   {
+      Real sum = this->getElement( row, row ) * x[ row ];
+      if( row > 0 )
+         sum += this->getElement( row, row - 1 ) * x[ row - 1 ]; 
+      if( row < this->getRows() - 1 )
+         sum += this->getElement( row, row + 1 ) * x[ row + 1 ]; 
+      aux[ row ] = x[ row ] + relaxation * ( b[ row ] - sum ) / this->getElement( row, row );
+   }
+}
+
+void TridiagonalMatrix::performSORIteration( const Vector& b,
+                                             Vector& x,
+                                             const Real& relaxation ) const
+{
+   for( int row = 0; row < this->getRows(); row++ )
+   {
+      Real sum = this->getElement( row, row ) * x[ row ];
+      if( row > 0 )
+         sum += this->getElement( row, row - 1 ) * x[ row - 1 ]; 
+      if( row < this->getRows() - 1 )
+         sum += this->getElement( row, row + 1 ) * x[ row + 1 ]; 
+      x[ row ] += relaxation * ( b[ row ] - sum ) / this->getElement( row, row );
+   }
+}
+
 TridiagonalMatrix& TridiagonalMatrix::operator=( const TridiagonalMatrix& m )
 {
    this->setDimensions( m.getRows(), m.getColumns() );

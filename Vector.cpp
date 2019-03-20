@@ -7,6 +7,13 @@
 #include "Vector.h"
 #include <cmath>
 
+Vector::Vector() {};
+
+Vector::Vector( const int size )
+{
+   this->setSize( size );
+};
+
 void Vector::setSize( const int size )
 {
    this->data.resize( size );

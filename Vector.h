@@ -16,6 +16,10 @@ class Vector
 {
    public:
    
+      Vector();
+      
+      Vector( const int size );
+      
       void setSize( const int size );
       
       int getSize() const;

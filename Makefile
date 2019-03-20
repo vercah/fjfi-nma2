@@ -17,6 +17,7 @@ SUBDIRS = data \
           gem \
           matrices \
           ode \
+          pde \
           stationary
 
 SUBDIRSCLEAN=$(addsuffix clean,$(SUBDIRS))

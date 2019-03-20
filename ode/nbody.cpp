@@ -23,7 +23,7 @@ int main( int argc, char** argv )
 {
    NBodyProblem problem( particlesCount );
    
-   Euler integrator; 
+   Merson integrator; 
    //integrator.setAdaptivity( 1.0e-8 );
     
    double* u = new double[ problem.getDegreesOfFreedom() ];
