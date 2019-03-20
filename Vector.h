@@ -38,7 +38,17 @@ class Vector
       
       const Real l2Norm() const;
       
+      void writeGnuplot1D( std::ostream& str,
+                           const double& h,
+                           const double& origin = 0 ) const;
       
+      void writeGnuplot2D( std::ostream& str,
+                           const int xSize,
+                           const int ySize,
+                           const double& h_x,
+                           const double& h_y,
+                           const double& origin_x = 0,
+                           const double& origin_y = 0 ) const;
       
    protected:
       

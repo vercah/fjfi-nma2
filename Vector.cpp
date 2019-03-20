@@ -74,6 +74,30 @@ const Real Vector::l2Norm() const
    return sqrt( result );
 }
 
+void Vector::writeGnuplot1D( std::ostream& str, const double& h, const double& origin ) const
+{
+   for( int i = 0; i< this->getSize(); i++ )
+      str << origin + i * h << " " << this->operator []( i ) << std::endl;
+   str<< std::endl;
+}
+
+void Vector::writeGnuplot2D( std::ostream& str,
+                             const int size_x,
+                             const int size_y,
+                             const double& h_x,
+                             const double& h_y,
+                             const double& origin_x,
+                             const double& origin_y ) const
+{
+   for( int j = 0; j < size_x; j++ )
+      for( int i = 0; i < size_y; i++ )
+         str << origin_x + i * h_x << " "
+             << origin_y + j * h_y << " "
+             << this->operator[]( j * size_x + i )
+             << std::endl;
+   str << std::endl;
+}
+
 std::ostream& operator << ( std::ostream& str, const Vector& v )
 {
    for( int i = 0; i < v.getSize() - 1; i++ )
