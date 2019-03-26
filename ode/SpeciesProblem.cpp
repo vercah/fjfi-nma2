@@ -24,7 +24,7 @@ void SpeciesProblem::setParameters( const double& _a,
    d = _d;
 }
 
-void SpeciesProblem::getRightHandSide( const double& t, const double* _u, double* fu )
+void SpeciesProblem::getRightHandSide( const double& t, double* _u, double* fu )
 {
    const double& u1 = _u[ 0 ];
    const double& u2 = _u[ 1 ];

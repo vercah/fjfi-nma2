@@ -51,7 +51,7 @@ void NBodyProblem::setInitialCondition( double* u )
    }
 }
 
-void NBodyProblem::getRightHandSide( const double& t, const double* _u, double* fu )
+void NBodyProblem::getRightHandSide( const double& t, double* _u, double* fu )
 {
    const double epsilon = 1.0e-1;
    const int n = this->particlesCount;

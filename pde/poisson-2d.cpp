@@ -32,6 +32,7 @@ int main( int argc, char* argv[] )
    const int dofs = ( N + 1 ) * ( N + 1 );
    Vector u( dofs ), b( dofs );
    EllpackMatrix A( dofs, dofs );
+   A.setRowLength( 5 );
      
    for( int j = 0; j <= N; j++ )
       for( int i = 0; i <= N; i++ )

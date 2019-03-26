@@ -12,7 +12,7 @@ int RiccatiProblem::getDegreesOfFreedom()
    return 1; 
 }
 
-void RiccatiProblem::getRightHandSide( const double& t, const double* _u, double* fu )
+void RiccatiProblem::getRightHandSide( const double& t, double* _u, double* fu )
 {
    const double& u = _u[ 0 ];
    fu[ 0 ] = pow( t, -4.0 ) * exp( t ) + u + 2.0 * exp( -t ) * u * u;

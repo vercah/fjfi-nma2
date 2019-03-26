@@ -27,7 +27,7 @@ class SpeciesProblem : public ODEProblem
                           const double& _c,
                           const double& _d );
       
-      void getRightHandSide( const double& t, const double* _u, double* fu );
+      void getRightHandSide( const double& t, double* _u, double* fu );
          
       bool writeSolution( const double& t, int step, const double* u );
       

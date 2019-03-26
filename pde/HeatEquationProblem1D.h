@@ -1,8 +1,8 @@
 /* 
- * File:   NBodyProblem.h
+ * File:   HeatEquationProblem1D.h
  * Author: oberhuber
  *
- * Created on March 10, 2017, 2:55 PM
+ * Created on March 26, 2019, 2:55 PM
  */
 
 #pragma once
@@ -13,13 +13,13 @@
 #include<vector>
 #include<sstream>
 #include<iomanip>
-#include "ODEProblem.h"
+#include "../ode/ODEProblem.h"
 
-class NBodyProblem : public ODEProblem
+class HeatEquationProblem1D : public ODEProblem
 {
    public:
       
-      NBodyProblem( int particlesCount, int dimension = 2 );
+      HeatEquationProblem1D( int size );
       
       int getDegreesOfFreedom();
       
@@ -31,15 +31,13 @@ class NBodyProblem : public ODEProblem
       
       bool writeSolution( const double& t, int step, const double* u );
 
-      ~NBodyProblem();
+      ~HeatEquationProblem1D();
       
    protected:
       
-      int dimension, particlesCount;
+      int size;
       
-      double* masses;
-      
-      double g;
+      double h;
 };
 
 

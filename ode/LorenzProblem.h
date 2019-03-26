@@ -26,7 +26,7 @@ class LorenzProblem : public ODEProblem
       
       int getDegreesOfFreedom();
       
-      void getRightHandSide( const double& t, const double* _u, double* fu );
+      void getRightHandSide( const double& t, double* _u, double* fu );
       
       bool writeSolution( const double& t, int step, const double* u );
          

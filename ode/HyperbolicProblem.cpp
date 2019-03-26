@@ -15,7 +15,7 @@ void HyperbolicProblem::setEpsilon( const double& eps )
    this->epsilon = eps;
 }
 
-void HyperbolicProblem::getRightHandSide( const double& t, const double* _u, double* fu )
+void HyperbolicProblem::getRightHandSide( const double& t, double* _u, double* fu )
 {
    const double& u1 = _u[ 0 ];
    const double& u2 = _u[ 1 ];

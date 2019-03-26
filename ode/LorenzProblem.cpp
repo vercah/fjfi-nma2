@@ -21,7 +21,7 @@ int LorenzProblem::getDegreesOfFreedom()
    return 3; 
 }
 
-void LorenzProblem::getRightHandSide( const double& t, const double* _u, double* fu )
+void LorenzProblem::getRightHandSide( const double& t, double* _u, double* fu )
 {
    const double& x = _u[ 0 ];
    const double& y = _u[ 1 ];

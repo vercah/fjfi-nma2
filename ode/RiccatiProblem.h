@@ -22,7 +22,7 @@ class RiccatiProblem : public ODEProblem
       
       int getDegreesOfFreedom();
       
-      void getRightHandSide( const double& t, const double* _u, double* fu );
+      void getRightHandSide( const double& t, double* _u, double* fu );
       
       double getExactSolution( const double& t ,
                                const double& c = 1.0 );

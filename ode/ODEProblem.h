@@ -13,7 +13,7 @@ class ODEProblem
       
       virtual int getDegreesOfFreedom() = 0;
       
-      virtual void getRightHandSide( const double& t, const double* _u, double* fu ) = 0;
+      virtual void getRightHandSide( const double& t, double* _u, double* fu ) = 0;
       
       virtual bool writeSolution( const double& t, int step, const double* u ) = 0;
 };
