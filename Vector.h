@@ -7,10 +7,7 @@
 
 #pragma once
 
-#include <vector>
 #include <ostream>
-#include "real.h"
-
 
 class Vector
 {
@@ -24,19 +21,23 @@ class Vector
       
       int getSize() const;
       
-      Real& operator[]( const int index );
+      double* getData();
       
-      const Real& operator[]( const int index ) const;
+      const double* getData() const;
+      
+      double& operator[]( const int index );
+      
+      const double& operator[]( const int index ) const;
       
       Vector& operator -= ( const Vector& b );
       
       void swap( Vector& v );
       
-      const Real maxNorm() const;
+      const double maxNorm() const;
       
-      const Real l1Norm() const;
+      const double l1Norm() const;
       
-      const Real l2Norm() const;
+      const double l2Norm() const;
       
       void writeGnuplot1D( std::ostream& str,
                            const double& h,
@@ -54,9 +55,11 @@ class Vector
       
       void writePGM( const char* fileName, const int width, const int height );
       
+      ~Vector();
+      
    protected:
       
-      std::vector< Real > data;
+      double* data;
       
       int size;
 };

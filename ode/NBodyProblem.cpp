@@ -101,7 +101,7 @@ bool NBodyProblem::writeSolution( const double& t, int step, const double* u )
     * Open file
     */   
    std::fstream file;
-   file.open( str.str(), std::ios::out );
+   file.open( str.str(), std::fstream::out | std::fstream::trunc );
    if( ! file )
    {
       std::cerr << "Unable to open the file " << str.str() << std::endl;

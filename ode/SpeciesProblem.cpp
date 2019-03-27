@@ -40,7 +40,7 @@ bool SpeciesProblem::writeSolution( const double& t, int step, const double* u )
       /****
        * In the first step, we want to rewrite the file
        */
-      file.open( "species.txt", ios::out );
+      file.open( "species.txt", fstream::out | fstream::trunc );
       if( ! file ) return false;
    }
    else
@@ -48,7 +48,7 @@ bool SpeciesProblem::writeSolution( const double& t, int step, const double* u )
       /****
        * In later steps, we just append new time steps
        */
-      file.open( "species.txt", ios::out | ios::app );
+      file.open( "species.txt", fstream::out | fstream::app );
       if( ! file ) return false;            
    }
    file << t << " " << u[ 0 ] << " " << u[ 1 ] << endl;

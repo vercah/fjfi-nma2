@@ -15,7 +15,7 @@ typedef HyperbolicProblem Problem;
 const double initialTime( 0.0 );
 const double finalTime( 100.0 );
 const double timeStep( 1.0e-1 );
-const double integrationTimeStep( 0.1 );
+const double integrationTimeStep( 1.0 );
 
 int main( int argc, char** argv )
 {
@@ -23,7 +23,7 @@ int main( int argc, char** argv )
     problem.setEpsilon( 0.0 );
     Merson integrator;
 
-    //integrator.setAdaptivity( 1.0e-5 );
+    integrator.setAdaptivity( 1.0e-5 );
         
     double u[ 2 ] = { 0.0, 1.0 };
     

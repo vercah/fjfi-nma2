@@ -12,7 +12,7 @@
 
 using namespace std;
 
-const double initialTime( 0.0 );
+const double initialTime( 0.05 );
 const double finalTime( 0.15 );
 const double timeStep( 1.0e-4 );
 const double integrationTimeStep( 1.0e-4 );
@@ -26,6 +26,12 @@ int main( int argc, char** argv )
      * Set initial condition
      */
     double u  = problem.getExactSolution( initialTime );
+    problem.writeSolution( initialTime, 0, &u );
+    
+    problem.writeExactSolution( "exact-riccati.txt", 
+                                initialTime,
+                                finalTime,
+                                timeStep );
 
     if( ! solve( initialTime,
                  finalTime,

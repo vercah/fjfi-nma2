@@ -7,18 +7,26 @@
 #include <cmath>
 #include <fstream>
 #include <iostream>
+#include <algorithm>
 #include "Vector.h"
 
-Vector::Vector() {};
+Vector::Vector()
+: data( 0 ),
+   size( 0 )
+{};
 
 Vector::Vector( const int size )
+: data( 0 ),
+   size( 0 )
 {
    this->setSize( size );
 };
 
 void Vector::setSize( const int size )
 {
-   this->data.resize( size );
+   if( data )
+      delete[] data;
+   this->data = new double[ size ];
    this->size = size;
 }
 
@@ -27,12 +35,22 @@ int Vector::getSize() const
    return this->size;
 }
 
-Real& Vector::operator[]( const int index )
+double* Vector::getData()
+{
+   return this->data;
+}
+
+const double* Vector::getData() const
+{
+   return this->data;
+}
+
+double& Vector::operator[]( const int index )
 {
    return this->data[ index ];
 }
 
-const Real& Vector::operator[]( const int index ) const
+const double& Vector::operator[]( const int index ) const
 {
    return this->data[ index ];
 }
@@ -45,35 +63,36 @@ Vector& Vector::operator -= ( const Vector& b )
 
 void Vector::swap( Vector& v )
 {
-   this->data.swap( v.data );
+   std::swap( this->data, v.data );
+   std::swap( this->size, v.size );
 }
 
-const Real Vector::maxNorm() const
+const double Vector::maxNorm() const
 {
-   Real result( 0.0 );
+   double result( 0.0 );
    for( int i = 0; i < this->size; i++ )
-      if( result < fabs( this->data[ i ] ) )
-         result = fabs( this->data[ i ] );
+      if( result < std::fabs( this->data[ i ] ) )
+         result = std::fabs( this->data[ i ] );
    return result;
 }
 
-const Real Vector::l1Norm() const
+const double Vector::l1Norm() const
 {
-   Real result( 0.0 );
+   double result( 0.0 );
    for( int i = 0; i < this->size; i++ )
-      result += fabs( this->data[ i ] );
+      result += std::fabs( this->data[ i ] );
    return result;
 }
 
-const Real Vector::l2Norm() const
+const double Vector::l2Norm() const
 {
-   Real result( 0.0 );
+   double result( 0.0 );
    for( int i = 0; i < this->size; i++ )
    {
-      const Real aux = fabs( this->data[ i ] );
+      const double aux = std::fabs( this->data[ i ] );
       result += aux * aux;
    }
-   return sqrt( result );
+   return std::sqrt( result );
 }
 
 void Vector::writeGnuplot1D( std::ostream& str, const double& h, const double& origin ) const
@@ -140,7 +159,7 @@ bool Vector::readPGM( const char* fileName, int& width, int& height )
    /****
     * Allocate data
     */
-   this->data.resize( width * height );
+   this->setSize( width * height );
 
    /****
     * Read image
@@ -166,7 +185,7 @@ void Vector::writePGM( const char* fileName, const int width, const int height )
    std::fstream file;
    file.open( fileName, std::ios::out );
    
-   file << "P5\n";
+   file << "P2\n";
    file << "# This file was generated at FJFI\n";
    file << width << ' '<< height << '\n' << "255\n";
    
@@ -174,8 +193,8 @@ void Vector::writePGM( const char* fileName, const int width, const int height )
    {
       for( int j = 0; j < width; j ++ )
       {
-         unsigned char color = 255 * data[ i * width + j ];
-         file << color;
+         int color = 255 * data[ i * width + j ];
+         file << color << "\n";
       }      
       file << '\n';
    }
@@ -187,5 +206,10 @@ std::ostream& operator << ( std::ostream& str, const Vector& v )
       str << v[ i ] << ", ";
    str << v[ v.getSize() - 1 ];
    return str;
+}
+
+Vector::~Vector()
+{
+   if( data ) delete[] data;
 }
 

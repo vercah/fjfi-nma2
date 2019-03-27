@@ -29,8 +29,8 @@ void HeatEquationProblem1D::setInitialCondition( double* u )
    for( int i = 0; i < size; i++ )
    {
       double x = i * h;
-      //u[ i ] = ( x > 0.4 && x < 0.6 ) ? 1.0 : 0.0;
-      u[ i ] = rand() % 20 - 10;
+      u[ i ] = ( x > 0.4 && x < 0.6 ) ? 1.0 : 0.0;
+      //u[ i ] = rand() % 20 - 10;
    }
 }
 
@@ -49,7 +49,7 @@ void HeatEquationProblem1D::getRightHandSide( const double& t, double* u, double
     */   
    const double h_sqr = h * h;
    for( int i = 1; i < size - 1; i++ )
-      fu[ i ] = ( u[ i - 1 ] - 2.0 * u[ i ] + u[ i + 1 ] )/ h_sqr;
+      fu[ i ] = ( u[ i - 1 ] - 2.0 * u[ i ] + u[ i + 1 ] ) / h_sqr;
 }
 
 bool HeatEquationProblem1D::writeSolution( const double& t, int step, const double* u )      
@@ -64,7 +64,7 @@ bool HeatEquationProblem1D::writeSolution( const double& t, int step, const doub
     * Open file
     */   
    std::fstream file;
-   file.open( str.str(), std::ios::out );
+   file.open( str.str(), std::fstream::out | std::fstream::trunc );
    if( ! file )
    {
       std::cerr << "Unable to open the file " << str.str() << std::endl;

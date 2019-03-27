@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <iostream>
+#include <cmath>
 #include "Merson.h"
 
 Merson::Merson()
@@ -96,7 +97,7 @@ bool Merson::solve( const double integrationTimeStep,
          iteration++;
          if( iteration > 100000 )
          {
-            std::cerr << "The solver has reached the maximum number of iteratoins. " << std::endl;
+            std::cerr << "The solver has reached the maximum number of iterations. " << std::endl;
             return false;
          }
       }

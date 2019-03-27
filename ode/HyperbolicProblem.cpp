@@ -32,7 +32,7 @@ bool HyperbolicProblem::writeSolution( const double& t, int step, const double* 
       /****
        * In the first step, we want to rewrite the file
        */
-      file.open( "hyperbolic.txt", ios::out );
+      file.open( "hyperbolic.txt", fstream::out | fstream::trunc );
       if( file ) return false;
    }
    else
@@ -40,7 +40,7 @@ bool HyperbolicProblem::writeSolution( const double& t, int step, const double* 
       /****
        * In later steps, we just append new time steps
        */
-      file.open( "hyperbolic.txt", ios::out | ios::app );
+      file.open( "hyperbolic.txt", fstream::out | fstream::app );
       if( ! file ) return false;            
    }
    file << t << " " << u[ 0 ] << " " << u[ 1 ] << endl;

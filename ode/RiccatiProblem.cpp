@@ -51,7 +51,7 @@ bool RiccatiProblem::writeSolution( const double& t, int step, const double* _u 
       /****
        * In the first step, we want to rewrite the file
        */
-      file.open( "riccati.txt", ios::out );
+      file.open( "riccati.txt", fstream::out | fstream::trunc );
       if( !file ) return false;
    }
    else
@@ -59,7 +59,7 @@ bool RiccatiProblem::writeSolution( const double& t, int step, const double* _u 
       /****
        * In later steps, we just append new time steps
        */
-      file.open( "riccati.txt", ios::out | ios::app );
+      file.open( "riccati.txt", fstream::out | fstream::app );
       if( !file ) return false;            
    }
    file << t << " " << u << endl;
