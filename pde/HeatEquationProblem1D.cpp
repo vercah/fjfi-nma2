@@ -1,5 +1,5 @@
 /* 
- * File:   HeatEquationProblem.cpp
+ * File:   HeatEquationProblem1D.cpp
  * Author: oberhuber
  *
  * Created on March 26, 2019, 2:55 PM
@@ -44,6 +44,9 @@ void HeatEquationProblem1D::getRightHandSide( const double& t, double* u, double
    fu[ 0 ] = 0.0;
    fu[ size -1 ] = 0.0;
    
+   /***
+    * Evaluate the Laplace operator
+    */   
    const double h_sqr = h * h;
    for( int i = 1; i < size - 1; i++ )
       fu[ i ] = ( u[ i - 1 ] - 2.0 * u[ i ] + u[ i + 1 ] )/ h_sqr;

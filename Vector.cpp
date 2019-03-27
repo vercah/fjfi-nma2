@@ -4,8 +4,10 @@
  * and open the template in the editor.
  */
 
-#include "Vector.h"
 #include <cmath>
+#include <fstream>
+#include <iostream>
+#include "Vector.h"
 
 Vector::Vector() {};
 
@@ -96,6 +98,87 @@ void Vector::writeGnuplot2D( std::ostream& str,
              << this->operator[]( j * size_x + i )
              << std::endl;
    str << std::endl;
+}
+
+bool Vector::readPGM( const char* fileName, int& width, int& height )
+{
+   std::fstream file;
+   file.open( fileName, std::ios::in );
+   
+   /***
+    * Read header
+    */
+   std::string magicNumber;
+   file >> magicNumber;
+   if( magicNumber != "P2" && magicNumber != "P5" )
+   {
+      std::cerr << "Unsupported format in file " << fileName << ". Only PGM format is supported." << std::endl;
+      return false;
+   }
+   bool binary = ( magicNumber == "P5" );
+   
+   /****
+    * Skip comments and empty lines
+    */
+   char character;
+   file.get(character);
+   while ( ! file.eof() and ( character == ' ' || character == '\t' || character == '\r' || character == '\n') )
+   {
+      file.get(character);
+      if ( character == '#' )
+         while( ! file.eof() && ( character != '\n' ) )
+	    file.get( character );
+   }
+   file.unget();
+ 
+   /***
+    * Read resolution
+    */
+   int maxColors;
+   file >> width >> height >> maxColors;
+ 
+   /****
+    * Allocate data
+    */
+   this->data.resize( width * height );
+
+   /****
+    * Read image
+    */
+   for( int i = 0; i < height; i ++ )
+      for( int j = 0; j < width; j ++ )
+      {
+         int col;
+         unsigned char col_aux;
+         if( binary )
+         {
+           file >> col_aux;
+           col = (int)col_aux;
+         }
+         else file >> col;
+         this->data[ i * width + j ] = ( double ) col / ( double ) maxColors;
+      }
+   return true;
+}
+
+void Vector::writePGM( const char* fileName, const int width, const int height )
+{
+   std::fstream file;
+   file.open( fileName, std::ios::out );
+   
+   file << "P5\n";
+   file << "# This file was generated at FJFI\n";
+   file << width << ' '<< height << '\n' << "255\n";
+   
+   for( int i = 0; i < height; i ++ )
+   {
+      for( int j = 0; j < width; j ++ )
+      {
+         unsigned char color = 255 * data[ i * width + j ];
+         file << color;
+      }      
+      file << '\n';
+   }
 }
 
 std::ostream& operator << ( std::ostream& str, const Vector& v )

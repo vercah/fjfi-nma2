@@ -50,6 +50,10 @@ class Vector
                            const double& origin_x = 0,
                            const double& origin_y = 0 ) const;
       
+      bool readPGM( const char* fileName, int& width, int& height );
+      
+      void writePGM( const char* fileName, const int width, const int height );
+      
    protected:
       
       std::vector< Real > data;

@@ -1,6 +1,9 @@
 include ../Makefile.inc
 
-TARGETS = poisson-1d poisson-2d heat-equation-1d
+TARGETS = poisson-1d \
+	  poisson-2d \
+	  heat-equation-1d \
+	  heat-equation-2d
 
 COMMON_SOURCES = ../CommandLineParser.cpp \
                  ../string-split.cpp \
@@ -19,7 +22,8 @@ COMMON_SOURCES = ../CommandLineParser.cpp \
 SOURCES = $(COMMON_SOURCES) \
 	  poisson-1d.cpp \
 	  poisson-2d.cpp \
-	  heat-equation-1d.cpp
+	  heat-equation-1d.cpp \
+	  heat-equation-2d.cpp
 COMMON_OBJECTS = ../CommandLineParser.o \
                  ../string-split.o \
                  ../Timer.o \
@@ -37,6 +41,7 @@ COMMON_OBJECTS = ../CommandLineParser.o \
 POISSON_1D_OBJECTS = $(COMMON_OBJECTS) poisson-1d.o
 POISSON_2D_OBJECTS = $(COMMON_OBJECTS) poisson-2d.o
 HEAT_EQUATION_1D_OBJECTS = $(COMMON_OBJECTS) heat-equation-1d.o HeatEquationProblem1D.o
+HEAT_EQUATION_2D_OBJECTS = $(COMMON_OBJECTS) heat-equation-2d.o HeatEquationProblem2D.o
 
 
 all: $(TARGETS)
@@ -53,8 +58,8 @@ heat-equation-1d: $(HEAT_EQUATION_1D_OBJECTS)
 	$(CXX) -o $@ $(HEAT_EQUATION_1D_OBJECTS) $(LD_FLAGS)
 	cp heat-equation-1d ../bin
 
-heat-equation-2d: $(HEAT_EQUATION_1D_OBJECTS)
-	$(CXX) -o $@ $(HEAT_EQUATION_1D_OBJECTS) $(LD_FLAGS)
+heat-equation-2d: $(HEAT_EQUATION_2D_OBJECTS)
+	$(CXX) -o $@ $(HEAT_EQUATION_2D_OBJECTS) $(LD_FLAGS)
 	cp heat-equation-2d ../bin
 
 
