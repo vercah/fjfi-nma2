@@ -5,7 +5,8 @@ TARGETS = poisson-1d \
 	  heat-equation-1d \
 	  heat-equation-2d \
 	  implicit-heat-equation-1d \
-	  implicit-heat-equation-2d
+	  implicit-heat-equation-2d \
+	  perona-malik-1d
 
 COMMON_SOURCES = ../CommandLineParser.cpp \
                  ../string-split.cpp \
@@ -27,7 +28,9 @@ SOURCES = $(COMMON_SOURCES) \
 	  heat-equation-1d.cpp \
 	  heat-equation-2d.cpp \
 	  implicit-heat-equation-1d.cpp \
-	  implicit-heat-equation-2d.cpp
+	  implicit-heat-equation-2d.cpp \
+	  perona-malik-1d.cpp
+	
 COMMON_OBJECTS = ../CommandLineParser.o \
                  ../string-split.o \
                  ../Timer.o \
@@ -48,6 +51,7 @@ HEAT_EQUATION_1D_OBJECTS = $(COMMON_OBJECTS) heat-equation-1d.o HeatEquationProb
 HEAT_EQUATION_2D_OBJECTS = $(COMMON_OBJECTS) heat-equation-2d.o HeatEquationProblem2D.o
 IMPLICT_HEAT_EQUATION_1D_OBJECTS = $(COMMON_OBJECTS) implicit-heat-equation-1d.o HeatEquationProblem1D.o
 IMPLICT_HEAT_EQUATION_2D_OBJECTS = $(COMMON_OBJECTS) implicit-heat-equation-2d.o HeatEquationProblem2D.o
+PERONA_MALIK_1D_OBJECTS = $(COMMON_OBJECTS) perona-malik-1d.o PeronaMalikProblem1D.o
 
 
 all: $(TARGETS)
@@ -75,6 +79,11 @@ implicit-heat-equation-1d: $(IMPLICT_HEAT_EQUATION_1D_OBJECTS)
 implicit-heat-equation-2d: $(IMPLICT_HEAT_EQUATION_2D_OBJECTS)
 	$(CXX) -o $@ $(IMPLICT_HEAT_EQUATION_2D_OBJECTS) $(LD_FLAGS)
 	cp implicit-heat-equation-2d ../bin
+
+perona-malik-1d: $(PERONA_MALIK_1D_OBJECTS)
+	$(CXX) -o $@ $(PERONA_MALIK_1D_OBJECTS) $(LD_FLAGS)
+	cp perona-malik-1d ../bin
+
 
 .PHONY: clean
 clean:
