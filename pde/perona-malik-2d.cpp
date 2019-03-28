@@ -1,12 +1,12 @@
 /* 
- * File:   heat-equation-1d.cpp
+ * File:   heat-equation-2d.cpp
  * Author: oberhuber
  *
  * Created on March 26, 2019, 10:41 AM
  */
 
 #include <cstdlib>
-#include "PeronaMalikProblem1D.h"
+#include "PeronaMalikProblem2D.h"
 #include "../ode/Euler.h"
 #include "../ode/Merson.h"
 #include "../ode/ode-solve.h"
@@ -21,7 +21,7 @@ const int size( 1000 );
 
 int main( int argc, char** argv )
 {
-   PeronaMalikProblem1D problem( size );
+   PeronaMalikProblem2D problem( size );
    
    Merson integrator; 
    integrator.setAdaptivity( 1.0e-8 );

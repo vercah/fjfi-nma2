@@ -30,8 +30,19 @@ void PeronaMalikProblem1D::setInitialCondition( double* u )
    for( int i = 0; i < size; i++ )
    {
       double x = i * h;
-      u[ i ] = ( x > 0.4 && x < 0.6 ) ? 1.0 : 0.0;
+      
+      // Step function
+      //u[ i ] = ( x > 0.4 && x < 0.6 ) ? 1.0 : 0.0;
+      
+      // Noise salt-pepper
       //u[ i ] = rand() % 20 - 10;
+      
+      // Step function with Gaussian noise
+      u[ i ] = 0.0;
+      for( int j = 0; j < 12; j++ )
+         u[ i ] += 1.0 / 100.0 * ( double ) ( rand() % 20 - 10 );
+      u[ i ] /= 12.0;
+      u[ i ] += ( double ) ( ( x > 0.4 && x < 0.6 ) ? 1.0 : 0.0 );
    }
 }
 
@@ -46,7 +57,7 @@ void PeronaMalikProblem1D::getRightHandSide( const double& t, double* u, double*
    fu[ size -1 ] = 0.0;
    
    /***
-    * Evaluate the Laplace operator
+    * Evaluate the Perona-Malik operator
     */   
    const double h_sqr = h * h;
    for( int i = 1; i < size - 1; i++ )
@@ -55,7 +66,7 @@ void PeronaMalikProblem1D::getRightHandSide( const double& t, double* u, double*
       p[ i ] = 1.0 / ( 1.0 + fabs( u_x ) / this->K_sqr );
    }
    for( int i = 1; i < size - 1; i++ )
-      fu[ i ] = ( u[ i - 1 ] - 2.0 * u[ i ] + u[ i + 1 ] ) / h_sqr;
+      fu[ i ] = ( p[ i ] * u[ i - 1 ] - ( p[ i ] + p[ i + 1 ] ) * u[ i ] + p[ i + 1 ] * u[ i + 1 ] ) / h_sqr;
 }
 
 bool PeronaMalikProblem1D::writeSolution( const double& t, int step, const double* u )      
@@ -64,7 +75,7 @@ bool PeronaMalikProblem1D::writeSolution( const double& t, int step, const doubl
     * Filename with step index
     */   
    std::stringstream str;
-   str << "heat-equation-" << std::setw( 5 ) << std::setfill( '0' ) << step << ".txt";
+   str << "perona-malik-" << std::setw( 5 ) << std::setfill( '0' ) << step << ".txt";
    
    /****
     * Open file

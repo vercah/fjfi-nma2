@@ -14,7 +14,7 @@
 using namespace std;
 
 const double initialTime( 0.0 );
-const double finalTime( 0.01 );
+const double finalTime( 0.05 );
 const double timeStep( 0.0001 );
 const double integrationTimeStep( 0.0001 );
 const int size( 1000 );
@@ -23,7 +23,7 @@ int main( int argc, char** argv )
 {
    HeatEquationProblem1D problem( size );
    
-   Euler integrator; 
+   Merson integrator; 
    //integrator.setAdaptivity( 1.0e-8 );
     
    double* u = new double[ problem.getDegreesOfFreedom() ];

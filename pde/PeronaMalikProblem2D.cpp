@@ -1,41 +1,39 @@
 /* 
- * File:   HeatEquationProblem1D.cpp
+ * File:   PeronaMalikProblem2D.cpp
  * Author: oberhuber
  *
- * Created on March 26, 2019, 2:55 PM
+ * Created on March 27, 2019, 2:55 PM
  */
 
 #include <cstdlib>
-#include "HeatEquationProblem1D.h"
+#include "PeronaMalikProblem2D.h"
 
-HeatEquationProblem1D::HeatEquationProblem1D( int size )
+PeronaMalikProblem2D::PeronaMalikProblem2D( int size )
 {
    this->size = size;
    this->h = 1.0 / size;
+   this->p = new double[ size ];
 }
 
-int HeatEquationProblem1D::getDegreesOfFreedom()
+int PeronaMalikProblem2D::getDegreesOfFreedom()
 { 
    return this->size;
 }
 
-void HeatEquationProblem1D::setParameters()
+void PeronaMalikProblem2D::setParameters()
 {
 
 }
 
-void HeatEquationProblem1D::setInitialCondition( double* u )
+void PeronaMalikProblem2D::setInitialCondition( double* u )
 {
    for( int i = 0; i < size; i++ )
    {
       double x = i * h;
-      // Step function
       //u[ i ] = ( x > 0.4 && x < 0.6 ) ? 1.0 : 0.0;
-      
-      // Noise salt-pepper
       //u[ i ] = rand() % 20 - 10;
       
-      // Step function with Gaussian noise
+      // Step function with noise
       u[ i ] = 0.0;
       for( int j = 0; j < 12; j++ )
          u[ i ] += 1.0 / 100.0 * ( double ) ( rand() % 20 - 10 );
@@ -44,13 +42,13 @@ void HeatEquationProblem1D::setInitialCondition( double* u )
    }
 }
 
-void HeatEquationProblem1D::getRightHandSide( const double& t, double* u, double* fu )
+void PeronaMalikProblem2D::getRightHandSide( const double& t, double* u, double* fu )
 {
    /***
-    * Zero Dirichlet boundary conditions
+    * Dirichlet boundary conditions
     */
-   u[ 0 ] = 0.0;
-   u[ size - 1 ] = 0.0;
+   //u[ 0 ] = 0.0;
+   //u[ size - 1 ] = 0.0;
    fu[ 0 ] = 0.0;
    fu[ size -1 ] = 0.0;
    
@@ -59,16 +57,21 @@ void HeatEquationProblem1D::getRightHandSide( const double& t, double* u, double
     */   
    const double h_sqr = h * h;
    for( int i = 1; i < size - 1; i++ )
-      fu[ i ] = ( u[ i - 1 ] - 2.0 * u[ i ] + u[ i + 1 ] ) / h_sqr;
+   {
+      const double u_x = ( u[ i ] - u[ i -1 ] ) / h;
+      p[ i ] = 1.0 / ( 1.0 + fabs( u_x ) / this->K_sqr );
+   }
+   for( int i = 1; i < size - 1; i++ )
+      fu[ i ] = ( p[ i ] * u[ i - 1 ] - ( p[ i ] + p[ i + 1 ] ) * u[ i ] + p[ i + 1 ] * u[ i + 1 ] ) / h_sqr;
 }
 
-bool HeatEquationProblem1D::writeSolution( const double& t, int step, const double* u )      
+bool PeronaMalikProblem2D::writeSolution( const double& t, int step, const double* u )      
 {
    /****
     * Filename with step index
     */   
    std::stringstream str;
-   str << "heat-equation-" << std::setw( 5 ) << std::setfill( '0' ) << step << ".txt";
+   str << "perona-malik-" << std::setw( 5 ) << std::setfill( '0' ) << step << ".txt";
    
    /****
     * Open file
@@ -91,6 +94,7 @@ bool HeatEquationProblem1D::writeSolution( const double& t, int step, const doub
    }
 }
 
-HeatEquationProblem1D::~HeatEquationProblem1D()
+PeronaMalikProblem2D::~PeronaMalikProblem2D()
 {
+   delete[] p;
 }

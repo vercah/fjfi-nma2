@@ -1,5 +1,5 @@
 /* 
- * File:   PeronaMalikProblem1D.h
+ * File:   PeronaMalikProblem2D.h
  * Author: oberhuber
  *
  * Created on March 27, 2019, 2:55 PM
@@ -15,11 +15,11 @@
 #include<iomanip>
 #include "../ode/ODEProblem.h"
 
-class PeronaMalikProblem1D : public ODEProblem
+class PeronaMalikProblem2D : public ODEProblem
 {
    public:
       
-      PeronaMalikProblem1D( int size );
+      PeronaMalikProblem2D( int size );
       
       int getDegreesOfFreedom();
       
@@ -31,7 +31,7 @@ class PeronaMalikProblem1D : public ODEProblem
       
       bool writeSolution( const double& t, int step, const double* u );
 
-      ~PeronaMalikProblem1D();
+      ~PeronaMalikProblem2D();
       
    protected:
       
