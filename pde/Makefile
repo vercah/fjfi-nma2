@@ -8,7 +8,10 @@ TARGETS = poisson-1d \
 	  implicit-heat-equation-2d \
 	  perona-malik-1d \
 	  perona-malik-2d \
-	  semi-implicit-perona-malik-1d
+	  semi-implicit-perona-malik-1d \
+	  semi-implicit-perona-malik-2d \
+	  transport-equation-1d
+	  
 
 COMMON_SOURCES = ../CommandLineParser.cpp \
                  ../string-split.cpp \
@@ -33,7 +36,9 @@ SOURCES = $(COMMON_SOURCES) \
 	  implicit-heat-equation-2d.cpp \
 	  perona-malik-1d.cpp \
 	  perona-malik-2d.cpp \
-	  semi-implicit-perona-malik-1d.cpp
+	  semi-implicit-perona-malik-1d.cpp \
+	  semi-implicit-perona-malik-2d.cpp \
+	  transport-equation-1d.cpp
 	
 COMMON_OBJECTS = ../CommandLineParser.o \
                  ../string-split.o \
@@ -58,6 +63,8 @@ IMPLICT_HEAT_EQUATION_2D_OBJECTS = $(COMMON_OBJECTS) implicit-heat-equation-2d.o
 PERONA_MALIK_1D_OBJECTS = $(COMMON_OBJECTS) perona-malik-1d.o PeronaMalikProblem1D.o
 PERONA_MALIK_2D_OBJECTS = $(COMMON_OBJECTS) perona-malik-2d.o PeronaMalikProblem2D.o
 SEMI_IMPLICT_PERONA_MALIK_1D_OBJECTS = $(COMMON_OBJECTS) semi-implicit-perona-malik-1d.o PeronaMalikProblem1D.o
+SEMI_IMPLICT_PERONA_MALIK_2D_OBJECTS = $(COMMON_OBJECTS) semi-implicit-perona-malik-2d.o PeronaMalikProblem2D.o
+TRANSPORT_EQUATION_1D_OBJECTS = $(COMMON_OBJECTS) transport-equation-1d.o TransportEquationProblem1D.o
 
 all: $(TARGETS)
 
@@ -97,6 +104,13 @@ semi-implicit-perona-malik-1d: $(SEMI_IMPLICT_PERONA_MALIK_1D_OBJECTS)
 	$(CXX) -o $@ $(SEMI_IMPLICT_PERONA_MALIK_1D_OBJECTS) $(LD_FLAGS)
 	cp semi-implicit-perona-malik-1d ../bin
 
+semi-implicit-perona-malik-2d: $(SEMI_IMPLICT_PERONA_MALIK_2D_OBJECTS)
+	$(CXX) -o $@ $(SEMI_IMPLICT_PERONA_MALIK_2D_OBJECTS) $(LD_FLAGS)
+	cp semi-implicit-perona-malik-2d ../bin
+
+transport-equation-1d: $(TRANSPORT_EQUATION_1D_OBJECTS)
+	$(CXX) -o $@ $(TRANSPORT_EQUATION_1D_OBJECTS) $(LD_FLAGS)
+	cp transport-equation-1d ../bin
 
 .PHONY: clean
 clean:
