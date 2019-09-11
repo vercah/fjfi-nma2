@@ -1,6 +1,7 @@
 include ../Makefile.inc
 
-TARGETS = power-method
+TARGETS = power-method \
+          triangular-method
 
 COMMON_SOURCES = ../CommandLineParser.cpp \
                  ../string-split.cpp \
@@ -10,7 +11,9 @@ COMMON_SOURCES = ../CommandLineParser.cpp \
 
 SOURCES = $(COMMON_SOURCES) \
           PowerMethod.cpp \
-          power-method.cpp
+          power-method.cpp \
+          TriangularMehtod.cpp \
+          triangular-method.cpp
 
 COMMON_OBJECTS = ../CommandLineParser.o \
                  ../string-split.o \
@@ -24,12 +27,22 @@ POWER_METHOD_OBJECTS = ../matrices/DenseMatrix.o \
                        PowerMethod.o \
                        power-method.o
 
+TRIANGULAR_METHOD_OBJECTS = ../matrices/DenseMatrix.o \
+                            ../matrices/TriangularOperations.o \
+                            ../gem/LUDecomposition.o \
+                            TriangularMethod.o \
+                            triangular-method.o
+
 all: $(TARGETS)
 
 power-method:  $(POWER_METHOD_OBJECTS) $(COMMON_OBJECTS)
 	$(CXX) -o $@  $(POWER_METHOD_OBJECTS) $(COMMON_OBJECTS) $(LDFLAGS)
 	cp power-method ../bin
-	
+
+triangular-method:  $(TRIANGULAR_METHOD_OBJECTS) $(COMMON_OBJECTS)
+	$(CXX) -o $@  $(TRIANGULAR_METHOD_OBJECTS) $(COMMON_OBJECTS) $(LDFLAGS)
+	cp triangular-method ../bin
+
 .PHONY: clean
 clean:
 	rm -f *.o *.d $(TARGETS)

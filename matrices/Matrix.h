@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <iostream>
 #include "../Vector.h"
 #include "../real.h"
 
@@ -46,23 +47,23 @@ class Matrix
       
       void getEigenvalueResidue( const Vector& eigenvector,
                                  const Real& eigenvalue,
-                                 Vector& residue ) const;      
+                                 Vector& residue ) const;
 
       int getRows() const;
       
       int getColumns() const;
       
-      Real maxNorm() const;      
+      Real maxNorm() const;
       
-      void print( std::ostream& str,
+      void print( std::ostream& str = std::cout,
                   const int precision = 8,
                   const std::string zero = "0" ) const;
-      
+
       virtual bool readMtxFile( std::istream& file );
 
    protected:
       
-      int rows, columns;   
+      int rows, columns;
 };
 
 std::ostream& operator << ( std::ostream& str, const Matrix& m );

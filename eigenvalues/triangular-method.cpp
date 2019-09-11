@@ -1,9 +1,16 @@
+/* 
+ * File:   triangular-method.cpp
+ * Author: oberhuber
+ *
+ * Created on September 11, 2019, 4:10 PM
+ */
+
 #include <fstream>
-#include "LUDecomposition.h"
 #include "../CommandLineParser.h"
 #include "../matrices/DenseMatrix.h"
 #include "../Timer.h"
-
+#include "../Vector.h"
+#include "TriangularMethod.h"
 
 int main( int argc, char* argv[] )
 {
@@ -19,17 +26,21 @@ int main( int argc, char* argv[] )
       {
          std::cerr << "No input file was given, use -i or --input-file." << std::endl;
       }
+
+   int max_iterations( 1000 );
+   if( parser.cmdOptionExists( "--max-iterations" ) )
+      max_iterations = std::stoi( parser.getCmdOption( "--max-iterations" ) );
    
+   Real convergence_residue( 1.0e-6 );
+   if( parser.cmdOptionExists( "--convergence-residue" ) )
+      convergence_residue = std::stof( parser.getCmdOption( "--convergence-residue" ) );
+
    int verbose( 0 );
    if( parser.cmdOptionExists( "--verbose" ) )
       verbose = std::stoi( parser.getCmdOption( "--verbose" ) );
-   
-   std::string method( "gem" );
-   if( parser.cmdOptionExists( "--method" ) )
-      method = parser.getCmdOption( "--method" );
-   
-   
+
    DenseMatrix matrix;
+
    std::fstream file;
    file.open( file_name.data(), std::ios::in );
    if( ! file )
@@ -47,35 +58,24 @@ int main( int argc, char* argv[] )
    }
    const int n = matrix.getRows();
    std::cout << "Matrix dimensions are " << n << "x" << n << "." << std::endl;
-   if( verbose > 1 )
+   if( verbose >= 1 )
       std::cout << "Matrix is:" << std::endl << matrix << std::endl;
-   DenseMatrix A, B;
-   A = matrix;
-   LUDecomposition lu( A );
+
+   std::cout << "Finding the matrix spectrum by the triangular method..." << std::endl;
+
+   TriangularMethod triangular_method( matrix );
+   triangular_method.setMaxIterations( max_iterations );
+   triangular_method.setConvergenceResidue( convergence_residue );
+   DenseMatrix eigenvectors( matrix.getRows(), matrix.getColumns() );
+   Vector spectrum( matrix.getRows() );
    Timer timer;
    timer.reset();
    timer.start();
-   if( method == "gem" )
-      lu.computeByGEM( verbose );
-   if( method == "crout")
-      lu.computeByCrout( verbose );
-   if( method == "doolitle" )
-      lu.computeByDoolitle( verbose );
+   triangular_method.solve( spectrum, eigenvectors, verbose );
    timer.stop();
 
-   std::cout << "Computation took " << timer.getTime() << " seconds." << std::endl;
-   if( verbose > 1 )
-      std::cout << "Result is: " << std::endl << A << std::endl;
-   B.setDimensions( A.getRows(), A.getColumns() );
-   if( method == "gem" || method == "crout" )
-      lu.restoreMatrix( B, true );
-   else
-      lu.restoreMatrix( B, false );
-   if( verbose > 1 )
-      std::cout << "Restored matrix is: " << std::endl << B << std::endl;
-   B -= matrix;
-   std::cout << "Max. norm of the difference is " << B.maxNorm() << "." << std::endl;
-
+   std::cout << "Computation took " << timer.getTime() << " seconds." << std::endl;   
    return EXIT_SUCCESS;
 }
+
 
