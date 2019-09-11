@@ -1,5 +1,5 @@
 /* 
- * File:   TriangularMethod.h
+ * File:   LRAlgorithm.h
  * Author: oberhuber
  *
  * Created on September 11, 2019, 2:52 PM
@@ -10,11 +10,11 @@
 #include "../matrices/DenseMatrix.h"
 #include "../Vector.h"
 
-class TriangularMethod
+class LRAlgorithm
 {
    public:
 
-      TriangularMethod( const DenseMatrix& A );
+      LRAlgorithm( const DenseMatrix& A );
 
       void setMaxIterations( const int max_iterations );
 

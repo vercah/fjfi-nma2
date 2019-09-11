@@ -1,4 +1,4 @@
-#include "TriangularMethod.h"
+#include "LRAlgorithm.h"
 #include "../gem/LUDecomposition.h"
 #include "../Vector.h"
 #include "../matrices/TriangularOperations.h"
@@ -6,72 +6,72 @@
 #include <cmath>
 #include <assert.h>
 
-TriangularMethod::TriangularMethod( const DenseMatrix& A )
+LRAlgorithm::LRAlgorithm( const DenseMatrix& A )
 :  A( A ), max_iterations( 100 ), convergence_residue( 1.0e-8 )
 {
 }
 
-void TriangularMethod::setMaxIterations( const int max_iterations )
+void LRAlgorithm::setMaxIterations( const int max_iterations )
 {
    this->max_iterations = max_iterations;
 }
 
-void TriangularMethod::setConvergenceResidue( const Real& convergence_residue )
+void LRAlgorithm::setConvergenceResidue( const Real& convergence_residue )
 {
    this->convergence_residue = convergence_residue;
 }
 
-void TriangularMethod::setLUDecompositionCheck( bool check )
+void LRAlgorithm::setLUDecompositionCheck( bool check )
 {
    this->checkLUDecomposition = check;
 }
 
-bool TriangularMethod::solve( Vector& spectrum, DenseMatrix& eigenvectorsA, int verbose ) const
+bool LRAlgorithm::solve( Vector& spectrum, DenseMatrix& eigenvectorsA, int verbose ) const
 {
    int size = A.getRows();
    assert( size == A.getColumns() );
 
+   DenseMatrix A_i( size, size ), RL( size, size );
+   A_i = A;
    Vector spectrum_old( size );
    for( int i = 0; i < size; i++ )
       spectrum_old[ i ] = 0.0;
-   DenseMatrix L( size, size ), AL( size, size );
-   for( int i = 0; i < size; i++ )
-      for( int j = 0; j < size; j++ )
-         if( i == j )
-            L( i, j ) = 1.0;
-         else
-            L( i, j ) = 0.0;
 
    int iteration( 0 );
    int norm_index( 0 );
    Real residue( this->convergence_residue + 1.0 );
    
-   DenseMatrix check( size, size ), AL_copy( size, size );
+   DenseMatrix check( size, size );
+
+   /*std::cout << "A = " << std::endl;
+   A.print();
+   std::cout << std::endl;*/
 
    while( iteration < this->max_iterations )
    {
-      computeMatrixTimesL( A, L, AL );
-      AL_copy = AL;
-      LUDecomposition decomposition( AL );
+      LUDecomposition decomposition( A_i );
       if( ! decomposition.computeByDoolitle() )
       {
          std::cerr << "Cannot compute LU decomposition, reaching matrix which is not strongly regular." << std::endl;
          return false;
       }
+      RL = A_i;
       decomposition.restoreMatrix( check, false );
-      check -= AL_copy;
+      check -= RL;
       double LU_error = check.maxNorm();
+
+      computeRTimesL( A_i, RL );
+      A_i.swap( RL );
 
       double residue( 0.0 );
       for( int i = 0; i < size; i++ )
       {
-         spectrum[ i ] = AL( i, i );
+         spectrum[ i ] = A_i( i, i );
          double diff = spectrum_old[ i ] - spectrum[ i ];
          //std::cerr << "diff -> " << diff << std::endl;
          residue += diff * diff;
          spectrum_old[ i ] = spectrum[ i ];
       }
-      AL.swap( L );
       residue = sqrt( residue );
       std::cout << "RES: " << residue << " LU error " << LU_error << std::endl;
 
@@ -93,14 +93,14 @@ bool TriangularMethod::solve( Vector& spectrum, DenseMatrix& eigenvectorsA, int 
                   /***
                    * First case of eigenvalue of higher multiplicity
                    */
-                  if( fabs( ( AL( i, i ) - spectrum[ j ] ) ) < 1.0e-8 )
+                  if( fabs( ( A_i( i, i ) - spectrum[ j ] ) ) < 1.0e-8 )
                      eigenvectorsR( i, j ) = 0.0;
                   else
                   {
                      double aux( 0.0 );
                      for( int k = j; k > i; k-- )
-                        aux += eigenvectorsR( k, j ) * AL( i, k );
-                     eigenvectorsR( i, j ) = -aux / ( AL( i, i ) - spectrum[ j ] );
+                        aux += eigenvectorsR( k, j ) * A_i( i, k );
+                     eigenvectorsR( i, j ) = -aux / ( A_i( i, i ) - spectrum[ j ] );
                   }
                }
             }
@@ -108,7 +108,7 @@ bool TriangularMethod::solve( Vector& spectrum, DenseMatrix& eigenvectorsA, int 
          /***
           * Transform to eigenvectors of A by multiplying with L
           */
-         computeLTimesMatrix( AL, eigenvectorsR, eigenvectorsA );
+         //computeLTimesMatrix( AL, eigenvectorsR, eigenvectorsA );
 
          return true;
       }

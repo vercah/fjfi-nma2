@@ -1,5 +1,5 @@
 /* 
- * File:   triangular-method.cpp
+ * File:   lr-algorithm.cpp
  * Author: oberhuber
  *
  * Created on September 11, 2019, 4:10 PM
@@ -10,7 +10,7 @@
 #include "../matrices/DenseMatrix.h"
 #include "../Timer.h"
 #include "../Vector.h"
-#include "TriangularMethod.h"
+#include "LRAlgorithm.h"
 
 int main( int argc, char* argv[] )
 {
@@ -63,7 +63,7 @@ int main( int argc, char* argv[] )
 
    std::cout << "Finding the matrix spectrum by the triangular method..." << std::endl;
 
-   TriangularMethod triangular_method( matrix );
+   LRAlgorithm triangular_method( matrix );
    triangular_method.setMaxIterations( max_iterations );
    triangular_method.setConvergenceResidue( convergence_residue );
    DenseMatrix eigenvectors( matrix.getRows(), matrix.getColumns() );

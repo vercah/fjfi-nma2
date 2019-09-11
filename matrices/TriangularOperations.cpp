@@ -39,3 +39,22 @@ void computeLTimesMatrix( const DenseMatrix& LU, const DenseMatrix& A, DenseMatr
          result( i, j ) = aux;
       }
 }
+
+void computeRTimesL( const DenseMatrix& LU, DenseMatrix& result )
+{
+   int size = LU.getRows();
+   assert( size == LU.getColumns() );
+   assert( size == result.getRows() );
+   assert( size == result.getColumns() );
+
+   for( int i = 0; i < size; i++ )
+      for( int j = 0; j < size; j++ )
+      {
+         double aux( 0.0 );
+         for( int k = std::max( i, j ); k < size; k++ )
+            if( k == i )
+               aux += LU( k, j );
+            else aux += LU( i, k ) * LU( k, j );
+         result( i, j ) = aux;
+      }
+}

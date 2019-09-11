@@ -13,3 +13,5 @@
 void computeMatrixTimesL( const DenseMatrix& A, const DenseMatrix& LU, DenseMatrix& result );
 
 void computeLTimesMatrix( const DenseMatrix& LU, const DenseMatrix& A, DenseMatrix& result );
+
+void computeRTimesL( const DenseMatrix& LU, DenseMatrix& result );
