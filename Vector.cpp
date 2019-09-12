@@ -55,10 +55,22 @@ const double& Vector::operator[]( const int index ) const
    return this->data[ index ];
 }
 
+Vector& Vector::operator += ( const Vector& b )
+{
+   for( int i = 0; i < this->size; i++ )
+      this->data[ i ] += b[ i ];
+}
+
 Vector& Vector::operator -= ( const Vector& b )
 {
    for( int i = 0; i < this->size; i++ )
       this->data[ i ] -= b[ i ];
+}
+
+Vector& Vector::operator *= ( const double& b )
+{
+   for( int i = 0; i < this->size; i++ )
+      this->data[ i ] *= b;
 }
 
 void Vector::swap( Vector& v )
