@@ -1,8 +1,7 @@
 include ../Makefile.inc
 
 TARGETS = power-method \
-          triangular-method \
-          lr-algorithm
+          eigenvalues 
 
 COMMON_SOURCES = ../CommandLineParser.cpp \
                  ../string-split.cpp \
@@ -14,7 +13,8 @@ SOURCES = $(COMMON_SOURCES) \
           PowerMethod.cpp \
           power-method.cpp \
           TriangularMehtod.cpp \
-          triangular-method.cpp
+          LRAlgorithm.cpp \
+          eigenvalues.cpp
 
 COMMON_OBJECTS = ../CommandLineParser.o \
                  ../string-split.o \
@@ -28,17 +28,12 @@ POWER_METHOD_OBJECTS = ../matrices/DenseMatrix.o \
                        PowerMethod.o \
                        power-method.o
 
-TRIANGULAR_METHOD_OBJECTS = ../matrices/DenseMatrix.o \
-                            ../matrices/TriangularOperations.o \
-                            ../gem/LUDecomposition.o \
-                            TriangularMethod.o \
-                            triangular-method.o
-
-LR_ALGORITHM_OBJECTS = ../matrices/DenseMatrix.o \
-                       ../matrices/TriangularOperations.o \
-                       ../gem/LUDecomposition.o \
-                        LRAlgorithm.o \
-                        lr-algorithm.o
+EIGENVALUES_OBJECTS = ../matrices/DenseMatrix.o \
+                      ../matrices/TriangularOperations.o \
+                      ../gem/LUDecomposition.o \
+                      TriangularMethod.o \
+                      LRAlgorithm.o \
+                      eigenvalues.o
 
 all: $(TARGETS)
 
@@ -46,13 +41,9 @@ power-method:  $(POWER_METHOD_OBJECTS) $(COMMON_OBJECTS)
 	$(CXX) -o $@  $(POWER_METHOD_OBJECTS) $(COMMON_OBJECTS) $(LDFLAGS)
 	cp power-method ../bin
 
-triangular-method:  $(TRIANGULAR_METHOD_OBJECTS) $(COMMON_OBJECTS)
-	$(CXX) -o $@  $(TRIANGULAR_METHOD_OBJECTS) $(COMMON_OBJECTS) $(LDFLAGS)
-	cp triangular-method ../bin
-
-lr-algorithm:  $(LR_ALGORITHM_OBJECTS) $(COMMON_OBJECTS)
-	$(CXX) -o $@  $(LR_ALGORITHM_OBJECTS) $(COMMON_OBJECTS) $(LDFLAGS)
-	cp lr-algorithm ../bin
+eigenvalues:  $(EIGENVALUES_OBJECTS) $(COMMON_OBJECTS)
+	$(CXX) -o $@  $(EIGENVALUES_OBJECTS) $(COMMON_OBJECTS) $(LDFLAGS)
+	cp eigenvalues ../bin
 
 .PHONY: clean
 clean:

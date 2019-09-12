@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   TriangularMethod.h
  * Author: oberhuber
  *
@@ -32,5 +32,5 @@ class TriangularMethod
 
       Real convergence_residue;
 
-      bool checkLUDecomposition = false;
+      bool checkLUDecomposition = true;
 };

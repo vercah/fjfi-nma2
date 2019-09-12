@@ -1,5 +1,5 @@
-/* 
- * File:   triangular-method.cpp
+/*
+ * File:   eigenvalues.cpp
  * Author: oberhuber
  *
  * Created on September 11, 2019, 4:10 PM
@@ -11,6 +11,7 @@
 #include "../Timer.h"
 #include "../Vector.h"
 #include "TriangularMethod.h"
+#include "LRAlgorithm.h"
 
 int main( int argc, char* argv[] )
 {
@@ -27,6 +28,13 @@ int main( int argc, char* argv[] )
          std::cerr << "No input file was given, use -i or --input-file." << std::endl;
       }
 
+   std::string method( "triangular" );
+   if( parser.cmdOptionExists( "-m" ) )
+      method = parser.getCmdOption( "-m" );
+   else
+      if( parser.cmdOptionExists( "--method" ) )
+         method = parser.getCmdOption( "--method" );
+
    int max_iterations( 1000 );
    if( parser.cmdOptionExists( "--max-iterations" ) )
       max_iterations = std::stoi( parser.getCmdOption( "--max-iterations" ) );
@@ -34,6 +42,12 @@ int main( int argc, char* argv[] )
    Real convergence_residue( 1.0e-3 );
    if( parser.cmdOptionExists( "--convergence-residue" ) )
       convergence_residue = std::stof( parser.getCmdOption( "--convergence-residue" ) );
+
+   bool withDecompositionError( true );
+   if( parser.cmdOptionExists( "--with-decomposition-error" ) )
+      if( parser.getCmdOption( "--with-decomposition-error" ) == "yes" )
+         withDecompositionError = true;
+      else withDecompositionError = false;
 
    int verbose( 0 );
    if( parser.cmdOptionExists( "--verbose" ) )
@@ -61,20 +75,33 @@ int main( int argc, char* argv[] )
    if( verbose >= 1 )
       std::cout << "Matrix is:" << std::endl << matrix << std::endl;
 
-   std::cout << "Finding the matrix spectrum by the triangular method..." << std::endl;
+   std::cout << "Finding complete matrix spectrum..." << std::endl;
 
-   TriangularMethod triangular_method( matrix );
-   triangular_method.setMaxIterations( max_iterations );
-   triangular_method.setConvergenceResidue( convergence_residue );
    DenseMatrix eigenvectors( matrix.getRows(), matrix.getColumns() );
    Vector spectrum( matrix.getRows() );
    Timer timer;
    timer.reset();
    timer.start();
-   triangular_method.solve( spectrum, eigenvectors, verbose );
+
+   if( method == "triangular" )
+   {
+      TriangularMethod triangular_method( matrix );
+      triangular_method.setMaxIterations( max_iterations );
+      triangular_method.setConvergenceResidue( convergence_residue );
+      triangular_method.setLUDecompositionCheck( withDecompositionError );
+      triangular_method.solve( spectrum, eigenvectors, verbose );
+   }
+   if( method == "lr" )
+   {
+      LRAlgorithm lr( matrix );
+      lr.setMaxIterations( max_iterations );
+      lr.setConvergenceResidue( convergence_residue );
+      lr.setLUDecompositionCheck( withDecompositionError );
+      lr.solve( spectrum, eigenvectors, verbose );
+   }
    timer.stop();
 
-   std::cout << "Computation took " << timer.getTime() << " seconds." << std::endl;   
+   std::cout << "Computation took " << timer.getTime() << " seconds." << std::endl;
    return EXIT_SUCCESS;
 }
 

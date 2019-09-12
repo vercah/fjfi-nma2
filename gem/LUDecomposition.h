@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   LUDecomposition.h
  * Author: oberhuber
  *
@@ -20,25 +20,27 @@ class LUDecomposition
       /**
        * Compute LU decomposition with ones on diagonal of R (U)
        * @param verbose
-       * @return 
+       * @return
        */
       bool computeByGEM( int verbose = 0 );
 
       /**
        * Compute LU decomposition with ones on diagonal of R (U)
        * @param verbose
-       * @return 
+       * @return
        */
       bool computeByCrout( int verbose = 0 );
 
       /**
        * Compute LU decomposition with ones on diagonal of L
        * @param verbose
-       * @return 
+       * @return
        */
       bool computeByDoolitle( int verbose = 0 );
 
       void restoreMatrix( DenseMatrix& B, bool ones_on_L = false );
+
+      void getError( DenseMatrix& A, double& max_error, bool ones_on_L = false );
 
    protected:
 

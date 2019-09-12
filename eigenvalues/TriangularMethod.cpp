@@ -45,7 +45,7 @@ bool TriangularMethod::solve( Vector& spectrum, DenseMatrix& eigenvectorsA, int 
    int iteration( 0 );
    int norm_index( 0 );
    Real residue( this->convergence_residue + 1.0 );
-   
+
    DenseMatrix check( size, size ), AL_copy( size, size );
 
    while( iteration < this->max_iterations )
@@ -58,9 +58,9 @@ bool TriangularMethod::solve( Vector& spectrum, DenseMatrix& eigenvectorsA, int 
          std::cerr << "Cannot compute LU decomposition, reaching matrix which is not strongly regular." << std::endl;
          return false;
       }
-      decomposition.restoreMatrix( check, false );
-      check -= AL_copy;
-      double LU_error = check.maxNorm();
+      double max_LU_error( -1 );
+      if( checkLUDecomposition )
+         decomposition.getError( AL_copy, max_LU_error );
 
       double residue( 0.0 );
       for( int i = 0; i < size; i++ )
@@ -73,7 +73,7 @@ bool TriangularMethod::solve( Vector& spectrum, DenseMatrix& eigenvectorsA, int 
       }
       AL.swap( L );
       residue = sqrt( residue );
-      std::cout << "RES: " << residue << " LU error " << LU_error << std::endl;
+      std::cout << "RES: " << residue << " LU error " << max_LU_error << std::endl;
 
       if( residue < this->convergence_residue )
       {

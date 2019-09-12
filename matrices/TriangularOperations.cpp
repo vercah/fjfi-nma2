@@ -47,7 +47,29 @@ void computeRTimesL( const DenseMatrix& LU, DenseMatrix& result )
    assert( size == result.getRows() );
    assert( size == result.getColumns() );
 
+   DenseMatrix L( size, size ), R( size, size );
    for( int i = 0; i < size; i++ )
+      for( int j = 0; j < size; j++ )
+      {
+         if( i > j )
+         {
+            L( i, j ) = LU( i, j );
+            R( i, j ) = 0.0;
+         }
+         if( i == j )
+         {
+            L( i, j ) = 1.0;
+            R( i, j ) = LU( i, j );
+         }
+         if( i < j )
+         {
+            L( i, j ) = 0.0;
+            R( i, j ) = LU( i, j );
+         }
+      }
+   result.matrixMultiplication( R, L );
+
+   /*for( int i = 0; i < size; i++ )
       for( int j = 0; j < size; j++ )
       {
          double aux( 0.0 );
@@ -56,5 +78,5 @@ void computeRTimesL( const DenseMatrix& LU, DenseMatrix& result )
                aux += LU( k, j );
             else aux += LU( i, k ) * LU( k, j );
          result( i, j ) = aux;
-      }
+      }*/
 }

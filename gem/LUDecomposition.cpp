@@ -14,7 +14,7 @@ LUDecomposition::LUDecomposition( DenseMatrix& A )
 }
 
 bool LUDecomposition::solve( Vector& b, int verbose )
-{  
+{
    const int n = A.getRows();
 
    if( verbose )
@@ -24,7 +24,7 @@ bool LUDecomposition::solve( Vector& b, int verbose )
     * Forward substitution
     */
    for( int k = 0; k < n; k++ )
-   {      
+   {
       for( int j = 0; j < k; j++ )
          b[ k ] -= b[ j ] * A( k, j );
       b[ k ] /= A( k, k );
@@ -168,32 +168,41 @@ void LUDecomposition::restoreMatrix( DenseMatrix& B, bool ones_on_U )
    assert( B.getColumns() == A.getColumns() );
    assert( B.getRows() ==  A.getRows() );
    const int n = A.getColumns();
-   
+
    if( ones_on_U )
       for( int i = 0; i < n; i++ )
          for( int j = 0; j < n; j++ )
          {
             Real aux( 0.0 );
-            for( int k = 0; k <= std::min( i, j ); k++ )            
-               if( k == j )  // There are ones on the diagonal of U 
+            for( int k = 0; k <= std::min( i, j ); k++ )
+               if( k == j )  // There are ones on the diagonal of U
                   aux += A( i, k );
                else
                   aux += A( i, k ) * A( k, j );
             B( i, j ) = aux;
-         }  
+         }
    else
       for( int i = 0; i < n; i++ )
          for( int j = 0; j < n; j++ )
          {
             Real aux( 0.0 );
-            for( int k = 0; k <= std::min( i, j ); k++ )            
-               if( k == i )  // There are ones on the diagonal of L 
+            for( int k = 0; k <= std::min( i, j ); k++ )
+               if( k == i )  // There are ones on the diagonal of L
                   aux += A( k, j );
                else
                   aux += A( i, k ) * A( k, j );
             B( i, j ) = aux;
-         }  
+         }
+}
 
+void LUDecomposition::getError( DenseMatrix& A, double& max_error, bool ones_on_L )
+{
+   assert( A.getRows() == A.getColumns() );
+   const int size = A.getRows();
+   DenseMatrix m( size, size );
+   this->restoreMatrix( m, ones_on_L );
+   m -= A;
+   max_error = m.maxNorm();
 }
 
 void LUDecomposition::print( std::ostream& str ) const

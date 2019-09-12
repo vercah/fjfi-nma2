@@ -40,7 +40,7 @@ bool LRAlgorithm::solve( Vector& spectrum, DenseMatrix& eigenvectorsA, int verbo
    int iteration( 0 );
    int norm_index( 0 );
    Real residue( this->convergence_residue + 1.0 );
-   
+
    DenseMatrix check( size, size );
 
    /*std::cout << "A = " << std::endl;
@@ -49,16 +49,17 @@ bool LRAlgorithm::solve( Vector& spectrum, DenseMatrix& eigenvectorsA, int verbo
 
    while( iteration < this->max_iterations )
    {
+      if( checkLUDecomposition )
+         RL = A_i;
       LUDecomposition decomposition( A_i );
       if( ! decomposition.computeByDoolitle() )
       {
          std::cerr << "Cannot compute LU decomposition, reaching matrix which is not strongly regular." << std::endl;
          return false;
       }
-      RL = A_i;
-      decomposition.restoreMatrix( check, false );
-      check -= RL;
-      double LU_error = check.maxNorm();
+      double max_LU_error( -1 );
+      if( checkLUDecomposition )
+         decomposition.getError( RL, max_LU_error );
 
       computeRTimesL( A_i, RL );
       A_i.swap( RL );
@@ -73,7 +74,7 @@ bool LRAlgorithm::solve( Vector& spectrum, DenseMatrix& eigenvectorsA, int verbo
          spectrum_old[ i ] = spectrum[ i ];
       }
       residue = sqrt( residue );
-      std::cout << "RES: " << residue << " LU error " << LU_error << std::endl;
+      std::cout << "RES: " << residue << " LU error " << max_LU_error << std::endl;
 
       if( residue < this->convergence_residue )
       {
