@@ -7,7 +7,8 @@ COMMON_SOURCES = ../CommandLineParser.cpp \
                  ../string-split.cpp \
                  ../Timer.cpp \
                  ../Vector.cpp \
-                 ../matrices/Matrix.cpp
+                 ../matrices/Matrix.cpp \
+                 eigenvectors.cpp
 
 SOURCES = $(COMMON_SOURCES) \
           PowerMethod.cpp \
@@ -33,7 +34,8 @@ EIGENVALUES_OBJECTS = ../matrices/DenseMatrix.o \
                       ../gem/LUDecomposition.o \
                       TriangularMethod.o \
                       LRAlgorithm.o \
-                      eigenvalues.o
+                      eigenvalues.o \
+		      eigenvectors.o
 
 all: $(TARGETS)
 

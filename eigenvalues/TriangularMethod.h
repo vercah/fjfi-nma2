@@ -22,7 +22,7 @@ class TriangularMethod
 
       void setLUDecompositionCheck( bool check );
 
-      bool solve( Vector& spectrum, DenseMatrix& eigenvectorsA, int verbose = 0 ) const;
+      bool solve( Vector& spectrum, DenseMatrix& eigenvectors, int verbose = 0 ) const;
 
    protected:
 

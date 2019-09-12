@@ -49,6 +49,18 @@ int main( int argc, char* argv[] )
          withDecompositionError = true;
       else withDecompositionError = false;
 
+   bool showSpectrum( true );
+   if( parser.cmdOptionExists( "--show-spectrum" ) )
+      if( parser.getCmdOption( "--show-spectrum" ) == "yes" )
+         showSpectrum = true;
+      else showSpectrum = false;
+
+   bool showEigenvectors( false );
+   if( parser.cmdOptionExists( "--show-eigenvectors" ) )
+      if( parser.getCmdOption( "--show-eigenvectors" ) == "yes" )
+         showEigenvectors = true;
+      else showEigenvectors = false;
+
    int verbose( 0 );
    if( parser.cmdOptionExists( "--verbose" ) )
       verbose = std::stoi( parser.getCmdOption( "--verbose" ) );
@@ -102,6 +114,10 @@ int main( int argc, char* argv[] )
    timer.stop();
 
    std::cout << "Computation took " << timer.getTime() << " seconds." << std::endl;
+   if( showSpectrum )
+      std::cout << "Spectrum is: " << spectrum << std::endl;
+   if( showEigenvectors )
+      std::cout << "Eigenvectors are: " << std::endl << eigenvectors << std::endl;
    return EXIT_SUCCESS;
 }
 
