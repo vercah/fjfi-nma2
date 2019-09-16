@@ -22,6 +22,33 @@ void HouseholderTransformation::init( DenseMatrix& matrix, int row, int column )
    w *= 1.0 / w.l2Norm();
 }
 
-void HouseholderTransformation::computeTransformationTimesMatrix( const DenseMatrix& A, DenseMatrix& result )
+void HouseholderTransformation::apply( const DenseMatrix& A )
 {
+   Vector A_T_w( w.getSize() );
+   const int row = size - w.getSize();
+   for( int i = row; i < size; i++ )
+   {
+      double aux( 0.0 );
+      for( int j = row; j < size; j++ )
+         aux += A( j, i ) * w[ j - row ];
+      A_T_w[ i - row ] = aux;
+   }
+   for( int i = row; i < size; i++ )
+      for( int j = 0; j < size; j++ )
+         A( i, j ) -= 2.0 * w[ i ] * A_T_w[ j ];
+}
+
+void HouseholderTransformation::computeQR( DenseMatrix& A, DenseMatrix& Q )
+{
+   const int size = A.getRows();
+   for( int i = 0; i < size; i++ )
+      for( int j = 0; j < size; j++ )
+         Q( i, j ) = i == j ? 1.0 : 0.0;
+
+   for( int i = 0; i < size; i++ )
+   {
+      this->init( A, i, i );
+      this->apply( A );
+      this->apply( Q );
+   }
 }
