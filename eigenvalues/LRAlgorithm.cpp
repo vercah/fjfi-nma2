@@ -3,7 +3,7 @@
 #include <cmath>
 
 #include "LRAlgorithm.h"
-#include "../gem/LUDecomposition.h"
+#include "../matrices/LUDecomposition.h"
 #include "../Vector.h"
 #include "../matrices/TriangularOperations.h"
 #include "eigenvectors.h"

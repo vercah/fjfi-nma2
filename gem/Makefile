@@ -1,6 +1,6 @@
 include ../Makefile.inc
 
-TARGETS = gem-solver lu-test lu-solver thomas-solver
+TARGETS = gem-solver lu-solver thomas-solver
 
 COMMON_SOURCES = ../CommandLineParser.cpp \
                  ../string-split.cpp \
@@ -29,12 +29,8 @@ GEM_SOLVER_OBJECTS = ../matrices/DenseMatrix.o \
                      GEM.o \
                      gem-solver.o
 
-LU_TEST_OBJECTS = ../matrices/DenseMatrix.o \
-                  LUDecomposition.o \
-                  lu-test.o
-
 LU_SOLVER_OBJECTS = ../matrices/DenseMatrix.o \
-                    LUDecomposition.o \
+                    ../matrices/LUDecomposition.o \
                     lu-solver.o
 
 THOMAS_SOLVER_OBJECTS = ../matrices/DenseMatrix.o \
@@ -48,10 +44,6 @@ all: $(TARGETS)
 gem-solver: $(GEM_SOLVER_OBJECTS) $(COMMON_OBJECTS)
 	$(CXX) -o $@ $(GEM_SOLVER_OBJECTS) $(COMMON_OBJECTS) $(LDFLAGS)
 	cp gem-solver ../bin
-
-lu-test: $(LU_TEST_OBJECTS) $(COMMON_OBJECTS)
-	$(CXX) -o $@ $(LU_TEST_OBJECTS) $(COMMON_OBJECTS) $(LDFLAGS)
-	cp lu-test ../bin
 
 lu-solver: $(LU_SOLVER_OBJECTS) $(COMMON_OBJECTS)
 	$(CXX) -o $@ $(LU_SOLVER_OBJECTS) $(COMMON_OBJECTS) $(LDFLAGS)

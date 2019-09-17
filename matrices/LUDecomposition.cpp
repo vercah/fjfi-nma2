@@ -27,6 +27,8 @@ bool LUDecomposition::solve( Vector& b, int verbose )
    {
       for( int j = 0; j < k; j++ )
          b[ k ] -= b[ j ] * A( k, j );
+      if( A( k, k ) == 0.0 )
+         return false;
       b[ k ] /= A( k, k );
    }
 
@@ -39,6 +41,7 @@ bool LUDecomposition::solve( Vector& b, int verbose )
       for( int j = k + 1; j < n; j++ )
          b[ k ] -= b[ j ] * A( k, j );
    }
+   return true;
 }
 
 
@@ -84,6 +87,7 @@ bool LUDecomposition::computeByGEM( int verbose )
          this->print();
       }
    }
+   return true;
 }
 
 bool LUDecomposition::computeByCrout( int verbose )

@@ -40,6 +40,7 @@ bool RiccatiProblem::writeExactSolution( const char*  fileName,
       file << t << " " << this->getExactSolution( t, c ) << std::endl;
       t = std::min( t + timeStep, finalTime );
    }
+   return true;
 }
 
 bool RiccatiProblem::writeSolution( const double& t, int step, const double* _u )
@@ -60,17 +61,18 @@ bool RiccatiProblem::writeSolution( const double& t, int step, const double* _u 
        * In later steps, we just append new time steps
        */
       file.open( "riccati.txt", fstream::out | fstream::app );
-      if( !file ) return false;            
+      if( !file ) return false;
    }
    file << t << " " << u << endl;
    
    /****
     * Evaluate errors of the approximation
-    */   	    
+    */
    const double diff = fabs( getExactSolution( t ) - u );
    l1Error += diff;
    l2Error += diff * diff;
    maxError = std::max( maxError, diff );
+   return true;
 }
 
 double RiccatiProblem::getL1Error( const double timeStep )

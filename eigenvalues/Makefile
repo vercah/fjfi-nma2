@@ -31,7 +31,7 @@ POWER_METHOD_OBJECTS = ../matrices/DenseMatrix.o \
 
 EIGENVALUES_OBJECTS = ../matrices/DenseMatrix.o \
                       ../matrices/TriangularOperations.o \
-                      ../gem/LUDecomposition.o \
+                      ../matrices/LUDecomposition.o \
                       TriangularMethod.o \
                       LRAlgorithm.o \
                       eigenvalues.o \

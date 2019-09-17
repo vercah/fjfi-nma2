@@ -44,6 +44,7 @@ bool HyperbolicProblem::writeSolution( const double& t, int step, const double* 
       if( ! file ) return false;            
    }
    file << t << " " << u[ 0 ] << " " << u[ 1 ] << endl;
+   return true;
 }
 
 

@@ -137,4 +137,5 @@ TridiagonalMatrix& TridiagonalMatrix::operator=( const TridiagonalMatrix& m )
 {
    this->setDimensions( m.getRows(), m.getColumns() );
    this->elements = m.elements;
+   return *this;
 }

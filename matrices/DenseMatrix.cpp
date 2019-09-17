@@ -182,10 +182,12 @@ DenseMatrix& DenseMatrix::operator=( const DenseMatrix& m )
 {
    this->setDimensions( m.getRows(), m.getColumns() );
    this->elements = m.elements;
+   return *this;
 }
 
 DenseMatrix& DenseMatrix::operator-=( const DenseMatrix& m )
 {
    for( int i = 0; i < this->elements.size(); i++ )
       this->elements[ i ] -= m.elements[ i ];
+   return *this;
 }
