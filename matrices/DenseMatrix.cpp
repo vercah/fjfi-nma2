@@ -192,7 +192,7 @@ DenseMatrix& DenseMatrix::operator-=( const DenseMatrix& m )
    return *this;
 }
 
-double DenseMatrix::checkOrthogonality()
+double DenseMatrix::checkOrthogonality( int verbose )
 {
    const int n = this->getRows();
    assert( n = Q.getColumns() ); 
@@ -205,9 +205,11 @@ double DenseMatrix::checkOrthogonality()
          for( int k = 0; k < n; k++ )
             aux += ( *this )( i, k ) * ( *this )( j, k );
          M( i, j ) = aux;
-         if( i == j ) 
-            M( i, j ) -= 1.0;
       }
+   if( verbose > 1 )
+      std::cout << "Orthogonality check matrix = " << std::endl << M << std::endl;
+   for( int i = 0; i < n; i++ )
+      M( i, i ) -= 1.0;
    return M.maxNorm();
 }
 

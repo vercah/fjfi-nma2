@@ -25,20 +25,46 @@ bool QRDecomposition::computeByGrammSchmidt( DenseMatrix& Q, DenseMatrix& R, int
       
       for( int j = 0; j < k - 1; j++ )
       {
+         /**
+          * Compute the scalar product of j-th and k-th column
+          */
          double aux( 0.0 );
          for( int i = 0; i < n; i ++  )
-            aux += Q( i, j ) * Q( j, k );
+            aux += Q( i, j ) * Q( i, k );
+
+         /**
+          * Store the result into the matrix R
+          */
          R( j, k ) = aux;
 
+         /**
+          * Subtract projection of j-th column from k-th column
+          */
          for( int i = 0; i < n; i++ )
             Q( i, k ) -= aux * Q( i, j );
       }
+
+      /**
+       * Compute norm of the k-th column
+       */
       double norm( 0.0 );
       for( int i = 0; i < n; i++ )
          norm += Q( i, k ) * Q( i, k );
+
+      /**
+       * Store it on the diagonal of matrix R
+       */
       R( k, k ) = sqrt( norm );
+
+      /**
+       * Normalize k-th column of matrix Q
+       */
       for( int i = 0; i < n; i++ )
          Q( i, k ) /= R( k, k );
+
+      /**
+       * Reset the rest of k-th column of matrix R
+       */
       for( int i = k + 1; i < n; i++ )
          R( i, k ) = 0.0;
    }
@@ -47,7 +73,6 @@ bool QRDecomposition::computeByGrammSchmidt( DenseMatrix& Q, DenseMatrix& R, int
 
 bool QRDecomposition::computeByHouseholderTransformations( DenseMatrix& Q, DenseMatrix& R, int verbose )
 {
-   std::cout << "AAA " << std::endl << A << std::endl;
    HouseholderTransformation householder( A.getRows() );
    R = A;
    householder.computeQR( R, Q );

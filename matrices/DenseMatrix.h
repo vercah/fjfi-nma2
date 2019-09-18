@@ -59,7 +59,7 @@ class DenseMatrix : public Matrix
 
       DenseMatrix& operator-=( const DenseMatrix& m );
 
-      double checkOrthogonality();
+      double checkOrthogonality( int verbose = 0 );
 
    private:
 

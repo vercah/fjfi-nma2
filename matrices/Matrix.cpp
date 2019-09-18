@@ -28,9 +28,10 @@ int Matrix::getColumns() const
 
 Real Matrix::maxNorm() const
 {
-   Real maxRow( 0.0 ), currentRow( 0.0 );
+   Real maxRow( 0.0 ), currentRow;
    for( int k = 0; k < this->getRows(); k++ )
    {
+      currentRow = 0.0;
       for( int j = 0; j < this->getColumns(); j++ )
          currentRow += std::fabs( this->getElement( k, j ) );
       if( currentRow > maxRow )
