@@ -40,15 +40,12 @@ class QRDecomposition
 
       void getError( DenseMatrix& Q, DenseMatrix& R, DenseMatrix& A, double& max_error );
 
-      void checkOrthogonality( const DenseMatrix& Q, double& error );
-
    protected:
 
       void print( std::ostream& str = std::cout ) const;
 
       DenseMatrix& A;
 };
-
 
 
 

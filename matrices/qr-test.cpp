@@ -67,6 +67,7 @@ int main( int argc, char* argv[] )
    std::cout << "Computation took " << timer.getTime() << " seconds." << std::endl;
    if( verbose > 1 )
       std::cout << "Result is: " << std::endl << Q << std::endl << R << std::endl;
+   std::cout << "Error of Q orthogonality is " << Q.checkOrthogonality() << "." << std::endl;
    B.setDimensions( A.getRows(), A.getColumns() );
    qr.restoreMatrix( Q, R, B );
    if( verbose > 1 )

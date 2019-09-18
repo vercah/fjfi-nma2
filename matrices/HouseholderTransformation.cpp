@@ -19,10 +19,11 @@ void HouseholderTransformation::init( DenseMatrix& matrix, int row, int column )
 
    const double sign_x1 = w[ 0 ] < 0.0 ? -1.0 : 1.0;
    w[ 0 ] += sign_x1 * w.l2Norm();
+   std::cout << "w -> " << w << std::endl;
    w *= 1.0 / w.l2Norm();
 }
 
-void HouseholderTransformation::apply( const DenseMatrix& A )
+void HouseholderTransformation::apply( DenseMatrix& A )
 {
    Vector A_T_w( w.getSize() );
    const int row = size - w.getSize();
@@ -45,9 +46,10 @@ void HouseholderTransformation::computeQR( DenseMatrix& A, DenseMatrix& Q )
       for( int j = 0; j < size; j++ )
          Q( i, j ) = i == j ? 1.0 : 0.0;
 
-   for( int i = 0; i < size; i++ )
+   for( int i = 0; i < size - 1; i++ )
    {
       this->init( A, i, i );
+      std::cout << "w = " << w << std::endl;
       this->apply( A );
       this->apply( Q );
    }

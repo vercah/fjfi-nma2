@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   denseMatrix.h
  * Author: oberhuber
  *
@@ -58,6 +58,8 @@ class DenseMatrix : public Matrix
       DenseMatrix& operator=( const DenseMatrix& m );
 
       DenseMatrix& operator-=( const DenseMatrix& m );
+
+      double checkOrthogonality();
 
    private:
 

@@ -191,3 +191,23 @@ DenseMatrix& DenseMatrix::operator-=( const DenseMatrix& m )
       this->elements[ i ] -= m.elements[ i ];
    return *this;
 }
+
+double DenseMatrix::checkOrthogonality()
+{
+   const int n = this->getRows();
+   assert( n = Q.getColumns() ); 
+   DenseMatrix M( n, n );
+   
+   for( int i = 0; i < n; i++ )
+      for( int j = 0; j < n; j++ )
+      {
+         double aux( 0.0 );
+         for( int k = 0; k < n; k++ )
+            aux += ( *this )( i, k ) * ( *this )( j, k );
+         M( i, j ) = aux;
+         if( i == j ) 
+            M( i, j ) -= 1.0;
+      }
+   return M.maxNorm();
+}
+

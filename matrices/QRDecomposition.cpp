@@ -1,4 +1,5 @@
 #include "QRDecomposition.h"
+#include "../matrices/HouseholderTransformation.h"
 #include <assert.h>
 #include <string>
 #include <iostream>
@@ -46,8 +47,10 @@ bool QRDecomposition::computeByGrammSchmidt( DenseMatrix& Q, DenseMatrix& R, int
 
 bool QRDecomposition::computeByHouseholderTransformations( DenseMatrix& Q, DenseMatrix& R, int verbose )
 {
-   const int n = A.getRows();
-
+   std::cout << "AAA " << std::endl << A << std::endl;
+   HouseholderTransformation householder( A.getRows() );
+   R = A;
+   householder.computeQR( R, Q );
    return true;
 }
 
@@ -76,9 +79,3 @@ void QRDecomposition::getError( DenseMatrix& Q, DenseMatrix& R, DenseMatrix& A, 
    m -= A;
    max_error = m.maxNorm();
 }
-
-void QRDecomposition::checkOrthogonality( const DenseMatrix& Q, double& error )
-{
-   
-}
-

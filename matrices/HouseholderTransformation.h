@@ -18,7 +18,7 @@ class HouseholderTransformation
 
       void init( DenseMatrix& matrix, int row, int column );
 
-      void computeTransformationTimesMatrix( const DenseMatrix& A, DenseMatrix& result );
+      void apply( DenseMatrix& A );
 
       void computeQR( DenseMatrix& A, DenseMatrix& Q );
 
