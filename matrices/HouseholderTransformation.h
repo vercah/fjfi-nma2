@@ -27,4 +27,6 @@ class HouseholderTransformation
       int size;
 
       Vector w;
+      
+      double x1_sign, x_norm;
 };
