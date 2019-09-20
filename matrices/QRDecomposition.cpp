@@ -1,5 +1,6 @@
 #include "QRDecomposition.h"
 #include "../matrices/HouseholderTransformation.h"
+#include "../matrices/GivensRotation.h"
 #include <assert.h>
 #include <string>
 #include <iostream>
@@ -81,9 +82,9 @@ bool QRDecomposition::computeByHouseholderTransformations( DenseMatrix& Q, Dense
 
 bool QRDecomposition::computeByGivensRotations( DenseMatrix& Q, DenseMatrix& R, int verbose )
 {
-   const int n = A.getRows();
-
-   return true;
+   GivensRotation givens( A.getRows() );
+   R = A;
+   return givens.computeQR( R, Q );
 }
 
 

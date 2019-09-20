@@ -18,7 +18,9 @@ class HouseholderTransformation
 
       void init( DenseMatrix& matrix, int row, int column );
 
-      void apply( DenseMatrix& A );
+      void applyFromLeft( DenseMatrix& A );
+
+      void applyFromRight( DenseMatrix& A );
 
       void computeQR( DenseMatrix& A, DenseMatrix& Q );
 

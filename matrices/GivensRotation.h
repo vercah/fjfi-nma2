@@ -19,15 +19,17 @@ class GivensRotation
 
       GivensRotation( int size );
 
-      void init( DenseMatrix& matrix, int row1, int row2, int column );
+      bool init( DenseMatrix& matrix, int row1, int row2 );
 
-      void apply( DenseMatrix& A );
+      void applyFromLeft( DenseMatrix& A );
 
-      void computeQR( DenseMatrix& A, DenseMatrix& Q );
+      void applyFromRight( DenseMatrix& A );
+
+      bool computeQR( DenseMatrix& A, DenseMatrix& Q );
 
    protected:
 
-      int size;
+      int size, row1, row2;
 
       double c, s;
 };

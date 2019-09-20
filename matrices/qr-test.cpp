@@ -60,8 +60,11 @@ int main( int argc, char* argv[] )
       qr.computeByGrammSchmidt( Q, R, verbose );
    if( method == "householder")
       qr.computeByHouseholderTransformations( Q, R, verbose );
-   if( method == "givens" )
-      qr.computeByGivensRotations( Q, R, verbose );
+   if( method == "givens" && ! qr.computeByGivensRotations( Q, R, verbose ) )
+   {
+      std::cerr << "QR decomposition computation failed." << std::endl;
+      return false;
+   }
    timer.stop();
 
    std::cout << "Computation took " << timer.getTime() << " seconds." << std::endl;

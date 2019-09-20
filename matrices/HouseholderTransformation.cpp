@@ -24,7 +24,7 @@ void HouseholderTransformation::init( DenseMatrix& matrix, int row, int column )
    w *= 1.0 / w.l2Norm();
 }
 
-void HouseholderTransformation::apply( DenseMatrix& A )
+void HouseholderTransformation::applyFromLeft( DenseMatrix& A )
 {
    Vector A_T_w( w.getSize() );
    const int row = size - w.getSize();
@@ -41,9 +41,26 @@ void HouseholderTransformation::apply( DenseMatrix& A )
          A( i, j ) -= 2.0 * w[ i - row  ] * A_T_w[ j - row ];
 }
 
+void HouseholderTransformation::applyFromRight( DenseMatrix& A )
+{
+   Vector A_w( size );
+   const int row = size - w.getSize();
+   for( int i = 0; i < size; i++ )
+   {
+      double aux( 0.0 );
+      for( int j = row; j < size; j++ )
+         aux += A( i, j ) * w[ j - row ];
+      A_w[ i ] = aux;
+   }
+   //std::cout << "A_T_w = " << A_T_w << std::endl;
+   for( int i = 0; i < size; i++ )
+      for( int j = row; j < size; j++ )
+         A( i, j ) -= 2.0 * w[ j - row  ] * A_w[ i ];
+}
+
+
 void HouseholderTransformation::computeQR( DenseMatrix& A, DenseMatrix& Q )
 {
-   DenseMatrix m( size, size );
    const int size = A.getRows();
    for( int i = 0; i < size; i++ )
       for( int j = 0; j < size; j++ )
@@ -52,15 +69,9 @@ void HouseholderTransformation::computeQR( DenseMatrix& A, DenseMatrix& Q )
    for( int i = 0; i < size - 1; i++ )
    {
       this->init( A, i, i );
-      this->apply( A );
+      this->applyFromLeft( A );
       //std::cout << "A = " << std::endl << A << std::endl;
-      DenseMatrix H( size, size );
-      for( int i = 0; i < size; i++ )
-         for( int j = 0; j < size; j++ )
-            H( i, j ) = ( i == j ? 1.0 : 0.0 );
-      this->apply( H );
-      m.matrixMultiplication( Q, H );
-      Q = m;
+      this->applyFromRight( Q );
       //std::cout << "Q = " << std::endl << Q << std::endl;
    }
 }
