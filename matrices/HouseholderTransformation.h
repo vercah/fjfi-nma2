@@ -16,13 +16,13 @@ class HouseholderTransformation
 
       HouseholderTransformation( int size );
 
-      void init( DenseMatrix& matrix, int row, int column );
+      bool init( DenseMatrix& matrix, int row, int column );
 
       void applyFromLeft( DenseMatrix& A );
 
       void applyFromRight( DenseMatrix& A );
 
-      void computeQR( DenseMatrix& A, DenseMatrix& Q );
+      bool computeQR( DenseMatrix& A, DenseMatrix& Q );
 
    protected:
 

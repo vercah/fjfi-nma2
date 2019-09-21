@@ -56,6 +56,8 @@ bool QRDecomposition::computeByGrammSchmidt( DenseMatrix& Q, DenseMatrix& R, int
        * Store it on the diagonal of matrix R
        */
       R( k, k ) = sqrt( norm );
+      if( R( k, k ) == 0.0 )
+         return false;
 
       /**
        * Normalize k-th column of matrix Q
@@ -76,8 +78,7 @@ bool QRDecomposition::computeByHouseholderTransformations( DenseMatrix& Q, Dense
 {
    HouseholderTransformation householder( A.getRows() );
    R = A;
-   householder.computeQR( R, Q );
-   return true;
+   return householder.computeQR( R, Q );
 }
 
 bool QRDecomposition::computeByGivensRotations( DenseMatrix& Q, DenseMatrix& R, int verbose )

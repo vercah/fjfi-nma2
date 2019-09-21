@@ -37,6 +37,8 @@ class DenseMatrix : public Matrix
       void matrixMultiplication( const DenseMatrix& A,
                                  const DenseMatrix& B );
 
+      void transpose();
+
       void performRichardsonIteration( const Vector& b,
                                        const Vector& x,
                                        Vector& aux,

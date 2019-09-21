@@ -83,6 +83,16 @@ void DenseMatrix::matrixMultiplication( const DenseMatrix& A,
       }
 }
 
+void DenseMatrix::transpose()
+{
+   if( rows == columns )
+   {
+      for( int i = 0; i < rows; i++ )
+         for( int j = 0; j < i; j++ )
+            std::swap( this->operator()( i, j ), this->operator()( j, i ) );
+   }
+}
+
 void DenseMatrix::performRichardsonIteration( const Vector& b,
                                               const Vector& x,
                                               Vector& aux,

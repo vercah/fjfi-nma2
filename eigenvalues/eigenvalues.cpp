@@ -12,6 +12,7 @@
 #include "../Vector.h"
 #include "TriangularMethod.h"
 #include "LRAlgorithm.h"
+#include "QRAlgorithm.h"
 
 int main( int argc, char* argv[] )
 {

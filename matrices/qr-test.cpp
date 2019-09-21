@@ -56,16 +56,20 @@ int main( int argc, char* argv[] )
    Timer timer;
    timer.reset();
    timer.start();
+   bool status( true );
    if( method == "gramm-schmidt" )
-      qr.computeByGrammSchmidt( Q, R, verbose );
+      status = qr.computeByGrammSchmidt( Q, R, verbose );
    if( method == "householder")
-      qr.computeByHouseholderTransformations( Q, R, verbose );
-   if( method == "givens" && ! qr.computeByGivensRotations( Q, R, verbose ) )
-   {
-      std::cerr << "QR decomposition computation failed." << std::endl;
-      return false;
-   }
+      status = qr.computeByHouseholderTransformations( Q, R, verbose );
+   if( method == "givens" )
+      status = qr.computeByGivensRotations( Q, R, verbose );
    timer.stop();
+
+   if( ! status )
+   {
+      std::cerr << "QR decomposition computation failed -the matrix is probably not regular." << std::endl;
+      return EXIT_FAILURE;
+   }
 
    std::cout << "Computation took " << timer.getTime() << " seconds." << std::endl;
    if( verbose > 1 )

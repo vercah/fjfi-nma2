@@ -15,6 +15,7 @@ SOURCES = $(COMMON_SOURCES) \
           power-method.cpp \
           TriangularMehtod.cpp \
           LRAlgorithm.cpp \
+	  QRAlgorithm.cpp \
           eigenvalues.cpp
 
 COMMON_OBJECTS = ../CommandLineParser.o \
@@ -34,6 +35,7 @@ EIGENVALUES_OBJECTS = ../matrices/DenseMatrix.o \
                       ../matrices/LUDecomposition.o \
                       TriangularMethod.o \
                       LRAlgorithm.o \
+		      QRAlgorithm.o \
                       eigenvalues.o \
 		      eigenvectors.o
 
