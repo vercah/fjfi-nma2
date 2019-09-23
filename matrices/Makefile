@@ -36,6 +36,7 @@ LU_TEST_OBJECTS = DenseMatrix.o \
 
 QR_TEST_OBJECTS = DenseMatrix.o \
                   QRDecomposition.o \
+		  GrammSchmidt.o \
                   HouseholderTransformation.o \
 		  GivensRotation.o \
                   qr-test.o

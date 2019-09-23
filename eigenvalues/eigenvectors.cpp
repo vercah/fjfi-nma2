@@ -49,3 +49,25 @@ void getEigenvectors( const DenseMatrix& R, const DenseMatrix& T, DenseMatrix& e
       eigenvectors.matrixMultiplication( T, eigenvectorsR );
 }
 
+void checkEigenvectors( const DenseMatrix& A, const DenseMatrix& eigenvectors, const Vector& eigenvalues, Vector& errors )
+{
+   assert( A.getRows() == A.getColumns() );
+   assert( A.getRows() == eigenvectors.getRows() );
+   assert( eigenvalues.getSize() === eigenvectors.getColumns() );
+   const int n = eigenvectors.getRows();
+   const int m = eigenvectors.getColumns();
+   errors.setSize( m );
+   
+   for( int j = 0; j < m; j++ )
+   {
+      Vector x( n ), y( n );
+      for( int i = 0; i < n; i++ )
+         x[ i ] = eigenvectors( i, j );
+      
+      A.vectorMultiplication( x, y );
+      for( int i = 0; i < n; i++ )
+         y[ i ] -= eigenvalues[ j ] * x[ i ];
+      
+      errors[ j ] = y.l2Norm();
+   }
+}

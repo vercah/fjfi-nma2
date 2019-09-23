@@ -20,3 +20,5 @@
  *        only in lower triangular part of T with ones on diagonal
  */
 void getEigenvectors( const DenseMatrix& R, const DenseMatrix& T, DenseMatrix& eigenvectors, bool lowerTriangularTransformation = false );
+
+void checkEigenvectors( const DenseMatrix& A, const DenseMatrix& eigenvectors, const Vector& spectrum, Vector& errors );

@@ -59,10 +59,14 @@ int main( int argc, char* argv[] )
    bool status( true );
    if( method == "gramm-schmidt" )
       status = qr.computeByGrammSchmidt( Q, R, verbose );
-   if( method == "householder")
+   else if( method == "householder")
       status = qr.computeByHouseholderTransformations( Q, R, verbose );
-   if( method == "givens" )
+   else if( method == "givens" )
       status = qr.computeByGivensRotations( Q, R, verbose );
+   else 
+   {
+      std::cerr << "Unknown method for QR decomposition. Can be: gramm-schmidt, householder, givens." << std::endl;
+   }
    timer.stop();
 
    if( ! status )

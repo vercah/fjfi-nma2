@@ -24,6 +24,18 @@ class HouseholderTransformation
 
       bool computeQR( DenseMatrix& A, DenseMatrix& Q );
 
+      /**
+       * Transforms matrix A into the Hessenberg form and stores
+       * the transformation matrix in Q.
+       * 
+       * @param A
+       * @param Q
+       * @return 
+       */
+      bool computeHessenbergForm( DenseMatrix& A, DenseMatrix& Q );
+      
+      void checkHessenbergForm( DenseMatrix& H, DenseMatrix& Q, DenseMatrix& A, double& max_error );
+
    protected:
 
       int size;

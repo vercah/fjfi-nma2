@@ -8,8 +8,10 @@
 #include <fstream>
 #include "../CommandLineParser.h"
 #include "../matrices/DenseMatrix.h"
+#include "../matrices/HouseholderTransformation.h"
 #include "../Timer.h"
 #include "../Vector.h"
+#include "eigenvectors.h"
 #include "TriangularMethod.h"
 #include "LRAlgorithm.h"
 #include "QRAlgorithm.h"
@@ -112,6 +114,34 @@ int main( int argc, char* argv[] )
       lr.setLUDecompositionCheck( withDecompositionError );
       lr.solve( spectrum, eigenvectors, verbose );
    }
+   if( method == "qr" )
+   {
+      QRAlgorithm qr( matrix );
+      qr.setMaxIterations( max_iterations );
+      qr.setConvergenceResidue( convergence_residue );
+      qr.setQRDecompositionCheck( withDecompositionError );
+      qr.solve( spectrum, eigenvectors, "householder", verbose );
+   }
+   if( method == "qr-hessenberg" )
+   {
+      DenseMatrix H( n, n ), Q( n, n );
+      H = matrix;
+      if( verbose )
+         std::cout << "Converting matrix to Hessenberg form ..." << std::endl;
+      HouseholderTransformation householder( n );
+      householder.computeHessenbergForm( H, Q );
+      std::cout << " H = " << std::endl << H << std::endl;
+      double max_error;
+      householder.checkHessenbergForm( H, Q, matrix, max_error );
+      std::cout << "Hessenberg form error is " << max_error << std::endl;
+      return 0;
+      /*QRAlgorithm qr( H );
+      qr.setMaxIterations( max_iterations );
+      qr.setConvergenceResidue( convergence_residue );
+      qr.setQRDecompositionCheck( withDecompositionError );
+      qr.solve( spectrum, eigenvectors, "householder", verbose );
+       */
+   }   
    timer.stop();
 
    std::cout << "Computation took " << timer.getTime() << " seconds." << std::endl;
@@ -119,6 +149,9 @@ int main( int argc, char* argv[] )
       std::cout << "Spectrum is: " << spectrum << std::endl;
    if( showEigenvectors )
       std::cout << "Eigenvectors are: " << std::endl << eigenvectors << std::endl;
+   Vector errors;
+   checkEigenvectors( matrix, eigenvectors, spectrum, errors );
+   std::cout << "Eigenvector residues are: " << errors << std::endl;
    return EXIT_SUCCESS;
 }
 

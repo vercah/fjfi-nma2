@@ -50,6 +50,7 @@ bool QRAlgorithm::solve( Vector& spectrum, DenseMatrix& eigenvectors, std::strin
    Real residue( this->convergence_residue + 1.0 );
 
    DenseMatrix check( size, size );
+   Vector residues;
 
    while( iteration < this->max_iterations )
    {
@@ -79,16 +80,16 @@ bool QRAlgorithm::solve( Vector& spectrum, DenseMatrix& eigenvectors, std::strin
 
       if( verbose > 1 )
          std::cout << "QR decomposition of A^K is: " << std::endl << A_i << std::endl;
-      A_i.matrixMultipluication( R, Q );
+      A_i.matrixMultiplication( R, Q );
 
       aux.matrixMultiplication( Q_global, Q );
       if( verbose > 1 )
       {
          std::cout << "A^k = " << std::endl << A_i << std::endl;
-         std::cout << "L = " << std::endl << L << std::endl;
+         //std::cout << "L = " << std::endl << L << std::endl;
       }
 
-      double residue( 0.0 );
+      residue = 0.0;
       for( int i = 0; i < size; i++ )
       {
          spectrum[ i ] = A_i( i, i );
@@ -97,7 +98,16 @@ bool QRAlgorithm::solve( Vector& spectrum, DenseMatrix& eigenvectors, std::strin
          spectrum_old[ i ] = spectrum[ i ];
       }
       residue = sqrt( residue );
-      std::cout << "RES: " << residue << " LU error " << max_LU_error << std::endl;
+      /*if( iteration % 10 == 0 )
+      {
+         Vector errors;
+         Q.transpose();
+         getEigenvectors( A_i, Q, eigenvectors, true );
+         checkEigenvectors( A, eigenvectors, spectrum, errors );
+         Q.transpose();
+         residue = errors.l2Norm();
+      }*/
+      std::cout << "RES: " << residue << " QR error " << max_QR_error << std::endl;
 
       if( residue < this->convergence_residue )
       {

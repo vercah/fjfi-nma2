@@ -33,6 +33,10 @@ POWER_METHOD_OBJECTS = ../matrices/DenseMatrix.o \
 EIGENVALUES_OBJECTS = ../matrices/DenseMatrix.o \
                       ../matrices/TriangularOperations.o \
                       ../matrices/LUDecomposition.o \
+		      ../matrices/QRDecomposition.o \
+		      ../matrices/GrammSchmidt.o \
+	              ../matrices/HouseholderTransformation.o \
+		      ../matrices/GivensRotation.o \
                       TriangularMethod.o \
                       LRAlgorithm.o \
 		      QRAlgorithm.o \
