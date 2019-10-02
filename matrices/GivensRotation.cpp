@@ -2,15 +2,11 @@
 #include "GivensRotation.h"
 #include <math.h>
 
-GivensRotation::GivensRotation( int size )
-: size( size )
-{
-}
-
 bool GivensRotation::init( DenseMatrix& matrix, int row1, int row2 )
 {
-   assert( matrix.getRows() == size );
-   assert( matrix.getColumns() == size );
+   assert( matrix.getRows() == matrix.getColumns() );
+   this->size = matrix.getRows();
+
    assert( row < size );
    assert( column < size );
 

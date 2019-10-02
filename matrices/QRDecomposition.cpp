@@ -32,7 +32,7 @@ bool QRDecomposition::computeByHouseholderTransformations( DenseMatrix& Q, Dense
 
 bool QRDecomposition::computeByGivensRotations( DenseMatrix& Q, DenseMatrix& R, int verbose )
 {
-   GivensRotation givens( A.getRows() );
+   GivensRotation givens;
    R = A;
    return givens.computeQR( R, Q );
 }

@@ -124,7 +124,7 @@ int main( int argc, char* argv[] )
    }
    if( method == "qr-hessenberg" )
    {
-      DenseMatrix H( n, n ), Q( n, n );
+      /*DenseMatrix H( n, n ), Q( n, n );
       H = matrix;
       if( verbose )
          std::cout << "Converting matrix to Hessenberg form ..." << std::endl;
@@ -134,13 +134,12 @@ int main( int argc, char* argv[] )
       double max_error;
       householder.checkHessenbergForm( H, Q, matrix, max_error );
       std::cout << "Hessenberg form error is " << max_error << std::endl;
-      return 0;
-      /*QRAlgorithm qr( H );
+      return 0;*/
+      QRAlgorithm qr( matrix );
       qr.setMaxIterations( max_iterations );
       qr.setConvergenceResidue( convergence_residue );
       qr.setQRDecompositionCheck( withDecompositionError );
-      qr.solve( spectrum, eigenvectors, "householder", verbose );
-       */
+      qr.solve( spectrum, eigenvectors, "hessenberg", verbose );
    }   
    timer.stop();
 
