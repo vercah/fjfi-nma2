@@ -102,7 +102,7 @@ bool QRAlgorithm::solve( Vector& spectrum, DenseMatrix& eigenvectors, std::strin
          spectrum_old[ i ] = spectrum[ i ];
       }
       residue = sqrt( residue );
-      /*if( iteration % 10 == 0 )
+      if( iteration % 10 == 0 )
       {
          Vector errors;
          Q.transpose();
@@ -110,7 +110,7 @@ bool QRAlgorithm::solve( Vector& spectrum, DenseMatrix& eigenvectors, std::strin
          checkEigenvectors( A, eigenvectors, spectrum, errors );
          Q.transpose();
          residue = errors.l2Norm();
-      }*/
+      }
       std::cout << "RES: " << residue << " QR error " << max_QR_error << std::endl;
 
       if( residue < this->convergence_residue )
@@ -154,28 +154,21 @@ bool QRAlgorithm::solveByHessenberg( Vector& spectrum, DenseMatrix& eigenvectors
       if( checkQRDecomposition )
          R = A_i;
       
-      for( int i = 1; i < size - 1; i++ )
+      for( int i = 0; i < size - 1; i++ )
       {
-         if( !givensRotations[ i - 1 ].init( A_i, i, i + 1 ) )
+         if( !givensRotations[ i ].init( A_i, i, i + 1 ) )
          {
             std::cerr << "Cannot compute Givens rotation." << std::endl;
             return false;
          }
-         givensRotations[ i - 1 ].applyFromLeft( A_i );
-         givensRotations[ i - 1 ].applyFromLeft( Q );
+         givensRotations[ i ].applyFromLeft( A_i );
+         givensRotations[ i ].applyFromLeft( Q );
       }
-      for( int i = 1; i < size - 1; i++ )
-         givensRotations[ i - 1 ].applyFromRight( A_i );
-
-      //if( verbose > 1 )
-      //   std::cout << "QR decomposition of A^K is: " << std::endl << A_i << std::endl;
-      //A_i.matrixMultiplication( R, Q );
+      for( int i = 0; i < size - 1; i++ )
+         givensRotations[ i ].applyFromRight( A_i );
 
       if( verbose > 1 )
-      {
          std::cout << "A^k = " << std::endl << A_i << std::endl;
-         //std::cout << "L = " << std::endl << L << std::endl;
-      }
 
       residue = 0.0;
       for( int i = 0; i < size; i++ )
@@ -186,7 +179,7 @@ bool QRAlgorithm::solveByHessenberg( Vector& spectrum, DenseMatrix& eigenvectors
          spectrum_old[ i ] = spectrum[ i ];
       }
       residue = sqrt( residue );
-      /*if( iteration % 10 == 0 )
+      if( iteration % 10 == 0 )
       {
          Vector errors;
          Q.transpose();
@@ -194,8 +187,8 @@ bool QRAlgorithm::solveByHessenberg( Vector& spectrum, DenseMatrix& eigenvectors
          checkEigenvectors( A, eigenvectors, spectrum, errors );
          Q.transpose();
          residue = errors.l2Norm();
-      }*/
-      //std::cout << "RES: " << residue << " QR error " << max_QR_error << std::endl;
+      }
+      std::cout << "RES: " << residue << std::endl;
 
       if( residue < this->convergence_residue )
       {
