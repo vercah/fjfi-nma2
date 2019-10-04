@@ -109,17 +109,17 @@ bool HouseholderTransformation::computeHessenbergForm( DenseMatrix& A, DenseMatr
    {
       if( ! this->init( A, i + 1, i ) )
          return false;
-      std::cout << "w = " << w << std::endl;
+      //std::cout << "w = " << w << std::endl;
       this->applyFromLeft( A );
       this->applyFromRight( A );
-      std::cout << "A = " << std::endl << A << std::endl;
+      //std::cout << "A = " << std::endl << A << std::endl;
       this->applyFromLeft( Q );
-      std::cout << "Q = " << std::endl << Q << std::endl;
-      double err;
-      checkHessenbergForm( A, Q, m, err );
-      std::cout << "Max.err.= " << err << std::endl;
-      std::cout << "Q orthogonality: " << Q.checkOrthogonality() << std::endl;
-      std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+      //std::cout << "Q = " << std::endl << Q << std::endl;
+      //double err;
+      //checkHessenbergForm( A, Q, m, err );
+      //std::cout << "Max.err.= " << err << std::endl;
+      //std::cout << "Q orthogonality: " << Q.checkOrthogonality() << std::endl;
+      //std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
    }
    return true;
 }
@@ -137,6 +137,6 @@ void HouseholderTransformation::checkHessenbergForm( DenseMatrix& H, DenseMatrix
    M1.matrixMultiplication( Q, H );
    M2.matrixMultiplication( M1, Q );
    M2 -= A;
-   std::cout << "Err. = " << std::endl << M2 << std::endl;
+   //std::cout << "Err. = " << std::endl << M2 << std::endl;
    max_error = M2.maxNorm();
 }

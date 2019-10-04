@@ -179,7 +179,7 @@ bool QRAlgorithm::solveByHessenberg( Vector& spectrum, DenseMatrix& eigenvectors
          spectrum_old[ i ] = spectrum[ i ];
       }
       residue = sqrt( residue );
-      if( iteration % 10 == 0 )
+      /*if( iteration % 10 == 0 )
       {
          Vector errors;
          Q.transpose();
@@ -187,7 +187,7 @@ bool QRAlgorithm::solveByHessenberg( Vector& spectrum, DenseMatrix& eigenvectors
          checkEigenvectors( A, eigenvectors, spectrum, errors );
          Q.transpose();
          residue = errors.l2Norm();
-      }
+      }*/
       std::cout << "RES: " << residue << std::endl;
 
       if( residue < this->convergence_residue )
