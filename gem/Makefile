@@ -41,6 +41,12 @@ THOMAS_SOLVER_OBJECTS = ../matrices/DenseMatrix.o \
 
 all: $(TARGETS)
 
+depend: .depend
+
+.depend: $(SOURCES) $(HEADERS)
+	rm -f ./.depend
+	$(CC) $(CFLAGS) -MM $^ -MF  ./.depend;
+
 gem-solver: $(GEM_SOLVER_OBJECTS) $(COMMON_OBJECTS)
 	$(CXX) -o $@ $(GEM_SOLVER_OBJECTS) $(COMMON_OBJECTS) $(LDFLAGS)
 	cp gem-solver ../bin

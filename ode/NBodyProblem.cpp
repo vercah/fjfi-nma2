@@ -40,8 +40,8 @@ void NBodyProblem::setInitialCondition( double* u )
          /****
           * Initial position
           */         
-         u[ this->particlesCount + 2 * i ] = ( double ) ( rand() % 10000 ) / 100.0 - 50.0;
-         u[ this->particlesCount + 2 * i + 1 ] = ( double ) ( rand() % 10000 ) / 100.0 - 50.0;
+         u[ 2 * this->particlesCount + 2 * i ] = ( double ) ( rand() % 10000 ) / 100.0 - 50.0;
+         u[ 2 * this->particlesCount + 2 * i + 1 ] = ( double ) ( rand() % 10000 ) / 100.0 - 50.0;
          
          /****
           * Particle mass
