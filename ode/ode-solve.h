@@ -22,7 +22,7 @@ bool solve( const double initialTime,
    solver->setup( problem->getDegreesOfFreedom() );
    const int timeStepsCount = std::ceil( std::max( 0.0, finalTime - initialTime ) / timeStep );
    double time( initialTime );
-   problem->writeSolution( 0.0, 0, u );
+   problem->writeSolution( time, 0, u );
    for( int k = 1; k <= timeStepsCount; k++ )
    {
       std::cout << "Solving time step " << k << " / " << timeStepsCount << " => " <<
