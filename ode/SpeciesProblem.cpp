@@ -9,7 +9,7 @@ SpeciesProblem::SpeciesProblem()
 }
 
 int SpeciesProblem::getDegreesOfFreedom()
-{ 
+{
    return 2;
 }
 
@@ -28,8 +28,8 @@ void SpeciesProblem::getRightHandSide( const double& t, double* _u, double* fu )
 {
    const double& u1 = _u[ 0 ];
    const double& u2 = _u[ 1 ];
-   fu[ 0 ] = u1 - a * u1 * u1 - c * u1 * u2;
-   fu[ 1 ] = u2 - b * u2 * u2 + d * u1 * u2;
+   fu[ 0 ] =  u1 - a * u1 * u2 - c * u1 * u1 ;
+   fu[ 1 ] = -u2 + b * u1 * u2 - d * u2 * u2 ;
 }
 
 bool SpeciesProblem::writeSolution( const double& t, int step, const double* u )
@@ -49,7 +49,7 @@ bool SpeciesProblem::writeSolution( const double& t, int step, const double* u )
        * In later steps, we just append new time steps
        */
       file.open( "species.txt", fstream::out | fstream::app );
-      if( ! file ) return false;            
+      if( ! file ) return false;
    }
    file << t << " " << u[ 0 ] << " " << u[ 1 ] << endl;
 }
