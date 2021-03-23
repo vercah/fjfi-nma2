@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   HeatEquationProblem2D.cpp
  * Author: oberhuber
  *
@@ -17,8 +17,8 @@ HeatEquationProblem2D::HeatEquationProblem2D( int sizeX, int sizeY )
 }
 
 int HeatEquationProblem2D::getDegreesOfFreedom()
-{ 
-
+{
+   return -1;  // TODO: Fix with correct DOFs
 }
 
 void HeatEquationProblem2D::setParameters()
@@ -41,17 +41,17 @@ void HeatEquationProblem2D::getRightHandSide( const double& t, double* u, double
     */
 }
 
-bool HeatEquationProblem2D::writeSolution( const double& t, int step, const double* u )      
+bool HeatEquationProblem2D::writeSolution( const double& t, int step, const double* u )
 {
    /****
     * Filename with step index
-    */   
+    */
    std::stringstream str;
    str << "heat-equation-" << std::setw( 5 ) << std::setfill( '0' ) << step << ".txt";
-   
+
    /****
     * Open file
-    */   
+    */
    std::fstream file;
    file.open( str.str(), std::fstream::out | std::fstream::trunc );
    if( ! file )
@@ -59,7 +59,7 @@ bool HeatEquationProblem2D::writeSolution( const double& t, int step, const doub
       std::cerr << "Unable to open the file " << str.str() << std::endl;
       return false;
    }
-   
+
    /****
     * Write solution
     */
@@ -72,6 +72,7 @@ bool HeatEquationProblem2D::writeSolution( const double& t, int step, const doub
       }
       file << std::endl;
    }
+   return true;
 }
 
 HeatEquationProblem2D::~HeatEquationProblem2D()

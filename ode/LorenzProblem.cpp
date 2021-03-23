@@ -17,8 +17,8 @@ void LorenzProblem::setParameters( const double& _sigma,
 }
 
 int LorenzProblem::getDegreesOfFreedom()
-{ 
-   return 3; 
+{
+   return 3;
 }
 
 void LorenzProblem::getRightHandSide( const double& t, double* _u, double* fu )
@@ -48,7 +48,8 @@ bool LorenzProblem::writeSolution( const double& t, int step, const double* u )
        * In later steps, we just append new time steps
        */
       file.open( "lorenz.txt", fstream::out | fstream::app );
-      if( !file ) return false;            
+      if( !file ) return false;
    }
    file << u[ 0 ] << " " << u[ 1 ] << " " << u[ 2 ] << endl;
+   return true;
 }

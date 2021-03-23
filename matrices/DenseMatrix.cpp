@@ -58,7 +58,7 @@ void DenseMatrix::vectorMultiplication( const Vector& in_vector,
 {
    assert( in_vector.getSize() == this->columns );
    assert( out_vector.getSize() == this->rows );
-   
+
    int idx( 0 );
    for( int row = 0; row < this->rows; row++ )
    {
@@ -205,9 +205,9 @@ DenseMatrix& DenseMatrix::operator-=( const DenseMatrix& m )
 double DenseMatrix::checkOrthogonality( int verbose )
 {
    const int n = this->getRows();
-   assert( n = Q.getColumns() ); 
+   assert( n = this->getColumns() );
    DenseMatrix M( n, n );
-   
+
    for( int i = 0; i < n; i++ )
       for( int j = 0; j < n; j++ )
       {

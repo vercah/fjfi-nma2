@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   EllpackMatrix.cpp
  * Author: oberhuber
  *
@@ -23,7 +23,7 @@ EllpackMatrix::EllpackMatrix( const int rows, const int columns )
 {
    this->allocate();
 }
-      
+
 bool EllpackMatrix::setDimensions( const int rows, const int columns )
 {
    this->rows = rows;
@@ -41,7 +41,7 @@ bool EllpackMatrix::setElement( const int row, const int column, const Real& val
 {
    int ptr = row * row_width;
    int row_end = ptr + row_width;
-   while( ptr < row_end && 
+   while( ptr < row_end &&
           this->column_indexes[ ptr ] != column &&
           this->column_indexes[ ptr ] != -1 ) ptr++;
    if( ptr == row_end )
@@ -66,16 +66,16 @@ bool EllpackMatrix::setElement( const int row, const int column, const Real& val
    this->elements[ ptr ] = value;
    return true;
 }
-      
+
 Real EllpackMatrix::getElement( const int row, const int column ) const
 {
    int ptr = row * row_width;
    const int row_end = ptr + row_width;
-   while( ptr < row_end && 
+   while( ptr < row_end &&
           this->column_indexes[ ptr ] != column &&
           this->column_indexes[ ptr ] != -1 ) ptr++;
    if( ptr == row_end )
-      return 0.0;   
+      return 0.0;
    return this->elements[ ptr ];
 }
 
@@ -84,7 +84,7 @@ void EllpackMatrix::vectorMultiplication( const Vector& in_vector,
 {
    assert( in_vector.getSize() == this->columns );
    assert( out_vector.getSize() == this->rows );
-   
+
    for( int row = 0; row < this->rows; row++ )
    {
       Real result( 0.0 );
@@ -105,7 +105,7 @@ void EllpackMatrix::performRichardsonIteration( const Vector& b,
    assert( x.getSize() == this->columns );
    assert( b.getSize() == this->columns );
    assert( this->columns == this->rows );
-   
+
    for( int row = 0; row < this->rows; row++ )
    {
       Real sum( 0.0 ), a_ii( 0.0 );
@@ -115,7 +115,7 @@ void EllpackMatrix::performRichardsonIteration( const Vector& b,
       while( ptr < row_end && ( column = this->column_indexes[ ptr ] ) != -1 )
             sum += this->elements[ ptr++ ] * x[ column ];
       aux[ row ]= x[ row ] + relaxation * ( b[ row ] - sum );
-   }   
+   }
 }
 
 void EllpackMatrix::performJacobiIteration( const Vector& b,
@@ -126,7 +126,7 @@ void EllpackMatrix::performJacobiIteration( const Vector& b,
    assert( x.getSize() == this->columns );
    assert( b.getSize() == this->columns );
    assert( this->columns == this->rows );
-   
+
    for( int row = 0; row < this->rows; row++ )
    {
       Real sum( 0.0 ), a_ii( 0.0 );
@@ -143,7 +143,7 @@ void EllpackMatrix::performJacobiIteration( const Vector& b,
       {
          std::cerr << "a_ii = 0 for i = " << row << ", unable to continue." << std::endl;
          abort();
-      }      
+      }
       aux[ row ]= x[ row ] + relaxation * ( b[ row ] - sum ) / a_ii;
    }
 }
@@ -155,7 +155,7 @@ void EllpackMatrix::performSORIteration( const Vector& b,
    assert( x.getSize() == this->columns );
    assert( b.getSize() == this->columns );
    assert( this->columns == this->rows );
-   
+
    for( int row = 0; row < this->rows; row++ )
    {
       Real sum( 0.0 ), a_ii( 0.0 );
@@ -174,12 +174,25 @@ void EllpackMatrix::performSORIteration( const Vector& b,
          abort();
       }
       x[ row ] += relaxation * ( b[ row ] - sum ) / a_ii;
-   }   
+   }
 }
 
 void EllpackMatrix::getResidue( const Vector& x, const Vector& b, Vector& r ) const
 {
-   
+   assert( in_vector.getSize() == this->columns );
+   assert( out_vector.getSize() == this->rows );
+
+   for( int row = 0; row < this->rows; row++ )
+   {
+      Real result( 0.0 );
+      int ptr = row * row_width;
+      int column;
+      const int row_end = ptr + row_width;
+      while( ptr < row_end && ( column = this->column_indexes[ ptr ] ) != -1 )
+         result += this->elements[ ptr++ ] * x[ column ];
+      r[ row ] = result - b[ row ];
+   }
+
 }
 
 EllpackMatrix& EllpackMatrix::operator=( const EllpackMatrix& m )
@@ -188,12 +201,14 @@ EllpackMatrix& EllpackMatrix::operator=( const EllpackMatrix& m )
    this->setRowLength( m.row_width );
    this->elements = m.elements;
    this->column_indexes = m.column_indexes;
+   return *this;
 }
 
 EllpackMatrix& EllpackMatrix::operator-=( const EllpackMatrix& m )
 {
    for( int i = 0; i < this->elements.size(); i++ )
       this->elements[ i ] -= m.elements[ i ];
+   return *this;
 }
 
 bool EllpackMatrix::readMtxFile( std::istream& str )
@@ -201,16 +216,16 @@ bool EllpackMatrix::readMtxFile( std::istream& str )
    std::string line;
    std::string matrixType;
    std::vector< std::string > parsedLine;
-   
+
    if( std::getline( str,line ) )
    {
       string_split( line, ' ', parsedLine );
       if( parsedLine.size() != 5 )
       {
          std::cerr << "Cannot read the MTX file header." << std::endl;
-         return false;                
+         return false;
       }
-      
+
       if( parsedLine[ 0 ] != "%%MatrixMarket" ||
           parsedLine[ 1 ] != "matrix" )
       {
@@ -238,7 +253,7 @@ bool EllpackMatrix::readMtxFile( std::istream& str )
    long int lineNumber( 1 );
    typedef std::pair< int, int > Coordinates;
    std::vector< int > row_lengths;
-   
+
    std::set< std::pair< Coordinates, Real > > matrix_elements;
    int matrix_rows, matrix_columns;
    while( std::getline( str, line ) )
@@ -246,15 +261,15 @@ bool EllpackMatrix::readMtxFile( std::istream& str )
       lineNumber++;
       if( line[ 0 ] == '%' )
          continue;
-      
-      string_split( line, ' ', parsedLine );         
+
+      string_split( line, ' ', parsedLine );
       if( ! dimensionsFlag )
       {
          if( parsedLine.size() < 3 )
          {
             std::cerr << "Cannot read matrix dimensions." << std::endl;
             return false;
-         }            
+         }
          const std::string& str_rows = parsedLine[ 0 ];
          const std::string& str_columns = parsedLine[ 1 ];
          matrix_rows = std::stoi( str_rows );
@@ -310,7 +325,7 @@ bool EllpackMatrix::readMtxFile( std::istream& str )
          {
             std::cerr << "Unable to set matrix element." << std::endl;
             return false;
-         }            
+         }
          //this->printRow( it->first.second );
       }
       it++;

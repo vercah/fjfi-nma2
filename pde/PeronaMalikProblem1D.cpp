@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   PeronaMalikProblem1D.cpp
  * Author: oberhuber
  *
@@ -16,7 +16,7 @@ PeronaMalikProblem1D::PeronaMalikProblem1D( int size )
 }
 
 int PeronaMalikProblem1D::getDegreesOfFreedom()
-{ 
+{
    return this->size;
 }
 
@@ -30,13 +30,13 @@ void PeronaMalikProblem1D::setInitialCondition( double* u )
    for( int i = 0; i < size; i++ )
    {
       double x = i * h;
-      
+
       // Step function
       //u[ i ] = ( x > 0.4 && x < 0.6 ) ? 1.0 : 0.0;
-      
+
       // Noise salt-pepper
       //u[ i ] = rand() % 20 - 10;
-      
+
       // Step function with Gaussian noise
       u[ i ] = 0.0;
       for( int j = 0; j < 12; j++ )
@@ -55,10 +55,10 @@ void PeronaMalikProblem1D::getRightHandSide( const double& t, double* u, double*
    //u[ size - 1 ] = 0.0;
    fu[ 0 ] = 0.0;
    fu[ size -1 ] = 0.0;
-   
+
    /***
     * Evaluate the Perona-Malik operator
-    */   
+    */
    const double h_sqr = h * h;
    for( int i = 1; i < size - 1; i++ )
    {
@@ -69,17 +69,17 @@ void PeronaMalikProblem1D::getRightHandSide( const double& t, double* u, double*
       fu[ i ] = ( p[ i ] * u[ i - 1 ] - ( p[ i ] + p[ i + 1 ] ) * u[ i ] + p[ i + 1 ] * u[ i + 1 ] ) / h_sqr;
 }
 
-bool PeronaMalikProblem1D::writeSolution( const double& t, int step, const double* u )      
+bool PeronaMalikProblem1D::writeSolution( const double& t, int step, const double* u )
 {
    /****
     * Filename with step index
-    */   
+    */
    std::stringstream str;
    str << "perona-malik-" << std::setw( 5 ) << std::setfill( '0' ) << step << ".txt";
-   
+
    /****
     * Open file
-    */   
+    */
    std::fstream file;
    file.open( str.str(), std::fstream::out | std::fstream::trunc );
    if( ! file )
@@ -87,15 +87,16 @@ bool PeronaMalikProblem1D::writeSolution( const double& t, int step, const doubl
       std::cerr << "Unable to open the file " << str.str() << std::endl;
       return false;
    }
-   
+
    /****
     * Write solution
-    */   
+    */
    for( int i = 0; i < size; i++ )
    {
       file << u[ i ] << " ";
       file << std::endl;
    }
+   return true;
 }
 
 PeronaMalikProblem1D::~PeronaMalikProblem1D()

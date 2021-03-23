@@ -5,7 +5,7 @@ ThomasAlgorithm::ThomasAlgorithm( TridiagonalMatrix& A,
 : A( A ), b( b ), rho( b.getSize() ), mu( b.getSize() )
 {
 }
-      
+
 bool ThomasAlgorithm::solve( Vector& x, int verbose )
 {
    /****
@@ -22,17 +22,17 @@ bool ThomasAlgorithm::solve( Vector& x, int verbose )
    }
    if( verbose )
       this->print( std::cout );
-   
+
    /****
     * Second phase: Backward substitution
     */
    x[ n - 1 ] = rho[ n - 1 ];
    for( int k = n - 2; k >= 0; k-- )
       x[ k ] = rho[ k ] - mu[ k ] * x[ k + 1 ];
-   
+   return true;
 }
-      
+
 void ThomasAlgorithm::print( std::ostream& str ) const
 {
-   
+
 }

@@ -52,5 +52,6 @@ bool SpeciesProblem::writeSolution( const double& t, int step, const double* u )
       if( ! file ) return false;
    }
    file << t << " " << u[ 0 ] << " " << u[ 1 ] << endl;
+   return true;
 }
 

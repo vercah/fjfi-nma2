@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   HeatEquationProblem1D.cpp
  * Author: oberhuber
  *
@@ -15,7 +15,7 @@ HeatEquationProblem1D::HeatEquationProblem1D( int size )
 }
 
 int HeatEquationProblem1D::getDegreesOfFreedom()
-{ 
+{
    return this->size;
 }
 
@@ -31,10 +31,10 @@ void HeatEquationProblem1D::setInitialCondition( double* u )
       double x = i * h;
       // Step function
       //u[ i ] = ( x > 0.4 && x < 0.6 ) ? 1.0 : 0.0;
-      
+
       // Noise salt-pepper
       //u[ i ] = rand() % 20 - 10;
-      
+
       // Step function with Gaussian noise
       u[ i ] = 0.0;
       for( int j = 0; j < 12; j++ )
@@ -53,26 +53,26 @@ void HeatEquationProblem1D::getRightHandSide( const double& t, double* u, double
    u[ size - 1 ] = 0.0;
    fu[ 0 ] = 0.0;
    fu[ size -1 ] = 0.0;
-   
+
    /***
     * Evaluate the Laplace operator
-    */   
+    */
    const double h_sqr = h * h;
    for( int i = 1; i < size - 1; i++ )
       fu[ i ] = ( u[ i - 1 ] - 2.0 * u[ i ] + u[ i + 1 ] ) / h_sqr;
 }
 
-bool HeatEquationProblem1D::writeSolution( const double& t, int step, const double* u )      
+bool HeatEquationProblem1D::writeSolution( const double& t, int step, const double* u )
 {
    /****
     * Filename with step index
-    */   
+    */
    std::stringstream str;
    str << "heat-equation-" << std::setw( 5 ) << std::setfill( '0' ) << step << ".txt";
-   
+
    /****
     * Open file
-    */   
+    */
    std::fstream file;
    file.open( str.str(), std::fstream::out | std::fstream::trunc );
    if( ! file )
@@ -80,15 +80,16 @@ bool HeatEquationProblem1D::writeSolution( const double& t, int step, const doub
       std::cerr << "Unable to open the file " << str.str() << std::endl;
       return false;
    }
-   
+
    /****
     * Write solution
-    */   
+    */
    for( int i = 0; i < size; i++ )
    {
       file << u[ i ] << " ";
       file << std::endl;
    }
+   return true;
 }
 
 HeatEquationProblem1D::~HeatEquationProblem1D()

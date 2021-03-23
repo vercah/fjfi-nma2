@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   TransportEquationProblem1D.cpp
  * Author: oberhuber
  *
@@ -16,7 +16,7 @@ TransportEquationProblem1D::TransportEquationProblem1D( int size )
 }
 
 int TransportEquationProblem1D::getDegreesOfFreedom()
-{ 
+{
    return this->size;
 }
 
@@ -66,7 +66,7 @@ void TransportEquationProblem1D::getRightHandSide( const double& t, double* u, d
       u[ size - 1 ] =  u[ size - 2 ];
    fu[ 0 ] = 0.0;
    fu[ size -1 ] = 0.0;
-   
+
    /***
     * Evaluate the Laplace operator
     */
@@ -90,17 +90,17 @@ void TransportEquationProblem1D::getRightHandSide( const double& t, double* u, d
    }
 }
 
-bool TransportEquationProblem1D::writeSolution( const double& t, int step, const double* u )      
+bool TransportEquationProblem1D::writeSolution( const double& t, int step, const double* u )
 {
    /****
     * Filename with step index
-    */   
+    */
    std::stringstream str;
    str << "transport-equation-" << std::setw( 5 ) << std::setfill( '0' ) << step << ".txt";
-   
+
    /****
     * Open file
-    */   
+    */
    std::fstream file;
    file.open( str.str(), std::fstream::out | std::fstream::trunc );
    if( ! file )
@@ -108,15 +108,16 @@ bool TransportEquationProblem1D::writeSolution( const double& t, int step, const
       std::cerr << "Unable to open the file " << str.str() << std::endl;
       return false;
    }
-   
+
    /****
     * Write solution
-    */   
+    */
    for( int i = 0; i < size; i++ )
    {
       file << u[ i ] << " ";
       file << std::endl;
    }
+   return true;
 }
 
 TransportEquationProblem1D::~TransportEquationProblem1D()

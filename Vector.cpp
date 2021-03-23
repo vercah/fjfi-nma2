@@ -59,18 +59,21 @@ Vector& Vector::operator += ( const Vector& b )
 {
    for( int i = 0; i < this->size; i++ )
       this->data[ i ] += b[ i ];
+   return *this;
 }
 
 Vector& Vector::operator -= ( const Vector& b )
 {
    for( int i = 0; i < this->size; i++ )
       this->data[ i ] -= b[ i ];
+   return *this;
 }
 
 Vector& Vector::operator *= ( const double& b )
 {
    for( int i = 0; i < this->size; i++ )
       this->data[ i ] *= b;
+   return *this;
 }
 
 void Vector::swap( Vector& v )
