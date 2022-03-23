@@ -27,8 +27,9 @@ bool solve( const double initialTime,
    {
       std::cout << "Solving time step " << k << " / " << timeStepsCount << " => " <<
          ( double ) k / ( double ) timeStepsCount * 100.0 << "% " << std::endl;
+      double currentTimeStep = std::min( timeStep, finalTime - time );
       if( !  solver->solve( integrationTimeStep,
-                            time + timeStep,  // stopTime
+                            time + currentTimeStep,  // stopTime
                             &time,
                             problem,
                             u ) )
