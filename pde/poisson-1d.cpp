@@ -20,14 +20,14 @@ const double h_sqr = h * h;
 const double gamma_1 = 0.0;
 const double gamma_2 = 0.1;
 
-const bool useDirectSolver = true;
+const bool useDirectSolver = false;
 
 double f( const double& x )
 {
    //return 10.0;
-   return 10.0 * x;
+   //return 10.0 * x;
    //return 10.0 * ( 1.0 - 4.0 * x * x );
-   //return 250.0 * x * x *sin( 10 * M_PI * x );
+   return 250.0 * x * x *sin( 10 * M_PI * x );
 }
 
 int main( int argc, char* argv[] )
@@ -79,7 +79,7 @@ int main( int argc, char* argv[] )
       StationarySolver solver( A, b );
       solver.setConvergenceResidue( 1.0e-4 );
       solver.setMaxIterations( 10000 );
-      solver.solve( u, "richardson", 1.0 );
+      solver.solve( u, "sor", 1.9 );
    }
    
    /****

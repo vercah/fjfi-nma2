@@ -17,21 +17,23 @@ using namespace std;
 class SpeciesProblem : public ODEProblem
 {
    public:
-      
+
       SpeciesProblem();
-      
+
       int getDegreesOfFreedom();
-      
+
       void setParameters( const double& _a,
                           const double& _b,
                           const double& _c,
-                          const double& _d );
-      
+                          const double& _d,
+                          const double& _e,
+                          const double& _f );
+
       void getRightHandSide( const double& t, double* _u, double* fu );
-         
+
       bool writeSolution( const double& t, int step, const double* u );
-      
+
    protected:
-      
-      double a,b,c,d;
+
+      double a, b, c, d, e, f;
 };

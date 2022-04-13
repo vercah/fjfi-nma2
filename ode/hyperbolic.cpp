@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   hyperbolic.cpp
  * Author: oberhuber
  *
@@ -22,11 +22,10 @@ int main( int argc, char** argv )
     HyperbolicProblem problem;
     problem.setEpsilon( 0.0 );
     Merson integrator;
+    integrator.setAdaptivity( 1.0e-4 );
 
-    integrator.setAdaptivity( 1.0e-5 );
-        
     double u[ 2 ] = { 0.0, 1.0 };
-    
+
     if( ! solve( initialTime,
                  finalTime,
                  timeStep,
