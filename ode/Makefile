@@ -13,7 +13,8 @@ SOURCES = $(COMMON_SOURCES) \
           hyperbolic.cpp \
           species.cpp \
           lorenz.cpp \
-          nbody.cpp
+          nbody.cpp \
+          sir.cpp
 
 COMMON_OBJECTS = ../CommandLineParser.o \
                  ../string-split.o \
@@ -31,6 +32,8 @@ HYPERBOLIC_OBJECTS = $(COMMON_OBJECTS) HyperbolicProblem.o hyperbolic.o
 SPECIES_OBJECTS = $(COMMON_OBJECTS) SpeciesProblem.o species.o
 
 LORENZ_OBJECTS = $(COMMON_OBJECTS) LorenzProblem.o lorenz.o
+
+SIR_OBJECTS = $(COMMON_OBJECTS) SIRProblem.o sir.o
 
 NBODY_OBJECTS = $(COMMON_OBJECTS) NBodyProblem.o nbody.o
 
@@ -51,6 +54,10 @@ species: $(SPECIES_OBJECTS)
 lorenz: $(LORENZ_OBJECTS)
 	$(CXX) -o $@ $(LORENZ_OBJECTS) $(LD_FLAGS)
 	cp lorenz ../bin
+
+sir: $(SIR_OBJECTS)
+	$(CXX) -o $@ $(SIR_OBJECTS) $(LD_FLAGS)
+	cp sir ../bin
 	
 nbody: $(NBODY_OBJECTS)
 	$(CXX) -o $@ $(NBODY_OBJECTS) $(LD_FLAGS)
