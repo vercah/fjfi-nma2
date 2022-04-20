@@ -11,7 +11,7 @@
 HeatEquationProblem1D::HeatEquationProblem1D( int size )
 {
    this->size = size;
-   this->h = 1.0 / size;
+   this->h = 1.0 / ( size - 1 );
 }
 
 int HeatEquationProblem1D::getDegreesOfFreedom()
@@ -30,17 +30,17 @@ void HeatEquationProblem1D::setInitialCondition( double* u )
    {
       double x = i * h;
       // Step function
-      //u[ i ] = ( x > 0.4 && x < 0.6 ) ? 1.0 : 0.0;
+      u[ i ] = ( x > 0.4 && x < 0.6 ) ? 1.0 : 0.0;
 
       // Noise salt-pepper
       //u[ i ] = rand() % 20 - 10;
 
       // Step function with Gaussian noise
-      u[ i ] = 0.0;
+      /*u[ i ] = 0.0;
       for( int j = 0; j < 12; j++ )
          u[ i ] += 1.0 / 100.0 * ( double ) ( rand() % 20 - 10 );
       u[ i ] /= 12.0;
-      u[ i ] += ( double ) ( ( x > 0.4 && x < 0.6 ) ? 1.0 : 0.0 );
+      u[ i ] += ( double ) ( ( x > 0.4 && x < 0.6 ) ? 1.0 : 0.0 );*/
    }
 }
 

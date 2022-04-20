@@ -11,7 +11,7 @@
 PeronaMalikProblem2D::PeronaMalikProblem2D( int size )
 {
    this->size = size;
-   this->h = 1.0 / size;
+   this->h = 1.0 / ( size - 1 );
    this->p = new double[ size ];
 }
 

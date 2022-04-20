@@ -15,7 +15,7 @@
 #include "../stationary/StationarySolver.h"
 
 const int N = 1000;
-const double h = 1.0 / ( double ) N;
+const double h = 1.0 / ( double ) ( N - 1 );
 const double h_sqr = h * h;
 const double gamma_1 = 0.0;
 const double gamma_2 = 0.1;

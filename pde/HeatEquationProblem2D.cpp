@@ -12,8 +12,8 @@ HeatEquationProblem2D::HeatEquationProblem2D( int sizeX, int sizeY )
 {
    this->sizeX = sizeX;
    this->sizeY = sizeY;
-   this->hx = 1.0 / sizeX;
-   this->hy = 1.0 / sizeY;
+   this->hx = 1.0 / ( sizeX - 1 );
+   this->hy = 1.0 / ( sizeY - 1 );
 }
 
 int HeatEquationProblem2D::getDegreesOfFreedom()
