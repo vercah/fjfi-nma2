@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   Euler.h
  * Author: oberhuber
  *
@@ -14,21 +14,21 @@
 class Euler : public ODESolver
 {
    public:
-      
+
       Euler();
-      
+
       bool setup( const int degreesOfFreedom );
-      
+
       bool solve( const double integrationTimeStep,
                   const double stopTime,
                   double* time,
                   ODEProblem* problem,
                   double* u );
-      
+
       ~Euler();
-      
+
    protected:
-      
-      double* k;   
+
+      double* k;
 };
 
