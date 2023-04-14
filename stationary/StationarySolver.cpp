@@ -31,15 +31,20 @@ bool StationarySolver::solve( Vector& x,
    while( iteration < this->max_iterations )
    {
       if( method == "richardson" )
+      {
          A.performRichardsonIteration( b, x, aux, relaxation );
+         x.swap( aux );
+      }
       if( method == "jacobi")
+      {
          A.performJacobiIteration( b, x, aux, relaxation );
+         x.swap( aux );
+      }
       if( method == "gauss-seidel")
          A.performSORIteration( b, x, 1.0 );
       if( method == "sor")
          A.performSORIteration( b, x, relaxation );
-      
-      x.swap( aux );
+
       if( verbose )
          std::cout << "Iteration = " << iteration << " x = " << x << std::endl;
       iteration++;
@@ -51,7 +56,7 @@ bool StationarySolver::solve( Vector& x,
          std::cout << "   ITER. " << iteration << " L2-RES. " << residue << std::endl;
          if( residue <= convergence_residue )
             return true;
-      }      
+      }
    }
    return false;
 }

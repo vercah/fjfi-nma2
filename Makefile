@@ -27,7 +27,7 @@ all: bin subdirs
 .PHONY:	subdirs $(SUBDIRS)
 subdirs:    $(SUBDIRS)
 $(SUBDIRS):
-	$(MAKE) -C $@	
+	$(MAKE) -C $@
 
 bin:
 	mkdir -p bin
@@ -41,9 +41,11 @@ clean:	$(SUBDIRSCLEAN) clean_curdir
 
 clean_curdir:
 	rm -f *.o
-	
+
 %clean:	%
 	$(MAKE) -C $< clean
 
 dist: clean
 	tar zcvf fjfi-num1-src.tgz $(SUBDIRS) $(FILES)
+
+-include $(SOURCES:%.cpp=%.d)

@@ -25,6 +25,8 @@ class QRAlgorithm
 
       bool solve( Vector& spectrum, DenseMatrix& eigenvectors, std::string method = "householder", int verbose = 0 ) const;
 
+      bool solveByHessenberg( Vector& spectrum, DenseMatrix& eigenvectors, int verbose = 0 ) const;
+
    protected:
 
       const DenseMatrix& A;

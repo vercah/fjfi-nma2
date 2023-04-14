@@ -130,17 +130,16 @@ int main( int argc, char* argv[] )
          std::cout << "Converting matrix to Hessenberg form ..." << std::endl;
       HouseholderTransformation householder( n );
       householder.computeHessenbergForm( H, Q );
-      std::cout << " H = " << std::endl << H << std::endl;
+      if( verbose > 1 )
+         std::cout << " H = " << std::endl << H << std::endl;
       double max_error;
       householder.checkHessenbergForm( H, Q, matrix, max_error );
       std::cout << "Hessenberg form error is " << max_error << std::endl;
-      return 0;
-      /*QRAlgorithm qr( H );
+      QRAlgorithm qr( matrix );
       qr.setMaxIterations( max_iterations );
       qr.setConvergenceResidue( convergence_residue );
       qr.setQRDecompositionCheck( withDecompositionError );
-      qr.solve( spectrum, eigenvectors, "householder", verbose );
-       */
+      qr.solve( spectrum, eigenvectors, "hessenberg", verbose );
    }   
    timer.stop();
 

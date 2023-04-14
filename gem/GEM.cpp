@@ -15,15 +15,15 @@
 GEM::GEM( DenseMatrix& A,
           Vector& b )
 : A( A ), b( b )
-{  
+{
    assert( A.getRows() == b.getSize() &&
            A.getColumns() == b.getSize() );
 }
-      
+
 bool GEM::solve( Vector& x, int verbose )
 {
    assert( b.getSize() == x.getSize() );
-   
+
    const int n = A.getRows();
 
    if( verbose )
@@ -46,13 +46,13 @@ bool GEM::solve( Vector& x, int verbose )
       for( int j = k+1; j < n; j++ )
          A( k, j ) /= pivot;
       A( k, k ) = 1.0;
-      
+
       if( verbose > 1 )
       {
          std::cout << "Dividing by the pivot ... " << std::endl;
          this->print();
       }
-      
+
       /****
        * Subtract the k-th row from the rows bellow
        */
@@ -70,7 +70,7 @@ bool GEM::solve( Vector& x, int verbose )
          this->print();
       }
    }
-   
+
    /****
     * Backward substitution
     */
@@ -80,14 +80,15 @@ bool GEM::solve( Vector& x, int verbose )
       //   std::cout << "Substitution: " << k << "/" << n << std::endl;
       x[ k ] = b[ k ];
       for( int j = k + 1; j < n; j++ )
-         x[ k ] -= x[ j ] * A( k, j );         
-   }   
+         x[ k ] -= x[ j ] * A( k, j );
+   }
+   return true;
 }
 
 bool GEM::solveWithPivoting( Vector& x, int verbose )
 {
    assert( b.getSize() == x.getSize() );
-   
+
    const int n = A.getRows();
 
    if( verbose )
@@ -103,7 +104,7 @@ bool GEM::solveWithPivoting( Vector& x, int verbose )
       for( int i = k + 1; i < n; i++ )
          if( fabs( A( i, k ) > fabs( A( pivotPosition, k ) ) ) )
             pivotPosition = i;
-         
+
       /****
        * Swap the rows ...
        */
@@ -113,14 +114,14 @@ bool GEM::solveWithPivoting( Vector& x, int verbose )
             std::swap( A( k, j ), A( pivotPosition, j ) );
          std::swap( b[ k ], b[ pivotPosition ] );
       }
-      
+
       if( verbose > 1 )
       {
          std::cout << std::endl;
          std::cout << "Choosing element at " << pivotPosition << "-th row as pivot..." << std::endl;
          std::cout << "Swaping " << k << "-th and " << pivotPosition <<  "-th rows ... " << std::endl;
       }
-            
+
       /****
        * Divide the k-th row by pivot
        */
@@ -129,18 +130,18 @@ bool GEM::solveWithPivoting( Vector& x, int verbose )
       {
          std::cerr << "Zero pivot has appeared in " << k << "-th step. GEM has failed." << std::endl;
          return false;
-      }      
+      }
       b[ k ] /= pivot;
       for( int j = k+1; j < n; j++ )
          A( k, j ) /= pivot;
       A( k, k ) = 1.0;
-      
+
       if( verbose > 1 )
       {
          std::cout << "Dividing by the pivot ... " << std::endl;
          this->print();
       }
-      
+
       /****
        * Subtract the k-th row from the rows bellow
        */
@@ -158,7 +159,7 @@ bool GEM::solveWithPivoting( Vector& x, int verbose )
          this->print();
       }
    }
-   
+
    /****
     * Backward substitution
     */
@@ -166,12 +167,13 @@ bool GEM::solveWithPivoting( Vector& x, int verbose )
    {
       x[ k ] = b[ k ];
       for( int j = k + 1; j < n; j++ )
-         x[ k ] -= x[ j ] * A( k, j );         
-   }   
+         x[ k ] -= x[ j ] * A( k, j );
+   }
+   return true;
 }
 
 bool GEM::computeLUDecomposition( int verbose )
-{  
+{
    const int n = A.getRows();
 
    if( verbose )
@@ -187,13 +189,13 @@ bool GEM::computeLUDecomposition( int verbose )
       for( int j = k+1; j < n; j++ )
          A( k, j ) /= pivot;
       //A( k, k ) = 1.0;
-      
+
       if( verbose > 1 )
       {
          std::cout << "Dividing by the pivot ... " << std::endl;
          this->print();
       }
-      
+
       /****
        * Subtract the k-th row from the rows bellow
        */
@@ -210,7 +212,8 @@ bool GEM::computeLUDecomposition( int verbose )
          std::cout << "Subtracting the " << k << "-th row from the rows bellow ... " << std::endl;
          this->print();
       }
-   }   
+   }
+   return true;
 }
 
 void GEM::print( std::ostream& str ) const

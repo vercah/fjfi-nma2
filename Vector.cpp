@@ -59,18 +59,21 @@ Vector& Vector::operator += ( const Vector& b )
 {
    for( int i = 0; i < this->size; i++ )
       this->data[ i ] += b[ i ];
+   return *this;
 }
 
 Vector& Vector::operator -= ( const Vector& b )
 {
    for( int i = 0; i < this->size; i++ )
       this->data[ i ] -= b[ i ];
+   return *this;
 }
 
 Vector& Vector::operator *= ( const double& b )
 {
    for( int i = 0; i < this->size; i++ )
       this->data[ i ] *= b;
+   return *this;
 }
 
 void Vector::swap( Vector& v )
@@ -138,7 +141,12 @@ bool Vector::readPGM( const char* fileName, int& width, int& height )
 {
    std::fstream file;
    file.open( fileName, std::ios::in );
-   
+   if( ! file )
+   {
+      std::cerr << "Unable to open the file " << fileName << std::endl;
+      return false;
+   }
+
    /***
     * Read header
     */
@@ -150,7 +158,7 @@ bool Vector::readPGM( const char* fileName, int& width, int& height )
       return false;
    }
    bool binary = ( magicNumber == "P5" );
-   
+
    /****
     * Skip comments and empty lines
     */
@@ -164,13 +172,13 @@ bool Vector::readPGM( const char* fileName, int& width, int& height )
 	    file.get( character );
    }
    file.unget();
- 
+
    /***
     * Read resolution
     */
    int maxColors;
    file >> width >> height >> maxColors;
- 
+
    /****
     * Allocate data
     */
@@ -199,18 +207,18 @@ void Vector::writePGM( const char* fileName, const int width, const int height )
 {
    std::fstream file;
    file.open( fileName, std::ios::out );
-   
+
    file << "P2\n";
    file << "# This file was generated at FJFI\n";
    file << width << ' '<< height << '\n' << "255\n";
-   
+
    for( int i = 0; i < height; i ++ )
    {
       for( int j = 0; j < width; j ++ )
       {
          int color = 255 * data[ i * width + j ];
          file << color << "\n";
-      }      
+      }
       file << '\n';
    }
 }

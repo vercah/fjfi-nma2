@@ -22,18 +22,18 @@ const int size( 100 );
 int main( int argc, char** argv )
 {
    HeatEquationProblem2D problem( size, size );
-    
+
    Vector u( size * size );
    problem.setInitialCondition( u.getData() );
    problem.writeSolution( 0.0, 0, u.getData() );
-   
+
    EllpackMatrix A;
    A.setDimensions( size, size );
-   Vector b( size );
-   
+   Vector b( size * size );
+
    StationarySolver solver( A, b );
    solver.setMaxIterations( 100000 );
-   
+
    /***
     * Set Dirichlet  boundary conditions
     */
@@ -57,13 +57,13 @@ int main( int argc, char** argv )
              */
            // TODO
          }
-         
+
          /***
           * Set-up right-hand side b
           */
          for( int i = 0; i < size; i++ )
             b[ i ] = u[ i ];
-         
+
          /***
           * Solve the linear system
           */

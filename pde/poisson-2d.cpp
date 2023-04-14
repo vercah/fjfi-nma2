@@ -13,7 +13,7 @@
 #include "../stationary/StationarySolver.h"
 
 const int N = 50;
-const double h = 1.0 / ( double ) N;
+const double h = 1.0 / ( double ) ( N - 1 );
 const double h_sqr = h * h;
 
 double f( const double& x, const double& y )

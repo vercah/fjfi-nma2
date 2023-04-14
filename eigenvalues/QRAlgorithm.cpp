@@ -1,10 +1,12 @@
 #include <assert.h>
 #include <iostream>
 #include <cmath>
+#include <vector>
 
 #include "QRAlgorithm.h"
 #include "../matrices/LUDecomposition.h"
 #include "../matrices/QRDecomposition.h"
+#include "../matrices/GivensRotation.h"
 #include "../Vector.h"
 #include "../matrices/TriangularOperations.h"
 #include "eigenvectors.h"
@@ -32,6 +34,8 @@ void QRAlgorithm::setQRDecompositionCheck( bool check )
 
 bool QRAlgorithm::solve( Vector& spectrum, DenseMatrix& eigenvectors, std::string method, int verbose ) const
 {
+   if( method == "hessenberg" )
+      return solveByHessenberg( spectrum, eigenvectors, verbose );
    int size = A.getRows();
    assert( size == A.getColumns() );
 
@@ -98,7 +102,7 @@ bool QRAlgorithm::solve( Vector& spectrum, DenseMatrix& eigenvectors, std::strin
          spectrum_old[ i ] = spectrum[ i ];
       }
       residue = sqrt( residue );
-      /*if( iteration % 10 == 0 )
+      if( iteration % 10 == 0 )
       {
          Vector errors;
          Q.transpose();
@@ -106,7 +110,7 @@ bool QRAlgorithm::solve( Vector& spectrum, DenseMatrix& eigenvectors, std::strin
          checkEigenvectors( A, eigenvectors, spectrum, errors );
          Q.transpose();
          residue = errors.l2Norm();
-      }*/
+      }
       std::cout << "RES: " << residue << " QR error " << max_QR_error << std::endl;
 
       if( residue < this->convergence_residue )
@@ -122,3 +126,79 @@ bool QRAlgorithm::solve( Vector& spectrum, DenseMatrix& eigenvectors, std::strin
    return false;
 }
 
+bool QRAlgorithm::solveByHessenberg( Vector& spectrum, DenseMatrix& eigenvectors, int verbose ) const
+{
+   int size = A.getRows();
+   assert( size == A.getColumns() );
+
+   DenseMatrix A_i( size, size ), R( size, size ), Q( size, size ), Q_global( size, size ), aux( size, size );
+   A_i = A;
+   Vector spectrum_old( size );
+   for( int i = 0; i < size; i++ )
+   {
+      spectrum_old[ i ] = 0.0;
+      for( int j = 0; j < size; j++ )
+         Q( i, j ) = ( i == j );
+   }
+
+   int iteration( 0 );
+   int norm_index( 0 );
+   Real residue( this->convergence_residue + 1.0 );
+
+   DenseMatrix check( size, size );
+   Vector residues;
+
+   std::vector< GivensRotation > givensRotations( size - 1 );
+   while( iteration < this->max_iterations )
+   {
+      if( checkQRDecomposition )
+         R = A_i;
+      
+      for( int i = 0; i < size - 1; i++ )
+      {
+         if( !givensRotations[ i ].init( A_i, i, i + 1 ) )
+         {
+            std::cerr << "Cannot compute Givens rotation." << std::endl;
+            return false;
+         }
+         givensRotations[ i ].applyFromLeft( A_i );
+         givensRotations[ i ].applyFromLeft( Q );
+      }
+      for( int i = 0; i < size - 1; i++ )
+         givensRotations[ i ].applyFromRight( A_i );
+
+      if( verbose > 1 )
+         std::cout << "A^k = " << std::endl << A_i << std::endl;
+
+      residue = 0.0;
+      for( int i = 0; i < size; i++ )
+      {
+         spectrum[ i ] = A_i( i, i );
+         double diff = spectrum_old[ i ] - spectrum[ i ];
+         residue += diff * diff;
+         spectrum_old[ i ] = spectrum[ i ];
+      }
+      residue = sqrt( residue );
+      /*if( iteration % 10 == 0 )
+      {
+         Vector errors;
+         Q.transpose();
+         getEigenvectors( A_i, Q, eigenvectors, true );
+         checkEigenvectors( A, eigenvectors, spectrum, errors );
+         Q.transpose();
+         residue = errors.l2Norm();
+      }*/
+      std::cout << "RES: " << residue << std::endl;
+
+      if( residue < this->convergence_residue )
+      {
+         Q.transpose();
+         getEigenvectors( A_i, Q, eigenvectors, true );
+         return true;
+      }
+
+      iteration++;
+   }
+   std::cerr << "Method did not converge." << std::endl;
+   return false;
+}

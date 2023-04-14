@@ -17,8 +17,6 @@ class GivensRotation
 {
    public:
 
-      GivensRotation( int size );
-
       bool init( DenseMatrix& matrix, int row1, int row2 );
 
       void applyFromLeft( DenseMatrix& A );

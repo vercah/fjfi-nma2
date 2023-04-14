@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   Merson.h
  * Author: oberhuber
  *
@@ -13,9 +13,9 @@
 class Merson : public ODESolver
 {
    public:
-      
+
       Merson();
-      
+
       bool setup( int degreesOfFreedom );
 
       void setAdaptivity( const double& adaptivity );
@@ -25,13 +25,13 @@ class Merson : public ODESolver
                   double* time,
                   ODEProblem* problem,
                   double* u );
-      
+
       ~Merson();
-      
+
    protected:
-      
+
       double *k1, *k2, *k3, *k4, *k5, *aux;
-      
+
       double adaptivity;
 
 };

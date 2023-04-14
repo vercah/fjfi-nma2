@@ -14,7 +14,7 @@
 using namespace std;
 
 const double initialTime( 0.0 );
-const double finalTime( 10.0 );
+const double finalTime( 100.0 );
 const double timeStep( 1.0e-2 );
 
 const double integrationTimeStep( 1.0e-4 );
@@ -22,7 +22,7 @@ const double integrationTimeStep( 1.0e-4 );
 int main( int argc, char** argv )
 {
     SpeciesProblem problem;
-    problem.setParameters( 0.5, 0.25, 0.5, 0.95 );
+    problem.setParameters( 1.0, -1.0, 0.5, -0.25, 0, 0  );
     Merson integrator;
 
     double u[ 2 ] = { 7.5, 0.25 };
