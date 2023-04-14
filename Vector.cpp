@@ -123,11 +123,14 @@ void Vector::writeGnuplot2D( std::ostream& str,
                              const double& origin_y ) const
 {
    for( int j = 0; j < size_x; j++ )
+   {
       for( int i = 0; i < size_y; i++ )
          str << origin_x + i * h_x << " "
              << origin_y + j * h_y << " "
              << this->operator[]( j * size_x + i )
              << std::endl;
+      str << std::endl;
+   }
    str << std::endl;
 }
 
