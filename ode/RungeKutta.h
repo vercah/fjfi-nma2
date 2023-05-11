@@ -29,6 +29,7 @@ class RungeKutta : public ODESolver
       
    protected:
       
-      double* k1;   // TODO: add other k-variables here
+      double* k1;
+      double* k2;
 };
 
