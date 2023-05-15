@@ -9,18 +9,21 @@
 #include "RiccatiProblem.h"
 #include "Euler.h"
 #include "ode-solve.h"
+#include "RungeKutta.h"
 
 using namespace std;
 
-const double initialTime( 0.05 );
-const double finalTime( 0.15 );
-const double timeStep( 1.0e-4 );
-const double integrationTimeStep( 1.0e-4 );
+const double initialTime( 1 );
+const double finalTime( 2 );
+const double timeStep( 0.0125 );
+const double integrationTimeStep( 0.0125 );
 
 int main( int argc, char** argv )
 {
     RiccatiProblem problem;
-    Euler integrator;
+    //Euler integrator;
+    RungeKutta integrator;
+
 
     /***
      * Set initial condition
