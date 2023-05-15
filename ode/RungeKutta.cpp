@@ -15,7 +15,7 @@ bool RungeKutta::setup( const int degreesOfFreedom )
     * Allocate memory for k-variables
     */
    k1 = new double[ degreesOfFreedom ];
-   k1 = new double[ degreesOfFreedom ];
+   k2 = new double[ degreesOfFreedom ];
    if( !k1 || !k2 )
       return false;
    return true;
@@ -27,7 +27,7 @@ bool RungeKutta::solve( const double integrationTimeStep,
                    ODEProblem* problem,
                    double* u )
 {
-   const int dofs = problem->getDegreesOfFreedom();         
+   const int dofs = problem->getDegreesOfFreedom();
    double tau = std::min( integrationTimeStep, stopTime - *time );
    while( *time < stopTime )
    {
