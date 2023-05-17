@@ -32,15 +32,15 @@ bool RungeKutta::solve( const double integrationTimeStep,
    while( *time < stopTime )
    {
       /****
-       * Runge-Kutta method of second order with parameters p1=0, p2=1, alpha2=beta21=1/2
+       * Runge-Kutta method of second order with parameters p1=0, p2=1, alpha2=beta21=0.5
        */
      problem->getRightHandSide( *time, u, k1 );
 
      double* tmp = new double[dofs];
      for (int i = 0; i < dofs; i++) {
-        tmp[i] = u[i] + (1/2)*tau*k1[i];
+        tmp[i] = u[i] + (0.5)*tau*k1[i];
      }
-     problem->getRightHandSide( *time + tau/2, tmp, k2 );
+     problem->getRightHandSide( *time + tau*0.5, tmp, k2 );
      delete[] tmp;
 
      /****
