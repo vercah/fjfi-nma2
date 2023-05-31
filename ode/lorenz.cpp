@@ -22,7 +22,7 @@ const double integrationTimeStep( 1.0e-4 );
 int main( int argc, char** argv )
 {
     LorenzProblem problem;
-    problem.setParameters( 10.0, 28.0, 8.0/3.0 );
+    problem.setParameters( 10.0, 29.0, 3.0 );
     
     Merson integrator;
 
