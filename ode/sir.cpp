@@ -15,7 +15,7 @@ const double integrationTimeStep( 1.0e-4 );
 int main( int argc, char** argv )
 {
     SIRProblem problem;
-    problem.setParameters( 1000.0, 5.0, 5.0, 6.1627, 5.0, 5.0 );
+    problem.setParameters( 200.0, 0.1, 0.1, 1.9, 0.2, 0.7 );
 //    N - velikost populace
 //    nat - míra porodnosti
 //    m - míra úmrtnosti
@@ -25,12 +25,12 @@ int main( int argc, char** argv )
 
 //    reprodukční číslo r = b/c
 //    např. tady je pro covid v Alžírsku r = 1.23254
-//      https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7570398/
+//      https://www.ncbi.nlm.nih.go/pmc/articles/PMC7570398/
 
 
     Merson integrator;
 
-    double sir[ 3 ] = { 2.0, 1.0, 1.0 };
+    double sir[ 3 ] = { 200.0, 1.0, 0.0 };
 
     if( ! solve( initialTime,
                  finalTime,

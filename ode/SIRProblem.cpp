@@ -47,12 +47,13 @@ bool SIRProblem::writeSolution( const double& t, int step, const double* sir )
    {
       file.open( "sir.txt", fstream::out | fstream::trunc );
       if( !file ) return false;
+      file << "t" << " " << "s" << " " << "i" << " " << "r" << endl;
    }
    else
    {
       file.open( "sir.txt", fstream::out | fstream::app );
       if( !file ) return false;
    }
-   file << sir[ 0 ] << " " << sir[ 1 ] << " " << sir[ 2 ] << endl;
+   file << t << " " << sir[ 0 ] << " " << sir[ 1 ] << " " << sir[ 2 ] << endl;
    return true;
 }
