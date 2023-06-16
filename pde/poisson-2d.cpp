@@ -14,11 +14,18 @@ using namespace std;
 #include "../matrices/DenseMatrix.h"
 #include "../stationary/StationarySolver.h"
 
-const int N = 50;
+const int N = 4;
 const double h = 1.0 / ( double ) ( N - 1 );
 const double h_sqr = h * h;
 
 double f( const double& x, const double& y )
+{
+   return 1.0;
+   //return 10.0 * x * y;
+   //return 10.0 * ( 1.0 - 2.0 * x * x - 2.0 * y * y );
+   //return 250.0 * x * x *sin( 10 * M_PI * ( x * x + y * y ) );
+}
+double g( const double& x, const double& y )
 {
    return 10.0;
    //return 10.0 * x * y;
@@ -36,11 +43,17 @@ int main( int argc, char* argv[] )
    EllpackMatrix A( dofs, dofs );
    A.setRowLength( 5 );
 
-    for( int i = 0; i <= N; i++ ) {
-        for( int j = 0; j <= N; j++ ){
-            b[j*N+i]=f(j, i);
+    for( int j = 0; j <= N; j++ ) {
+        for( int i = 0; i <= N; i++ ){
+            if ((i==0 || i==N) || (j==0 || j==N)){
+                b[j*(N+1)+i]=g(j, i);
+            }else{
+                b[j*(N+1)+i]=f(j, i);
+            }
         }
     }
+
+    for(int i = 0; i<dofs;i++) {cout << b[i] << ", ";}
 
    for( int i = 0; i < dofs; i++ ) {
       for( int j = 0; j < dofs; j++ )
