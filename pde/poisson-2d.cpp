@@ -14,21 +14,21 @@ using namespace std;
 #include "../matrices/DenseMatrix.h"
 #include "../stationary/StationarySolver.h"
 
-const int N = 4;
+const int N = 160;
 const double h = 1.0 / ( double ) ( N - 1 );
 const double h_sqr = h * h;
 
 double f( const double& x, const double& y )
 {
-   return 1.0;
-   //return 10.0 * x * y;
+   //return 10.0;
+   //return 0.3 * x;
    //return 10.0 * ( 1.0 - 2.0 * x * x - 2.0 * y * y );
-   //return 250.0 * x * x *sin( 10 * M_PI * ( x * x + y * y ) );
+   return x * x *sin( 10 * ( x * x + y * y ) );
 }
 double g( const double& x, const double& y )
 {
-   return 10.0;
-   //return 10.0 * x * y;
+   //return 10.0;
+   return 10.0 * sin(x);
    //return 10.0 * ( 1.0 - 2.0 * x * x - 2.0 * y * y );
    //return 250.0 * x * x *sin( 10 * M_PI * ( x * x + y * y ) );
 }
@@ -53,7 +53,7 @@ int main( int argc, char* argv[] )
         }
     }
 
-    for(int i = 0; i<dofs;i++) {cout << b[i] << ", ";}
+    //for(int i = 0; i<dofs;i++) {cout << b[i] << ", ";}
 
    for( int i = 0; i < dofs; i++ ) {
       for( int j = 0; j < dofs; j++ )
@@ -84,7 +84,7 @@ int main( int argc, char* argv[] )
     */
    StationarySolver solver( A, b );
    solver.setConvergenceResidue( 1.0e-4 );
-   solver.setMaxIterations( 500 );
+   solver.setMaxIterations( 20000 );
    solver.solve( u, "sor", 1.9 );
    
    /****
