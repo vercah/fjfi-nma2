@@ -18,7 +18,7 @@ HeatEquationProblem2D::HeatEquationProblem2D( int sizeX, int sizeY )
 
 int HeatEquationProblem2D::getDegreesOfFreedom()
 {
-   return -1;  // TODO: Fix with correct DOFs
+   return sizeX * sizeY;
 }
 
 void HeatEquationProblem2D::setParameters()
@@ -28,6 +28,22 @@ void HeatEquationProblem2D::setParameters()
 
 void HeatEquationProblem2D::setInitialCondition( double* u )
 {
+   for (int i = 0; i < sizeX; i++){
+      const double x = i * hx;
+
+      for (int j = 0; j < sizeY; j++){
+         const double y = j * hy;
+
+         // plane above
+
+         //u[i + sizeX * j] = (x > 0.3 && x < 0.7 && y > 0.3 && y < 0.7) ? 1.0 : 0.0;
+
+         // Random
+
+         u[i + sizeX * j] = rand() % 10 - 4;
+      }
+   }
+
 }
 
 void HeatEquationProblem2D::getRightHandSide( const double& t, double* u, double* fu )
@@ -35,10 +51,22 @@ void HeatEquationProblem2D::getRightHandSide( const double& t, double* u, double
    /***
     * Zero Dirichlet boundary conditions
     */
-
+   for (int i = 0; i < sizeX * sizeY; i++){
+      if (i < sizeX || i > sizeX * sizeY - sizeX || i % sizeX == 0 || i % sizeX == sizeX - 1)
+      {
+         u[i]  = 0;
+         fu[i] = 0;
+      }
+   }
    /***
     * Evaluate the Laplace operator
     */
+    for (int i = sizeX; i < sizeX * (sizeY - 1); i++){
+      if (i % sizeX != 0 && i % sizeX != sizeX - 1)
+      {
+         fu[i] = (u[i-1]-2.0*u[i]+u[i+1])/(hx*hx)+(u[i-sizeX]-2.0*u[i]+u[i+sizeX])/(hy*hy);
+      }
+   }
 }
 
 bool HeatEquationProblem2D::writeSolution( const double& t, int step, const double* u )
