@@ -39,8 +39,11 @@ void HeatEquationProblem2D::setInitialCondition( double* u )
          //u[i + sizeX * j] = (x > 0.3 && x < 0.7 && y > 0.3 && y < 0.7) ? 1.0 : 0.0;
 
          // Random
-
+        if (i==0 || j==0 || i == sizeX-1 || j == sizeY-1){
+            u[i+sizeX*j] = 0;
+        }else{
          u[i + sizeX * j] = rand() % 10 - 4;
+        }
       }
    }
 

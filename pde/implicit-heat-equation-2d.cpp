@@ -15,9 +15,9 @@ using namespace std;
 
 const double initialTime( 0.0 );
 const double finalTime( 0.01 );
-const double timeStep( 0.01 );
-const double integrationTimeStep( 0.01 );
-const int size( 100 );
+const double timeStep( 0.001 );
+const double integrationTimeStep( 0.0001 );
+const int size( 50 );
 
 int main( int argc, char** argv )
 {
@@ -28,7 +28,9 @@ int main( int argc, char** argv )
    problem.writeSolution( 0.0, 0, u.getData() );
 
    EllpackMatrix A;
-   A.setDimensions( size, size );
+  A.setRowLength( 5 );
+  A.setDimensions( size*size, size*size );
+
    Vector b( size * size );
 
    StationarySolver solver( A, b );
@@ -37,10 +39,13 @@ int main( int argc, char** argv )
    /***
     * Set Dirichlet  boundary conditions
     */
-   // TODO
+   A.setElement( 0, 0, 1.0 );
+   A.setElement( 0, 1, 0.0 );
+   A.setElement( size - 1, size - 2, 0.0 );
+   A.setElement( size - 1, size - 1, 1.0 );
    double time = initialTime;
    double lastTau = -1.0;
-   const double h = 1.0 / ( double ) size;
+   const double h = 1.0 / ( double ) (size-1);
    const double h_sqr = h * h;
    int step( 0 );
    while( time < finalTime )
@@ -55,13 +60,31 @@ int main( int argc, char** argv )
             /***
              * Set-up linear system
              */
-           // TODO
+            double lambda = currentTau/h_sqr;
+            for (int i = 0; i<size*size; i++){
+                for (int j = 0; j<size*size; j++){
+                    if (i==j){
+                        if((i < size)||(i >= size * size - size ) || ((i+1) % (size) == 1) || ((i+1)%(size)==0)){
+                            A.setElement(i, j, 1);
+                            continue;
+                        }else{
+                            A.setElement(i, j, 1 + 4 * lambda);
+                            continue;
+                        }
+                    }
+                    if (((j == i+1)||(j == i-1)||(j==i-(size))||j==i+(size)) && ((i+1) % (size) > 1) && ((i+1) % (size) < size - 1)
+                    && ( i >= size) && ( i < size*size - (size))){
+                        A.setElement(i,j,-lambda);
+                        continue;
+                    }
+                }
+            }
          }
 
          /***
           * Set-up right-hand side b
           */
-         for( int i = 0; i < size; i++ )
+         for( int i = 0; i < size*size; i++ )
             b[ i ] = u[ i ];
 
          /***
